@@ -1,3 +1,17 @@
+# IT-ISQS Website
+
+## Usage
+
+You need to put supabase anon key and supabase url in `env/.env`. Obtain them at `https://supabase.com/dashboard/project/{PROJECT_ID}/settings/api`
+Don't forget to install dependencies.
+Navigate to /auth and login using `deez@mail.com` email and `helloworld` password.
+
+> Beware. It's awfully slow.
+
+Below came from template.
+
+---
+
 # React, mantine, supabase template
 
 Opinionated and ready to go tempalte, for when you need to bootstrap an app in a minute.
@@ -40,8 +54,8 @@ Create fully type safe endpoints by running `yarn typegen`.
 ## Prettier
 
 Is installed as a dev dependency and `.vscode` recommends installing it as an editor plugin.  
-Format on save is enabled for a reason. Dont write ugly code.  
+Format on save is enabled for a reason. Dont write ugly code.
 
 ## Supabase credentials are stored in .env
 
-App will error if no supabase keys are present. Obtain them at `https://supabase.com/dashboard/{YOUR_PROJECT}/settings/general`
+App will error if no supabase keys are present. Obtain them at `https://supabase.com/dashboard/project/{PROJECT_ID}/settings/api`
