@@ -1,5 +1,4 @@
 import {
-  Anchor,
   Box,
   Button,
   Center,
@@ -15,9 +14,10 @@ import { useForm } from '@mantine/form';
 import { IconCircleKey } from '@tabler/icons-react';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { useUser } from '../supabase/loader';
-import { Link, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+import { openTypedModal } from '../mantine/modals/modals-utils';
 
-export function Authentication() {
+export function AuthSignUp() {
   const form = useForm({
     initialValues: {
       email: '',
@@ -32,7 +32,7 @@ export function Authentication() {
   // redirect if logged in
   const { user } = useUser();
   if (user) {
-    return <Navigate to="/auth"></Navigate>;
+    return <Navigate to="/"></Navigate>;
   }
 
   return (
@@ -43,16 +43,28 @@ export function Authentication() {
             <Text c="dimmed">
               <IconCircleKey></IconCircleKey>
             </Text>
-            <Title>Login</Title>
+            <Title>Sign Up</Title>
           </Group>
 
           <Paper withBorder shadow="md" p={30} mt={30} radius="md">
             <form
               onSubmit={form.onSubmit(async (values) => {
-                await supabaseClient.auth.signInWithPassword({
+                const { error } = await supabaseClient.auth.signUp({
                   email: values.email,
                   password: values.password,
                 });
+
+                if (error) {
+                  openTypedModal({
+                    modal: 'testName',
+                    title: 'Error',
+                    body: {
+                      modalBody: error.message, // Correctly pass the error message
+                    },
+                  });
+                } else {
+                  <Navigate to="/auth"></Navigate>; // Redirect to login if successful
+                }
               })}
             >
               <TextInput
@@ -70,14 +82,8 @@ export function Authentication() {
               />
 
               <Button fullWidth mt="xl" type="submit">
-                Sign in
+                Sign up
               </Button>
-              <Group justify="center">
-                <Text>Don't have an account? </Text>
-                <Anchor component={Link} to="/signup" underline="always">
-                  Sign up here
-                </Anchor>
-              </Group>
             </form>
           </Paper>
         </Container>

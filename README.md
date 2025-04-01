@@ -34,11 +34,11 @@ Template comes with out of the box configured:
 
 Preset uses the `yarn create vite` template using vite with `typescript + SWC`.
 
-Big part of this template is the [Mantine](https://mantine.dev/) component library. I know there are many options, but after trying a lot of them, I found that Mantine suits me the most.
+Big part of this template is the [Mantine](https://mantine.dev/) component library. I know there are many options, but after trying a lot of them, I found that Mantine suits the project the most.
 
 I use [Nanostores](https://github.com/nanostores/nanostores) for global state (think, better Redux). It gives me everything I need 99% of the time. It has a nice syntax and nice React integration.
 
-## Autotyping with upabase
+## Autotyping with supabase
 
 Create fully type safe endpoints by running `yarn typegen`.
 
