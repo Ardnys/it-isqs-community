@@ -15,7 +15,7 @@ import { useForm } from '@mantine/form';
 import { IconCircleKey } from '@tabler/icons-react';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { useUser } from '../supabase/loader';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export function Authentication() {
   const form = useForm({
@@ -28,14 +28,21 @@ export function Authentication() {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
     },
   });
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
+
+  // redirect if logged in
+  const { user } = useUser();
+  if (user) {
+    return <Navigate to="/"></Navigate>;
+  }
+
   return (
     <Box h="100vh" w="100vw">
       <Center h="100vh" w="100%">
         <Container size={620} miw={440}>
-          <Group align="center" justify="center">
+          <Group align="baseline">
             <Text c="dimmed">
-              <IconCircleKey />
+              <IconCircleKey></IconCircleKey>
             </Text>
             <Title>Login</Title>
           </Group>
@@ -64,7 +71,7 @@ export function Authentication() {
               />
 
               <Button fullWidth mt="xl" type="submit">
-                Login
+                Sign in
               </Button>
             </form>
             <Center mt="md">

@@ -133,6 +133,3 @@ export function Header() {
     </div>
   );
 }
-function setUser(arg0: null) {
-  throw new Error('Function not implemented.');
-}
