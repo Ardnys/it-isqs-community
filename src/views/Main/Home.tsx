@@ -6,7 +6,7 @@ import { $currUser } from '../../global-state/user';
 import { openTypedModal } from '../../mantine/modals/modals-utils';
 import { supabaseClient } from '../../supabase/supabaseClient';
 
-function App() {
+function Home() {
   const user = useStore($currUser);
 
   return (
@@ -82,4 +82,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;

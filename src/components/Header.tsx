@@ -14,6 +14,7 @@ import cx from 'clsx';
 import {
   Avatar,
   Burger,
+  Button,
   Container,
   Group,
   Menu,
@@ -24,32 +25,35 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import classes from './HeaderTabs.module.css';
+import { useNavigate } from 'react-router-dom';
+import { supabaseClient } from '../supabase/supabaseClient';
+import { useStore } from '@nanostores/react';
+import { $currUser } from '../global-state/user';
 
-const user = {
-  name: 'Jane Spoonfighter',
-  email: 'janspoon@fighter.dev',
-  image:
-    'https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-5.png',
-};
-
-const tabs = [
-  'Home',
-  'Orders',
-  'Education',
-  'Community',
-  'Forums',
-  'Support',
-  'Account',
-  'Helpdesk',
-];
+const tabs = ['Home', 'Materials', 'Blogs', 'Forum'];
 
 export function Header() {
   const theme = useMantineTheme();
   const [opened, { toggle }] = useDisclosure(false);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
+  const user = useStore($currUser);
+  const navigate = useNavigate();
+
+  const handleTabClick = (tab: string) => {
+    const path = `/${tab.toLowerCase()}`;
+    navigate(path);
+  };
+
+  const handleLogout = () => {
+    supabaseClient.auth.signOut();
+    $currUser.set(null);
+  };
+  const handleLogin = () => {
+    navigate('/auth');
+  };
 
   const items = tabs.map((tab) => (
-    <Tabs.Tab value={tab} key={tab}>
+    <Tabs.Tab value={tab} key={tab} onClick={() => handleTabClick(tab)}>
       {tab}
     </Tabs.Tab>
   ));
@@ -75,101 +79,60 @@ export function Header() {
             <Tabs.List>{items}</Tabs.List>
           </Tabs>
 
-          {/* User Menu Dropdown (Aligned to Right) */}
-          <Menu
-            width={260}
-            position="bottom-end"
-            transitionProps={{ transition: 'pop-top-right' }}
-            onClose={() => setUserMenuOpened(false)}
-            onOpen={() => setUserMenuOpened(true)}
-            withinPortal
-          >
-            <Menu.Target>
-              <UnstyledButton
-                className={cx(classes.user, {
-                  [classes.userActive]: userMenuOpened,
-                })}
-              >
-                <Group gap={7}>
-                  <Avatar
-                    src={user.image}
-                    alt={user.name}
-                    radius="xl"
-                    size={20}
-                  />
-                  <Text fw={500} size="sm" lh={1} mr={3}>
-                    {user.name}
-                  </Text>
-                  <IconChevronDown size={12} stroke={1.5} />
-                </Group>
-              </UnstyledButton>
-            </Menu.Target>
-            <Menu.Dropdown>
-              <Menu.Item
-                leftSection={
-                  <IconHeart
-                    size={16}
-                    color={theme.colors.red[6]}
-                    stroke={1.5}
-                  />
-                }
-              >
-                Liked posts
-              </Menu.Item>
-              <Menu.Item
-                leftSection={
-                  <IconStar
-                    size={16}
-                    color={theme.colors.yellow[6]}
-                    stroke={1.5}
-                  />
-                }
-              >
-                Saved posts
-              </Menu.Item>
-              <Menu.Item
-                leftSection={
-                  <IconMessage
-                    size={16}
-                    color={theme.colors.blue[6]}
-                    stroke={1.5}
-                  />
-                }
-              >
-                Your comments
-              </Menu.Item>
-
-              <Menu.Label>Settings</Menu.Label>
-              <Menu.Item leftSection={<IconSettings size={16} stroke={1.5} />}>
-                Account settings
-              </Menu.Item>
-              <Menu.Item
-                leftSection={<IconSwitchHorizontal size={16} stroke={1.5} />}
-              >
-                Change account
-              </Menu.Item>
-              <Menu.Item leftSection={<IconLogout size={16} stroke={1.5} />}>
-                Logout
-              </Menu.Item>
-
-              <Menu.Divider />
-
-              <Menu.Label>Danger zone</Menu.Label>
-              <Menu.Item
-                leftSection={<IconPlayerPause size={16} stroke={1.5} />}
-              >
-                Pause subscription
-              </Menu.Item>
-              <Menu.Item
-                color="red"
-                leftSection={<IconTrash size={16} stroke={1.5} />}
-              >
-                Delete account
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
+          {user ? (
+            // Menu for logged-in user
+            <Menu
+              width={260}
+              position="bottom-end"
+              transitionProps={{ transition: 'pop-top-right' }}
+              onClose={() => setUserMenuOpened(false)}
+              onOpen={() => setUserMenuOpened(true)}
+              withinPortal
+            >
+              <Menu.Target>
+                <UnstyledButton
+                  className={cx(classes.user, {
+                    [classes.userActive]: userMenuOpened,
+                  })}
+                >
+                  <Group gap={7}>
+                    <Avatar
+                      //   src={user.image}
+                      //   alt={user.name}
+                      radius="xl"
+                      size={20}
+                    />
+                    <Text fw={500} size="sm" lh={1} mr={3}>
+                      {'here'}
+                    </Text>
+                    <IconChevronDown size={12} stroke={1.5} />
+                  </Group>
+                </UnstyledButton>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item
+                  leftSection={<IconSettings size={16} stroke={1.5} />}
+                >
+                  Account settings
+                </Menu.Item>
+                <Menu.Item
+                  leftSection={<IconLogout size={16} stroke={1.5} />}
+                  onClick={handleLogout}
+                  color="red"
+                >
+                  Logout
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          ) : (
+            // Login button for logged-out users
+            <Button onClick={handleLogin}>Login</Button>
+          )}
         </Group>
       </Container>
     </div>
   );
+}
+function setUser(arg0: null) {
+  throw new Error('Function not implemented.');
 }

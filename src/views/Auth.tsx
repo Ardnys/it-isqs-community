@@ -1,4 +1,5 @@
 import {
+  Anchor,
   Box,
   Button,
   Center,
@@ -9,38 +10,32 @@ import {
   Text,
   TextInput,
   Title,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { IconCircleKey } from "@tabler/icons-react";
-import { supabaseClient } from "../supabase/supabaseClient";
-import { useUser } from "../supabase/loader";
-import { Navigate } from "react-router-dom";
+} from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { IconCircleKey } from '@tabler/icons-react';
+import { supabaseClient } from '../supabase/supabaseClient';
+import { useUser } from '../supabase/loader';
+import { useNavigate } from 'react-router-dom';
 
 export function Authentication() {
   const form = useForm({
     initialValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
 
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
     },
   });
-
-  // redirect if logged in
-  const { user } = useUser();
-  if (user) {
-    return <Navigate to="/"></Navigate>;
-  }
-
+  const navigate = useNavigate(); // Initialize navigate
   return (
     <Box h="100vh" w="100vw">
       <Center h="100vh" w="100%">
         <Container size={620} miw={440}>
-          <Group align="baseline">
+          <Group align="center" justify="center">
             <Text c="dimmed">
-              <IconCircleKey></IconCircleKey>
+              <IconCircleKey />
             </Text>
             <Title>Login</Title>
           </Group>
@@ -58,20 +53,28 @@ export function Authentication() {
                 label="Email"
                 placeholder="you@mantine.dev"
                 required
-                {...form.getInputProps("email")}
+                {...form.getInputProps('email')}
               />
               <PasswordInput
                 label="Password"
                 placeholder="Your password"
                 required
                 mt="md"
-                {...form.getInputProps("password")}
+                {...form.getInputProps('password')}
               />
 
               <Button fullWidth mt="xl" type="submit">
                 Sign in
               </Button>
             </form>
+            <Center mt="md">
+              <Text size="sm">
+                Don't have an account?{' '}
+                <Anchor component="button" onClick={() => navigate('/signup')}>
+                  Sign up
+                </Anchor>
+              </Text>
+            </Center>
           </Paper>
         </Container>
       </Center>
