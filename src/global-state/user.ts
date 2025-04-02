@@ -3,10 +3,26 @@ import { atom } from 'nanostores';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { notifications } from '@mantine/notifications';
 
-export const $currUser = atom<User | null>(null);
-
+export const $currUser = atom<ExtendedUser | null>(null);
+export interface ExtendedUser extends User {
+  name: string;
+  surname: string;
+}
 supabaseClient.auth.onAuthStateChange((authChangeEvent, session) => {
-  $currUser.set(session?.user || null);
+  if (session?.user) {
+    const userMetadata = session.user.user_metadata;
+    const extendedUser: ExtendedUser = {
+      ...session.user, // Include other user data
+      name: userMetadata?.name || '', // Access name from user_metadata
+      surname: userMetadata?.surname || '', // Access surname from user_metadata
+    };
+
+    // Store the extended user
+    $currUser.set(extendedUser);
+  } else {
+    $currUser.set(null); // No user logged in
+  }
+
   notifications.show({
     title: 'Auth state changed',
     message: `User ${authChangeEvent}`,

@@ -103,7 +103,7 @@ export function Header() {
                       size={20}
                     />
                     <Text fw={500} size="sm" lh={1} mr={3}>
-                      {'here'}
+                      {user.name}
                     </Text>
                     <IconChevronDown size={12} stroke={1.5} />
                   </Group>

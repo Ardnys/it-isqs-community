@@ -64,7 +64,7 @@ export function Authentication() {
               />
 
               <Button fullWidth mt="xl" type="submit">
-                Sign in
+                Login
               </Button>
             </form>
             <Center mt="md">
