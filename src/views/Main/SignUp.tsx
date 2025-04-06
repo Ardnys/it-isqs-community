@@ -14,6 +14,7 @@ import {
 import { useForm } from '@mantine/form';
 import { IconCircleKey } from '@tabler/icons-react';
 import { supabaseClient } from '../../supabase/supabaseClient';
+import { notifications } from '@mantine/notifications';
 
 export function SignUp() {
   const form = useForm({
@@ -106,7 +107,17 @@ export function SignUp() {
                 {...form.getInputProps('password')}
               />
 
-              <Button fullWidth mt="xl" type="submit">
+              <Button
+                fullWidth
+                mt="xl"
+                type="submit"
+                onClick={() => {
+                  notifications.show({
+                    message:
+                      'We sent an email for verification to your adress!',
+                  });
+                }}
+              >
                 Sign Up
               </Button>
             </form>

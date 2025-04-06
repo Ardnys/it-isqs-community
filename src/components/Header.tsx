@@ -12,6 +12,7 @@ import {
 } from '@tabler/icons-react';
 import cx from 'clsx';
 import {
+  Anchor,
   Avatar,
   Burger,
   Button,
@@ -30,7 +31,12 @@ import { supabaseClient } from '../supabase/supabaseClient';
 import { useStore } from '@nanostores/react';
 import { $currUser } from '../global-state/user';
 
-const tabs = ['Home', 'Materials', 'Blogs', 'Forum'];
+const mainLinks = [
+  { link: '/', label: 'Home' },
+  { link: '/materials', label: 'Materials' },
+  { link: '/blogs', label: 'Blogs' },
+  { link: '/forum', label: 'Forum' },
+];
 
 export function Header() {
   const theme = useMantineTheme();
@@ -52,10 +58,27 @@ export function Header() {
     navigate('/auth');
   };
 
-  const items = tabs.map((tab) => (
-    <Tabs.Tab value={tab} key={tab} onClick={() => handleTabClick(tab)}>
-      {tab}
-    </Tabs.Tab>
+  // const items = tabs.map((tab) => (
+  //   <Tabs.Tab value={tab} key={tab} onClick={() => handleTabClick(tab)}>
+  //     {tab}
+  //   </Tabs.Tab>
+  // ));
+
+  const [active, setActive] = useState(0);
+  const mainItems = mainLinks.map((item, index) => (
+    <Anchor<'a'>
+      href={item.link}
+      key={item.label}
+      className={classes.mainLink}
+      data-active={index === active || undefined}
+      onClick={(event) => {
+        event.preventDefault();
+        setActive(index);
+        navigate(item.link);
+      }}
+    >
+      {item.label}
+    </Anchor>
   ));
 
   return (
@@ -66,7 +89,7 @@ export function Header() {
           <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />
 
           {/* Tabs Section */}
-          <Tabs
+          {/* <Tabs
             defaultValue="Home"
             variant="outline"
             visibleFrom="sm"
@@ -77,7 +100,10 @@ export function Header() {
             }}
           >
             <Tabs.List>{items}</Tabs.List>
-          </Tabs>
+          </Tabs> */}
+          <Group gap={30} justify="flex-end" className={classes.mainLinks}>
+            {mainItems}
+          </Group>
 
           {user ? (
             // Menu for logged-in user
