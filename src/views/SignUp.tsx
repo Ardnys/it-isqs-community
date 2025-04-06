@@ -46,6 +46,7 @@ export function SignUp() {
         password,
         options: {
           data: { name, surname }, // Stores additional user info
+          emailRedirectTo: 'http://localhost:5173/home',
         },
       });
 
