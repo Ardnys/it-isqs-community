@@ -1,6 +1,6 @@
 import { Box, Group, Stack, Title } from '@mantine/core';
 import { Outlet } from 'react-router-dom';
-import { Header } from '../../components/Header';
+import { Header } from '../components/Header';
 
 export const AppLayout = () => {
   return (

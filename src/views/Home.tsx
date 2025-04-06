@@ -2,9 +2,9 @@ import { Badge, Button, Group, Paper, Stack, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { spotlight } from '@mantine/spotlight';
 import { useStore } from '@nanostores/react';
-import { $currUser } from '../../global-state/user';
-import { openTypedModal } from '../../mantine/modals/modals-utils';
-import { supabaseClient } from '../../supabase/supabaseClient';
+import { $currUser } from '../global-state/user';
+import { openTypedModal } from '../mantine/modals/modals-utils';
+import { supabaseClient } from '../supabase/supabaseClient';
 
 function Home() {
   const user = useStore($currUser);

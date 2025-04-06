@@ -1,12 +1,12 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { ProtectedPath } from '../components/ProtectedPath';
 import { Authentication } from '../views/Auth';
-import Home from '../views/Main/Home';
-import { AppLayout } from '../views/Main/AppLayout';
-import Materials from '../views/Main/Materials';
-import Blogs from '../views/Main/Blogs';
-import Forum from '../views/Main/Forum';
-import SignUp from '../views/Main/SignUp';
+import Home from '../views/Home';
+import { AppLayout } from '../views/AppLayout';
+import Materials from '../views/Materials';
+import Blogs from '../views/Blogs';
+import Forum from '../views/Forum';
+import SignUp from '../views/SignUp';
 
 export const router = createBrowserRouter([
   {

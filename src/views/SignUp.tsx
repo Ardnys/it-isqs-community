@@ -13,7 +13,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconCircleKey } from '@tabler/icons-react';
-import { supabaseClient } from '../../supabase/supabaseClient';
+import { supabaseClient } from '../supabase/supabaseClient';
 import { notifications } from '@mantine/notifications';
 
 export function SignUp() {
