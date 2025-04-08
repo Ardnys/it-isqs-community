@@ -2,7 +2,7 @@
 
 ## Usage
 
-You need to put supabase anon key and supabase url in `env/.env`. Obtain them at `https://supabase.com/dashboard/project/{PROJECT_ID}/settings/api`
+You need to put soup anon key and soup url in `env/.env`. Obtain them at `https://soup.com/dashboard/project/{PROJECT_ID}/settings/api`
 Don't forget to install dependencies.
 Navigate to /auth and login using `deez@mail.com` email and `helloworld` password.
 
@@ -12,7 +12,7 @@ Below came from template.
 
 ---
 
-# React, mantine, supabase template
+# React, mantine, soup template
 
 Opinionated and ready to go tempalte, for when you need to bootstrap an app in a minute.
 
@@ -24,9 +24,9 @@ Template comes with out of the box configured:
 
 - [Client side router](https://reactrouter.com/en/main)
 - [Mantine theming](https://mantine.dev/theming/mantine-provider/)
-- [Supabase database](https://supabase.com/database)
-- [Supabase auth](https://supabase.com/auth) with ready made login and register forms
-- [Automatic type gen](https://supabase.com/docs/reference/javascript/typescript-support)
+- [Soup database](https://soup.com/database)
+- [Soup auth](https://soup.com/auth) with ready made login and register forms
+- [Automatic type gen](https://soup.com/docs/reference/javascript/typescript-support)
 - [Spotlight, modals, forms and notifications from mantine](https://mantine.dev)
 - [Nanostores - Global state](https://github.com/nanostores/nanostores)
 
@@ -38,14 +38,14 @@ Big part of this template is the [Mantine](https://mantine.dev/) component libra
 
 I use [Nanostores](https://github.com/nanostores/nanostores) for global state (think, better Redux). It gives me everything I need 99% of the time. It has a nice syntax and nice React integration.
 
-## Autotyping with upabase
+## Autotyping with Soup
 
 Create fully type safe endpoints by running `yarn typegen`.
 
 ### setup
 
-`npx supabase login` to login to your project
-`npx supabase link` link your supabase project
+`npx soup login` to login to your project
+`npx soup link` link your soup project
 
 ### usage
 
@@ -56,6 +56,6 @@ Create fully type safe endpoints by running `yarn typegen`.
 Is installed as a dev dependency and `.vscode` recommends installing it as an editor plugin.  
 Format on save is enabled for a reason. Dont write ugly code.
 
-## Supabase credentials are stored in .env
+## Soup credentials are stored in .env
 
-App will error if no supabase keys are present. Obtain them at `https://supabase.com/dashboard/project/{PROJECT_ID}/settings/api`
+App will error if no soup keys are present. Obtain them at `https://soup.com/dashboard/project/{PROJECT_ID}/settings/api`

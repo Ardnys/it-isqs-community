@@ -44,7 +44,7 @@ export function Authentication() {
             <Text c="dimmed">
               <IconCircleKey></IconCircleKey>
             </Text>
-            <Title>Sign Up</Title>
+            <Title>Login</Title>
           </Group>
 
           <Paper withBorder shadow="md" p={30} mt={30} radius="md">
@@ -71,7 +71,7 @@ export function Authentication() {
               />
 
               <Button fullWidth mt="xl" type="submit">
-                Sign in
+                Login
               </Button>
             </form>
             <Center mt="md">

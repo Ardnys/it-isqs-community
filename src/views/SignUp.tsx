@@ -1,5 +1,4 @@
 import {
-  Anchor,
   Box,
   Button,
   Center,
@@ -12,9 +11,9 @@ import {
   Title,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 import { IconCircleKey } from '@tabler/icons-react';
 import { supabaseClient } from '../supabase/supabaseClient';
-import { notifications } from '@mantine/notifications';
 
 export function SignUp() {
   const form = useForm({
@@ -62,8 +61,6 @@ export function SignUp() {
         console.error('Error inserting data: ', insertError.message);
         return;
       }
-
-      console.log('User signed up and data inserted successfully!', data);
     } catch (err) {
       console.error('Unexpected error: ', err);
     }

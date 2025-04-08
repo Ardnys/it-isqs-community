@@ -22,10 +22,4 @@ supabaseClient.auth.onAuthStateChange((authChangeEvent, session) => {
   } else {
     $currUser.set(null); // No user logged in
   }
-
-  notifications.show({
-    title: 'Auth state changed',
-    message: `User ${authChangeEvent}`,
-    color: 'blue',
-  });
 });

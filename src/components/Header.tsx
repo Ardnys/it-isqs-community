@@ -1,35 +1,21 @@
-import { useState } from 'react';
-import {
-  IconChevronDown,
-  IconHeart,
-  IconLogout,
-  IconMessage,
-  IconPlayerPause,
-  IconSettings,
-  IconStar,
-  IconSwitchHorizontal,
-  IconTrash,
-} from '@tabler/icons-react';
-import cx from 'clsx';
 import {
   Anchor,
   Avatar,
-  Burger,
   Button,
   Container,
   Group,
   Menu,
-  Tabs,
   Text,
   UnstyledButton,
-  useMantineTheme,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import classes from './HeaderTabs.module.css';
-import { useNavigate } from 'react-router-dom';
-import { supabaseClient } from '../supabase/supabaseClient';
 import { useStore } from '@nanostores/react';
+import { IconChevronDown, IconLogout, IconSettings } from '@tabler/icons-react';
+import cx from 'clsx';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { $currUser } from '../global-state/user';
+import { supabaseClient } from '../supabase/supabaseClient';
+import classes from './HeaderTabs.module.css';
 
 const mainLinks = [
   { link: '/', label: 'Home' },
@@ -39,16 +25,9 @@ const mainLinks = [
 ];
 
 export function Header() {
-  const theme = useMantineTheme();
-  const [opened, { toggle }] = useDisclosure(false);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
   const user = useStore($currUser);
   const navigate = useNavigate();
-
-  const handleTabClick = (tab: string) => {
-    const path = `/${tab.toLowerCase()}`;
-    navigate(path);
-  };
 
   const handleLogout = () => {
     supabaseClient.auth.signOut();
@@ -57,12 +36,6 @@ export function Header() {
   const handleLogin = () => {
     navigate('/auth');
   };
-
-  // const items = tabs.map((tab) => (
-  //   <Tabs.Tab value={tab} key={tab} onClick={() => handleTabClick(tab)}>
-  //     {tab}
-  //   </Tabs.Tab>
-  // ));
 
   const [active, setActive] = useState(0);
   const mainItems = mainLinks.map((item, index) => (
@@ -85,22 +58,6 @@ export function Header() {
     <div className={classes.header}>
       <Container className={classes.mainSection} size="lg">
         <Group justify="space-between">
-          {/* Burger Menu */}
-          <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />
-
-          {/* Tabs Section */}
-          {/* <Tabs
-            defaultValue="Home"
-            variant="outline"
-            visibleFrom="sm"
-            classNames={{
-              root: classes.tabs,
-              list: classes.tabsList,
-              tab: classes.tab,
-            }}
-          >
-            <Tabs.List>{items}</Tabs.List>
-          </Tabs> */}
           <Group gap={30} justify="flex-end" className={classes.mainLinks}>
             {mainItems}
           </Group>
@@ -123,8 +80,7 @@ export function Header() {
                 >
                   <Group gap={7}>
                     <Avatar
-                      //   src={user.image}
-                      //   alt={user.name}
+                      //   src={user.image} we can add profile image here if needed
                       radius="xl"
                       size={20}
                     />

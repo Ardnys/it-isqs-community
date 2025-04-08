@@ -1,11 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { ProtectedPath } from '../components/ProtectedPath';
-import { Authentication } from '../views/Auth';
-import Home from '../views/Home';
 import { AppLayout } from '../views/AppLayout';
-import Materials from '../views/Materials';
+import { Authentication } from '../views/Auth';
 import Blogs from '../views/Blogs';
 import Forum from '../views/Forum';
+import Home from '../views/Home';
+import Materials from '../views/Materials';
 import SignUp from '../views/SignUp';
 
 export const router = createBrowserRouter([
