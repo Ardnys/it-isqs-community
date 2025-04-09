@@ -24,4 +24,5 @@ export const router = createBrowserRouter([
     path: '/auth',
     element: <Authentication />,
   },
+  
 ]);
