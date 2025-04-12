@@ -6,6 +6,7 @@ import Forum from '../views/Forum';
 import Home from '../views/Home';
 import Materials from '../views/Materials';
 import SignUp from '../views/SignUp';
+import BlogEdit from '../views/BlogEdit';
 
 export const router = createBrowserRouter([
   {
@@ -27,10 +28,15 @@ export const router = createBrowserRouter([
       {
         path: '/blogs',
         element: <Blogs />,
+        children: [{}],
       },
       {
         path: '/forum',
         element: <Forum />,
+      },
+      {
+        path: '/blog-edit',
+        element: <BlogEdit />,
       },
     ],
   },
