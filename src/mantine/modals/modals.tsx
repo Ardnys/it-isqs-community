@@ -1,7 +1,7 @@
-import { Test } from './FIleUploadModal';
+import { Upload } from './FIleUploadModal';
 import { Test2 } from './Test2';
 
 export const mantineModals = {
-  testName: Test,
+  testName: Upload,
   test2name: Test2,
 } as const;
