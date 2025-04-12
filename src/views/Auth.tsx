@@ -34,6 +34,7 @@ export function Authentication() {
   // redirect if logged in
   const { user } = useUser();
   if (user) {
+    console.log(user.role);
     return <Navigate to="/"></Navigate>;
   }
 

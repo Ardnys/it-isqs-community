@@ -3,9 +3,12 @@ import { Button, Card, Grid, List, Stack, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { openTypedModal } from '../mantine/modals/modals-utils';
 import { supabaseClient } from '../supabase/supabaseClient';
+import { useUser } from '../supabase/loader';
+import { getUserRole } from '../Utils/RoleChecker';
 
 const Materials = () => {
   const [files, setFiles] = useState<{ name: string; url: string }[]>([]);
+  const { user } = useUser();
 
   const fetchFiles = async () => {
     try {
@@ -38,25 +41,39 @@ const Materials = () => {
     fetchFiles();
   }, []);
 
+  const [role, setRole] = useState<'registered' | 'professional' | null>(null);
+  useEffect(() => {
+    const fetchRole = async () => {
+      if (user?.email) {
+        const r = await getUserRole(user.email);
+        setRole(r);
+      }
+    };
+    fetchRole();
+  }, [user]);
+  console.log('role is' + role);
+
   return (
     <div>
-      <Button
-        onClick={() => {
-          openTypedModal({
-            modal: 'testName',
-            title: 'Upload Material',
-            body: {
-              modalBody: 'Upload your material here',
-            },
-          });
-        }}
-        fullWidth
-        color="teal"
-        size="lg"
-        style={{ marginBottom: '20px' }}
-      >
-        Upload
-      </Button>
+      {role === 'professional' && (
+        <Button
+          onClick={() => {
+            openTypedModal({
+              modal: 'testName',
+              title: 'Upload Material',
+              body: {
+                modalBody: 'Upload your material here',
+              },
+            });
+          }}
+          fullWidth
+          color="teal"
+          size="lg"
+          style={{ marginBottom: '20px' }}
+        >
+          Upload
+        </Button>
+      )}
 
       <Grid gutter="lg" justify="flex-start" align="flex-start">
         {files.map((file, index) => (
