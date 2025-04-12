@@ -1,4 +1,4 @@
-import { Badge, Button, Stack } from '@mantine/core';
+import { Badge, Button, FileInput, Stack } from '@mantine/core';
 import { ContextModalProps } from '@mantine/modals';
 
 export const Test = ({
@@ -9,7 +9,11 @@ export const Test = ({
   return (
     <Stack>
       {innerProps.modalBody}
-      <Badge>{id}</Badge>
+      <FileInput
+        label="Input label"
+        description="Select the file to upload"
+        placeholder="Select the file to upload"
+      />
       <Button
         onClick={() => {
           context.closeModal(id);

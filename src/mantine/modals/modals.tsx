@@ -1,4 +1,4 @@
-import { Test } from './Test';
+import { Test } from './FIleUploadModal';
 import { Test2 } from './Test2';
 
 export const mantineModals = {
