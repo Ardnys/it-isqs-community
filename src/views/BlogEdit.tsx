@@ -14,6 +14,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useForm } from '@mantine/form';
+import { supabaseClient } from '../supabase/supabaseClient';
 
 const BlogEdit = () => {
   const navigate = useNavigate();
@@ -49,11 +50,44 @@ const BlogEdit = () => {
     }
   };
 
+  const saveBlogPost = async (blog: {
+    title: string;
+    thumbnail: File | null;
+    blogContent: string;
+  }) => {
+    {
+      const { data, error } = await supabaseClient.storage
+        .from('thumbnails')
+        .upload(blog.thumbnail?.name as string, blog.thumbnail as File, {
+          contentType: 'image/jpeg',
+        });
+      if (error) {
+        console.error('Error while uploading file', error);
+      }
+    }
+
+    const { error } = await supabaseClient.from('Blog').insert({
+      title: blog.title,
+      body: blog.blogContent,
+      thumbnail: blog.thumbnail?.name,
+      id: 0,
+      date: '',
+    });
+    if (error) {
+      console.error('error while saving to db: ', error);
+    }
+  };
+
   const handleSave = (values: { title: string; thumbnail: File | null }) => {
-    // TODO: Replace this with an API call to save the blog post
-    console.log('Blog content saved:', editor?.getHTML());
+    const blogContent = editor?.getHTML() as string;
     console.log('Blog title:', values.title);
+    console.log('Blog content saved:', blogContent);
     console.log('Thumbnail file:', values.thumbnail);
+    saveBlogPost({
+      title: values.title,
+      thumbnail: values.thumbnail,
+      blogContent: blogContent,
+    });
     navigate('/blogs'); // Redirect back to the blogs page after saving
   };
 
