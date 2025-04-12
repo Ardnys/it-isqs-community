@@ -4,7 +4,6 @@ export const getUserRole = async (
   userEmail: string,
 ): Promise<'registered' | 'professional' | null> => {
   try {
-    console.log('mail is ' + userEmail);
     // Check if they're a professional
     const { data: professional, error: proError } = await supabaseClient
       .from('Professional')
