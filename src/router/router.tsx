@@ -1,21 +1,36 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { ProtectedPath } from '../components/ProtectedPath';
+import { AppLayout } from '../views/AppLayout';
 import { Authentication } from '../views/Auth';
-import App from '../views/Main/App';
-import { AppLayout } from '../views/Main/AppLayout';
+import Blogs from '../views/Blogs';
+import Forum from '../views/Forum';
+import Home from '../views/Home';
+import Materials from '../views/Materials';
+import SignUp from '../views/SignUp';
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <ProtectedPath redirectUrl="/auth">
-        <AppLayout />
-      </ProtectedPath>
-    ),
+    element: <AppLayout />,
     children: [
       {
         path: '/',
-        element: <App />,
+        element: <Home />,
+      },
+      {
+        path: '/home',
+        element: <Home />,
+      },
+      {
+        path: '/materials',
+        element: <Materials />,
+      },
+      {
+        path: '/blogs',
+        element: <Blogs />,
+      },
+      {
+        path: '/forum',
+        element: <Forum />,
       },
     ],
   },
@@ -23,5 +38,9 @@ export const router = createBrowserRouter([
   {
     path: '/auth',
     element: <Authentication />,
+  },
+  {
+    path: '/signup',
+    element: <SignUp />,
   },
 ]);

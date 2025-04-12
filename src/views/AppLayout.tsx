@@ -1,11 +1,12 @@
 import { Box, Group, Stack, Title } from '@mantine/core';
 import { Outlet } from 'react-router-dom';
+import { Header } from '../components/Header';
 
 export const AppLayout = () => {
   return (
     <Stack>
       <Group>
-        <Title>MantineSupabase-t</Title>
+        <Header></Header>
       </Group>
       <Box flex={1}>
         <Outlet />

@@ -1,4 +1,5 @@
 import {
+  Anchor,
   Box,
   Button,
   Center,
@@ -9,24 +10,25 @@ import {
   Text,
   TextInput,
   Title,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { IconCircleKey } from "@tabler/icons-react";
-import { supabaseClient } from "../supabase/supabaseClient";
-import { useUser } from "../supabase/loader";
-import { Navigate } from "react-router-dom";
+} from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { IconCircleKey } from '@tabler/icons-react';
+import { supabaseClient } from '../supabase/supabaseClient';
+import { useUser } from '../supabase/loader';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export function Authentication() {
   const form = useForm({
     initialValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
 
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
     },
   });
+  const navigate = useNavigate();
 
   // redirect if logged in
   const { user } = useUser();
@@ -58,20 +60,28 @@ export function Authentication() {
                 label="Email"
                 placeholder="you@mantine.dev"
                 required
-                {...form.getInputProps("email")}
+                {...form.getInputProps('email')}
               />
               <PasswordInput
                 label="Password"
                 placeholder="Your password"
                 required
                 mt="md"
-                {...form.getInputProps("password")}
+                {...form.getInputProps('password')}
               />
 
               <Button fullWidth mt="xl" type="submit">
-                Sign in
+                Login
               </Button>
             </form>
+            <Center mt="md">
+              <Text size="sm">
+                Don't have an account?{' '}
+                <Anchor component="button" onClick={() => navigate('/signup')}>
+                  Sign up
+                </Anchor>
+              </Text>
+            </Center>
           </Paper>
         </Container>
       </Center>
