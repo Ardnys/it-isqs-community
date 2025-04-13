@@ -1,30 +1,62 @@
-import { AppShell, Button, Group, Stack, Title } from '@mantine/core';
+import { Button, Stack, Title } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabaseClient } from '../supabase/supabaseClient';
+import BlogPost from '../components/BlogPost';
+
+type Blog = {
+  body: string | null;
+  date: string | null;
+  id: number;
+  thumbnail: string | null;
+  title: string | null;
+};
 
 const Blogs = () => {
   const navigate = useNavigate();
+  const [blogPosts, setBlogPosts] = useState<Array<Blog> | null>(null);
+
+  const fetchBlogPosts = async () => {
+    const { data, error } = await supabaseClient.from('Blog').select();
+    if (error) {
+      console.error('error while fetching blog posts', error);
+      return;
+    }
+    const postsWithThumbnails = data.map((post) => {
+      const publicUrl = post.thumbnail
+        ? supabaseClient.storage
+            .from('storage')
+            .getPublicUrl(`thumbnails/${post.thumbnail}`).data.publicUrl
+        : null;
+      return {
+        ...post,
+        thumbnail: publicUrl,
+      };
+    });
+    setBlogPosts(postsWithThumbnails);
+    console.log(postsWithThumbnails);
+  };
+
+  useEffect(() => {
+    fetchBlogPosts();
+  }, []);
+
   return (
-    <AppShell header={{ height: 60 }} footer={{ height: 60 }} padding="md">
-      <AppShell.Header>
-        <Group>
-          <Stack>
-            <Title order={1}>Le Blogs</Title>
-            <Title order={4}>Learn what's new</Title>
-          </Stack>
-        </Group>
-      </AppShell.Header>
-      <AppShell.Main></AppShell.Main>
-      <AppShell.Aside>
-        {/* TODO: hide this if not proffessional ? idk how to do that nicely */}
-        <Button
-          onClick={() => {
-            navigate('/blog-edit');
-          }}
-        >
-          Add new post
-        </Button>
-      </AppShell.Aside>
-    </AppShell>
+    <Stack>
+      <Button onClick={() => navigate('/blog-edit')}>Create New Post</Button>
+
+      <Title order={2}>Blog Posts</Title>
+
+      {blogPosts?.map((post) => (
+        <BlogPost
+          key={post.id}
+          title={post.title}
+          body={post.body}
+          thumbnail={post.thumbnail}
+          date={post.date}
+        />
+      ))}
+    </Stack>
   );
 };
 

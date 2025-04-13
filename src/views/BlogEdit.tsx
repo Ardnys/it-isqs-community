@@ -57,10 +57,14 @@ const BlogEdit = () => {
   }) => {
     {
       const { data, error } = await supabaseClient.storage
-        .from('thumbnails')
-        .upload(blog.thumbnail?.name as string, blog.thumbnail as File, {
-          contentType: 'image/jpeg',
-        });
+        .from('storage')
+        .upload(
+          `thumbnails/${blog.thumbnail?.name as string}`,
+          blog.thumbnail as File,
+          {
+            contentType: 'image/jpeg',
+          },
+        );
       if (error) {
         console.error('Error while uploading file', error);
       }
@@ -70,8 +74,6 @@ const BlogEdit = () => {
       title: blog.title,
       body: blog.blogContent,
       thumbnail: blog.thumbnail?.name,
-      id: 0,
-      date: '',
     });
     if (error) {
       console.error('error while saving to db: ', error);
