@@ -5,12 +5,16 @@ import { openTypedModal } from '../mantine/modals/modals-utils';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { useUser } from '../supabase/loader';
 import { getUserRole } from '../Utils/RoleChecker';
+import handleDownload from '../Utils/DownloadHandler';
+import { useStore } from '@nanostores/react';
+import { $currUser } from '../global-state/user';
 
 const Materials = () => {
   const [files, setFiles] = useState<
     { name: string; url: string; path: string }[]
   >([]);
-  const { user } = useUser();
+
+  const user = useStore($currUser);
 
   const fetchFiles = async () => {
     try {
@@ -53,30 +57,6 @@ const Materials = () => {
     };
     fetchRole();
   }, [user]);
-
-  const handleDownload = async (path: string, filename: string) => {
-    try {
-      const { data, error } = await supabaseClient.storage
-        .from('storage')
-        .download(path);
-
-      if (error || !data) {
-        console.error('Download error:', error);
-        return;
-      }
-
-      const url = URL.createObjectURL(data);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error('Unexpected error:', err);
-    }
-  };
 
   return (
     <div>
@@ -122,14 +102,16 @@ const Materials = () => {
                 >
                   View
                 </Button>
-                <Button
-                  onClick={() => handleDownload(file.path, file.name)}
-                  variant="filled"
-                  color="teal"
-                  fullWidth
-                >
-                  Download
-                </Button>
+                {user && (
+                  <Button
+                    onClick={() => handleDownload(file.path, file.name)}
+                    variant="filled"
+                    color="teal"
+                    fullWidth
+                  >
+                    Download
+                  </Button>
+                )}
               </Stack>
             </Card>
           </Grid.Col>
