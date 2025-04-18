@@ -1,8 +1,18 @@
-import { Badge, Button, FileInput, Stack, Image, Group } from '@mantine/core';
+import {
+  Badge,
+  Button,
+  FileInput,
+  Stack,
+  Image,
+  Group,
+  Avatar,
+} from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { ContextModalProps } from '@mantine/modals';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabaseClient } from '../../supabase/supabaseClient';
+import { useStore } from '@nanostores/react';
+
 import { $currUser, ExtendedUser } from '../../global-state/user';
 
 export const Settings = ({
@@ -13,6 +23,14 @@ export const Settings = ({
   const [file, setFile] = useState<File | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const currentUser = useStore($currUser);
+
+  // Load current profile picture on component mount
+  useEffect(() => {
+    if (currentUser?.user_metadata?.profile_picture) {
+      setThumbnailPreview(currentUser.user_metadata.profile_picture);
+    }
+  }, [currentUser]);
 
   const handleFileChange = (newFile: File | null) => {
     setFile(newFile);
@@ -24,7 +42,7 @@ export const Settings = ({
       };
       reader.readAsDataURL(newFile);
     } else {
-      setThumbnailPreview(null);
+      setThumbnailPreview(currentUser?.user_metadata?.profile_picture || null);
     }
   };
 
@@ -33,22 +51,19 @@ export const Settings = ({
 
     setIsUploading(true);
     try {
-      // Upload the file
       const { data, error } = await supabaseClient.storage
         .from('storage')
         .upload(`profile-pictures/${file.name}`, file, {
           cacheControl: '3600',
-          upsert: true, // Allow overwriting
+          upsert: true,
         });
 
       if (error) throw error;
 
-      // Get public URL
       const { data: publicData } = supabaseClient.storage
         .from('storage')
         .getPublicUrl(data?.path ?? '');
 
-      // Update user metadata with the new profile picture URL
       const { error: updateError } = await supabaseClient.auth.updateUser({
         data: { profile_picture: publicData.publicUrl },
       });
@@ -62,7 +77,6 @@ export const Settings = ({
         autoClose: 3000,
       });
 
-      // Refresh user data
       const {
         data: { user },
       } = await supabaseClient.auth.getUser();
@@ -73,6 +87,7 @@ export const Settings = ({
           surname: user.user_metadata?.surname || '',
         };
         $currUser.set(extendedUser);
+        setThumbnailPreview(publicData.publicUrl); // Update preview with new image
       }
     } catch (error) {
       notifications.show({
@@ -81,6 +96,8 @@ export const Settings = ({
         color: 'red',
         autoClose: 3000,
       });
+      // Revert to current profile picture on error
+      setThumbnailPreview(currentUser?.user_metadata?.profile_picture || null);
     } finally {
       setIsUploading(false);
     }
@@ -99,20 +116,19 @@ export const Settings = ({
       />
 
       <Group align="center">
-        {thumbnailPreview && (
+        {thumbnailPreview ? (
           <Image
             src={thumbnailPreview}
-            alt="Thumbnail Preview"
+            alt="Profile picture preview"
             width={150}
             height={150}
             radius="md"
             style={{ objectFit: 'cover' }}
           />
-        )}
-        {file && !thumbnailPreview && (
-          <Badge variant="outline" color="blue">
-            {file.name}
-          </Badge>
+        ) : (
+          <Avatar src={null} radius="xl" size={150}>
+            {currentUser?.email?.charAt(0).toUpperCase()}
+          </Avatar>
         )}
       </Group>
 

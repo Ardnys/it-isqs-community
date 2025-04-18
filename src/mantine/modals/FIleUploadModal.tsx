@@ -13,14 +13,14 @@ export const Upload = ({
   const [fileUrl, setFileUrl] = useState<string | null>(null);
 
   const handleFileChange = (newFile: File | null) => {
-    setFile(newFile); // Set the selected file
+    setFile(newFile);
   };
 
   const handleUpload = async () => {
     if (file) {
       try {
         const { data, error } = await supabaseClient.storage
-          .from('storage') // Your bucket name
+          .from('storage')
           .upload(`materials/${file.name}`, file);
 
         if (error) {
