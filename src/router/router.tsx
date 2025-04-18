@@ -6,6 +6,8 @@ import Forum from '../views/Forum';
 import Home from '../views/Home';
 import Materials from '../views/Materials';
 import SignUp from '../views/SignUp';
+import Contact from '../views/Contact';
+
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +34,11 @@ export const router = createBrowserRouter([
         path: '/forum',
         element: <Forum />,
       },
+
+      {
+        path: '/contact',
+        element: <Contact />,
+      }
     ],
   },
 
