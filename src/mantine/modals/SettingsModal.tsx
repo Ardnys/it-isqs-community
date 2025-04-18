@@ -51,12 +51,6 @@ export const Settings = ({
 
       {file && <Badge>{file.name}</Badge>}
 
-      <Button
-        style={{ position: 'absolute', top: 10, right: 10 }}
-        onClick={() => context.closeModal(id)}
-      >
-        Close
-      </Button>
       <Button onClick={handleUpload}>Upload File</Button>
     </Stack>
   );
