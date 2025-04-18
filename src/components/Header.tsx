@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { $currUser } from '../global-state/user';
 import { supabaseClient } from '../supabase/supabaseClient';
 import classes from './HeaderTabs.module.css';
+import { openTypedModal } from '../mantine/modals/modals-utils';
 
 const mainLinks = [
   { link: '/', label: 'Home' },
@@ -94,8 +95,17 @@ export function Header() {
               <Menu.Dropdown>
                 <Menu.Item
                   leftSection={<IconSettings size={16} stroke={1.5} />}
+                  onClick={() => {
+                    openTypedModal({
+                      modal: 'settings',
+                      title: 'Settings',
+                      body: {
+                        modalBody: 'Upload your material here',
+                      },
+                    });
+                  }}
                 >
-                  Account settings
+                  Settings
                 </Menu.Item>
                 <Menu.Item
                   leftSection={<IconLogout size={16} stroke={1.5} />}

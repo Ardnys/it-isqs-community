@@ -64,7 +64,7 @@ const Materials = () => {
         <Button
           onClick={() => {
             openTypedModal({
-              modal: 'testName',
+              modal: 'upload',
               title: 'Upload Material',
               body: {
                 modalBody: 'Upload your material here',

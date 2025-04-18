@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { supabaseClient } from '../../supabase/supabaseClient';
 
-export const Upload = ({
+export const Settings = ({
   context,
   id,
   innerProps,
@@ -51,6 +51,12 @@ export const Upload = ({
 
       {file && <Badge>{file.name}</Badge>}
 
+      <Button
+        style={{ position: 'absolute', top: 10, right: 10 }}
+        onClick={() => context.closeModal(id)}
+      >
+        Close
+      </Button>
       <Button onClick={handleUpload}>Upload File</Button>
     </Stack>
   );
