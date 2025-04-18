@@ -27,10 +27,10 @@ const Materials = () => {
       const fileUrls =
         data?.map((file) => ({
           name: file.name,
-          path: `materials/${file.name}`,
           url: supabaseClient.storage
             .from('storage')
             .getPublicUrl(`materials/${file.name}`).data.publicUrl,
+          path: `materials/${file.name}`,
         })) || [];
 
       setFiles(fileUrls);
@@ -54,15 +54,10 @@ const Materials = () => {
     fetchRole();
   }, [user]);
 
-  const handleDownload = async (
-    bucket: string,
-    path: string,
-    filename: string,
-  ) => {
+  const handleDownload = async (path: string, filename: string) => {
     try {
-      console.log(path);
       const { data, error } = await supabaseClient.storage
-        .from(bucket)
+        .from('storage')
         .download(path);
 
       if (error || !data) {
@@ -70,18 +65,13 @@ const Materials = () => {
         return;
       }
 
-      // Create a URL for the file blob
       const url = URL.createObjectURL(data);
-
-      // Create a temporary anchor and trigger download
       const a = document.createElement('a');
       a.href = url;
       a.download = filename;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-
-      // Cleanup the blob URL
       URL.revokeObjectURL(url);
     } catch (err) {
       console.error('Unexpected error:', err);
@@ -124,7 +114,8 @@ const Materials = () => {
                 <Button
                   component="a"
                   href={file.url}
-                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
                   variant="outline"
                   color="teal"
                   fullWidth
@@ -132,11 +123,7 @@ const Materials = () => {
                   View
                 </Button>
                 <Button
-                  component="a"
-                  download={file.name}
-                  onClick={() =>
-                    handleDownload('storage', file.path, file.name)
-                  }
+                  onClick={() => handleDownload(file.path, file.name)}
                   variant="filled"
                   color="teal"
                   fullWidth
