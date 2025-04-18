@@ -3,11 +3,10 @@ import { AppLayout } from '../views/AppLayout';
 import { Authentication } from '../views/Auth';
 import Blogs from '../views/Blogs';
 import Forum from '../views/Forum';
-import Home from '../views/Home';
 import Materials from '../views/Materials';
 import SignUp from '../views/SignUp';
-import Contact from '../views/Mine/Contact';
-import HomePage from '../views/Mine/HomePage';
+import Contact from '../views/Contact';
+import Home from '../views/Home';
 
 
 export const router = createBrowserRouter([
@@ -15,10 +14,6 @@ export const router = createBrowserRouter([
     path: '/',
     element: <AppLayout />,
     children: [
-      {
-        path: '/',
-        element: <Home />,
-      },
       {
         path: '/home',
         element: <Home />,
@@ -36,14 +31,10 @@ export const router = createBrowserRouter([
         element: <Forum />,
       },
 
+     
       {
         path: '/Contact',
-        element: <Contact />,
-      },
-
-      {
-        path: '/HomePage',
-        element: <HomePage />,
+        element: <Contact/>,
       }
     ],
   },

@@ -18,12 +18,12 @@ import { supabaseClient } from '../supabase/supabaseClient';
 import classes from './HeaderTabs.module.css';
 
 const mainLinks = [
-  { link: '/', label: 'Home' },
+  { link: '/home', label: 'Home' },
   { link: '/materials', label: 'Materials' },
   { link: '/blogs', label: 'Blogs' },
   { link: '/forum', label: 'Forum' },
-  { link: '/Contact', label: 'Contact' },
-  { link: '/HomePage', label: 'HomePage' },
+  { link: '/contact', label: 'Contact' },
+  
 
 ];
 
