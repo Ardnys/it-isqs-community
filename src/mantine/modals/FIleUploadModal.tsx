@@ -19,7 +19,6 @@ export const Upload = ({
   const handleUpload = async () => {
     if (file) {
       try {
-        // Upload file to Supabase
         const { data, error } = await supabaseClient.storage
           .from('storage') // Your bucket name
           .upload(`materials/${file.name}`, file);
@@ -28,18 +27,12 @@ export const Upload = ({
           throw error;
         }
 
-        // Get public URL for the file
         const { data: publicData } = supabaseClient.storage
           .from('storage')
           .getPublicUrl(data?.path ?? '');
 
-        setFileUrl(publicData.publicUrl); // Set the URL to state
+        setFileUrl(publicData.publicUrl);
         console.log('File uploaded successfully!', data);
-
-        // Optionally, store file name and URL in Supabase database (e.g., 'materials' table)
-        // await supabaseClient
-        //   .from('materials')
-        //   .insert([{ name: file.name, url: publicData.publicUrl }]);
       } catch (error) {
         console.error('Error uploading file:', error);
       }
