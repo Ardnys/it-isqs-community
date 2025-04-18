@@ -12,5 +12,9 @@ dist
 dist-ssr
 *.local
 
+#secret
+.env
+
 .handsome
 
+# Local env files
