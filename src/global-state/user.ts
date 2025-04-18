@@ -7,6 +7,10 @@ export const $currUser = atom<ExtendedUser | null>(null);
 export interface ExtendedUser extends User {
   name: string;
   surname: string;
+  user_metadata: {
+    profile_picture?: string;
+    // ... other metadata
+  };
 }
 supabaseClient.auth.onAuthStateChange((authChangeEvent, session) => {
   if (session?.user) {

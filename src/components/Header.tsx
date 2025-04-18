@@ -81,9 +81,10 @@ export function Header() {
                 >
                   <Group gap={7}>
                     <Avatar
-                      //   src={user.image} we can add profile image here if needed
+                      src={user?.user_metadata?.profile_picture}
                       radius="xl"
                       size={20}
+                      alt="Profile picture"
                     />
                     <Text fw={500} size="sm" lh={1} mr={3}>
                       {user.name}
@@ -100,7 +101,7 @@ export function Header() {
                       modal: 'settings',
                       title: 'Settings',
                       body: {
-                        modalBody: 'Upload your material here',
+                        modalBody: '',
                       },
                     });
                   }}
