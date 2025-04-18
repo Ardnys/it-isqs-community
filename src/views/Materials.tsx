@@ -7,14 +7,15 @@ import { useUser } from '../supabase/loader';
 import { getUserRole } from '../Utils/RoleChecker';
 
 const Materials = () => {
-  const [files, setFiles] = useState<{ name: string; url: string }[]>([]);
+  const [files, setFiles] = useState<
+    { name: string; url: string; path: string }[]
+  >([]);
   const { user } = useUser();
 
   const fetchFiles = async () => {
     try {
-      // List files in the "materials" folder of the "storage" bucket
       const { data, error } = await supabaseClient.storage
-        .from('storage') // Your bucket name
+        .from('storage')
         .list('materials', {
           limit: 100,
         });
@@ -22,13 +23,14 @@ const Materials = () => {
       if (error) {
         throw error;
       }
-      // Get public URLs for each file
+
       const fileUrls =
         data?.map((file) => ({
           name: file.name,
+          path: `materials/${file.name}`,
           url: supabaseClient.storage
             .from('storage')
-            .getPublicUrl(`materials/${file.name}`).data.publicUrl, // Get the public URL for each file
+            .getPublicUrl(`materials/${file.name}`).data.publicUrl,
         })) || [];
 
       setFiles(fileUrls);
@@ -51,7 +53,40 @@ const Materials = () => {
     };
     fetchRole();
   }, [user]);
-  console.log('role is' + role);
+
+  const handleDownload = async (
+    bucket: string,
+    path: string,
+    filename: string,
+  ) => {
+    try {
+      console.log(path);
+      const { data, error } = await supabaseClient.storage
+        .from(bucket)
+        .download(path);
+
+      if (error || !data) {
+        console.error('Download error:', error);
+        return;
+      }
+
+      // Create a URL for the file blob
+      const url = URL.createObjectURL(data);
+
+      // Create a temporary anchor and trigger download
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      // Cleanup the blob URL
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Unexpected error:', err);
+    }
+  };
 
   return (
     <div>
@@ -85,7 +120,7 @@ const Materials = () => {
               style={{ width: '100%' }}
             >
               <Stack>
-                <Text>{file.name}</Text> {/* Display the file name */}
+                <Text>{file.name}</Text>
                 <Button
                   component="a"
                   href={file.url}
@@ -95,6 +130,18 @@ const Materials = () => {
                   fullWidth
                 >
                   View
+                </Button>
+                <Button
+                  component="a"
+                  download={file.name}
+                  onClick={() =>
+                    handleDownload('storage', file.path, file.name)
+                  }
+                  variant="filled"
+                  color="teal"
+                  fullWidth
+                >
+                  Download
                 </Button>
               </Stack>
             </Card>
