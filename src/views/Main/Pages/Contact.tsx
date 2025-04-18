@@ -1,35 +1,57 @@
-import { useState } from 'react';
-import { Box, Button, Container, Stack, Text, TextInput, Textarea, Title } from '@mantine/core';
+import { Box, Container, Grid, Group, Stack, Text, Title, Anchor, rem } from '@mantine/core';
+import { IconMail, IconPhone, IconWorld } from '@tabler/icons-react';
 
 function Contact() {
-  const [formSent, setFormSent] = useState(false);
-
-  const handleSubmit = () => {
-    setFormSent(true);
-  };
-
   return (
     <Box>
       <Container size="md" py="lg">
-        <Stack gap="xl">
-            <Title order={2} ta="center">
-            Contact Us
-            </Title>
-            <Text ta="center" c="dimmed" style={{ maxWidth: 600, margin: '0 auto' }}>
-            Deez contact us page
-            </Text>
+        <Title order={2} ta="center" mb="xl">
+          Contact Us
+        </Title>
 
-          <form style={{ maxWidth: 600, margin: '0 auto' }} onSubmit={e => e.preventDefault()}>
-            <Stack gap="md">
-              <TextInput label="Your Name" placeholder="John Doe" required radius="md" />
-              <TextInput label="Your Email" placeholder="john@example.com" type="email" required radius="md" />
-              <Textarea label="Message" placeholder="Type your message here..." minRows={4} required radius="md" />
-              <Button fullWidth mt="sm" variant="filled" color="blue" radius="md" onClick={handleSubmit}>
-                {formSent ? 'Message Sent' : 'Send Message'}
-              </Button>
+        <Grid>
+          {/* Left Column: Contact Info */}
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <Stack gap="lg">
+              <Group align="center" gap="sm">
+                <IconWorld size={20} />
+                <Text>
+                  Website:{' '}
+                  <Anchor href="https://www.cankaya.edu.tr" target="_blank" rel="noopener noreferrer">
+                    https://www.cankaya.edu.tr
+                  </Anchor>
+                </Text>
+              </Group>
+
+              <Group align="center" gap="sm">
+                <IconPhone size={20} />
+                <Text>Phone: +903122331291</Text>
+              </Group>
+
+              <Group align="center" gap="sm">
+                <IconMail size={20} />
+                <Text>Email: it_isqs@gmail.com</Text>
+              </Group>
             </Stack>
-          </form>
-        </Stack>
+          </Grid.Col>
+
+          {/* Right Column: Image Placeholder */}
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <Box
+              style={{
+                width: '100%',
+                height: rem(200),
+                backgroundColor: '#f0f0f0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: '1px dashed #ccc',
+              }}
+            >
+              <Text c="dimmed">[Image or Map Placeholder]</Text>
+            </Box>
+          </Grid.Col>
+        </Grid>
       </Container>
     </Box>
   );
