@@ -64,6 +64,7 @@ export const Settings = ({
         .from('storage')
         .getPublicUrl(data?.path ?? '');
 
+      //update the pfp in the metadata
       const { error: updateError } = await supabaseClient.auth.updateUser({
         data: { profile_picture: publicData.publicUrl },
       });
