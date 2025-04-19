@@ -15,37 +15,6 @@ import { IconArrowUp, IconArrowDown, IconMessage } from '@tabler/icons-react';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { useEffect, useState } from 'react';
 
-// Mock posts data (now includes avatar paths)
-const mockPosts = [
-  {
-    id: 1,
-    title: 'How to use Mantine with Next.js?',
-    author: 'dev_user',
-    avatarPath: 'avatars/dev_user.png', // Path in Supabase Storage
-    date: '2 hours ago',
-    votes: 24,
-    comments: 5,
-  },
-  {
-    id: 2,
-    title: 'Best practices for React state management in 2024',
-    author: 'react_lover',
-    avatarPath: 'avatars/react_lover.jpg',
-    date: '1 day ago',
-    votes: 56,
-    comments: 12,
-  },
-  {
-    id: 3,
-    title: 'Introducing a new UI library - Should we switch?',
-    author: 'ui_enthusiast',
-    avatarPath: 'avatars/ui_enthusiast.webp',
-    date: '3 days ago',
-    votes: -3,
-    comments: 8,
-  },
-];
-
 export default function ForumPage() {
   const [posts, setPosts] = useState<ForumPost[] | null>(null);
 
