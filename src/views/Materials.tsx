@@ -42,17 +42,21 @@ const Materials = () => {
       console.error('Error fetching files:', error);
     }
   };
+  useEffect(() => {
+    fetchFiles();
+  }, []);
 
   const [role, setRole] = useState<'registered' | 'professional' | null>(null);
 
   useEffect(() => {
     const fetchRole = async () => {
-      if (!user?.id) return; // Using id is better than email for lookups
+      if (!user?.email) return;
+      console.log(user.email);
 
       const { data, error } = await supabaseClient
         .from('RegisteredUser')
         .select('role')
-        .eq('id', user.id)
+        .eq('email', user.email)
         .single();
 
       if (error) {
@@ -61,7 +65,6 @@ const Materials = () => {
         return;
       }
 
-      // Assuming your role column contains either 'registered' or 'professional'
       if (data?.role === 'registered' || data?.role === 'professional') {
         setRole(data.role);
       } else {
@@ -70,7 +73,7 @@ const Materials = () => {
     };
 
     fetchRole();
-  }, [user?.id]); // Only re-run if user.id changes
+  }, [user?.email]);
 
   return (
     <div>
