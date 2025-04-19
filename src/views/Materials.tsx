@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { openTypedModal } from '../mantine/modals/modals-utils';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { useUser } from '../supabase/loader';
-import { getUserRole } from '../Utils/RoleChecker';
+
 import handleDownload from '../Utils/DownloadHandler';
 import { useStore } from '@nanostores/react';
 import { $currUser } from '../global-state/user';
@@ -42,21 +42,38 @@ const Materials = () => {
       console.error('Error fetching files:', error);
     }
   };
-
   useEffect(() => {
     fetchFiles();
   }, []);
 
   const [role, setRole] = useState<'registered' | 'professional' | null>(null);
+
   useEffect(() => {
     const fetchRole = async () => {
-      if (user?.email) {
-        const r = await getUserRole(user.email);
-        setRole(r);
+      if (!user?.email) return;
+      console.log(user.email);
+
+      const { data, error } = await supabaseClient
+        .from('RegisteredUser')
+        .select('role')
+        .eq('email', user.email)
+        .single();
+
+      if (error) {
+        console.error('Error fetching role:', error);
+        setRole(null);
+        return;
+      }
+
+      if (data?.role === 'registered' || data?.role === 'professional') {
+        setRole(data.role);
+      } else {
+        setRole(null);
       }
     };
+
     fetchRole();
-  }, [user]);
+  }, [user?.email]);
 
   return (
     <div>

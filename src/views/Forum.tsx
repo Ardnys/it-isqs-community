@@ -29,9 +29,7 @@ export default function ForumPage() {
     creation_date,
     votes,
     user_id,
-    professional_id,
-    RegisteredUser:user_id(name, surname, email),
-    Professional:professional_id(name, surname, email, occupation)
+    RegisteredUser:user_id(name, surname, email)
   `,
         )
         .order('creation_date', { ascending: false });
@@ -86,9 +84,7 @@ export default function ForumPage() {
                     Posted by{' '}
                     {post.RegisteredUser
                       ? `${post.RegisteredUser.name} ${post.RegisteredUser.surname ?? ''}`
-                      : post.Professional
-                        ? `${post.Professional.name} ${post.Professional.surname ?? ''}`
-                        : 'Anonymous'}
+                      : 'Anonymous'}
                     · {new Date(post.creation_date).toLocaleDateString()}
                   </Text>
 

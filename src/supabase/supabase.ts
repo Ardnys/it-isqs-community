@@ -73,72 +73,10 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "CoAuthors_author_id_fkey"
-            columns: ["author_id"]
-            isOneToOne: true
-            referencedRelation: "Professional"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "CoAuthors_blog_id_fkey"
             columns: ["blog_id"]
             isOneToOne: false
             referencedRelation: "Blog"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      ForumComment: {
-        Row: {
-          body: string | null
-          date: string
-          id: number
-          parent_comment_id: number | null
-          post_id: number | null
-          professional_id: number | null
-          user_id: number | null
-          votes: number | null
-        }
-        Insert: {
-          body?: string | null
-          date?: string
-          id?: number
-          parent_comment_id?: number | null
-          post_id?: number | null
-          professional_id?: number | null
-          user_id?: number | null
-          votes?: number | null
-        }
-        Update: {
-          body?: string | null
-          date?: string
-          id?: number
-          parent_comment_id?: number | null
-          post_id?: number | null
-          professional_id?: number | null
-          user_id?: number | null
-          votes?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "ForumComment_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "ForumComment"
-            referencedColumns: ["parent_comment_id"]
-          },
-          {
-            foreignKeyName: "ForumComment_professional_id_fkey"
-            columns: ["professional_id"]
-            isOneToOne: false
-            referencedRelation: "Professional"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "ForumComment_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "RegisteredUser"
             referencedColumns: ["id"]
           },
         ]
@@ -176,13 +114,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "ForumPost_professional_id_fkey"
-            columns: ["professional_id"]
-            isOneToOne: false
-            referencedRelation: "Professional"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "ForumPost_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -191,50 +122,81 @@ export type Database = {
           },
         ]
       }
-      Professional: {
+      ForumReply: {
         Row: {
-          email: string | null
+          body: string | null
+          date: string | null
           id: number
-          name: string
-          occupation: string | null
-          phone: string | null
-          surname: string | null
+          parent_comment_id: number | null
+          post_id: number
+          user_id: number
+          votes: number | null
         }
         Insert: {
-          email?: string | null
+          body?: string | null
+          date?: string | null
           id?: number
-          name: string
-          occupation?: string | null
-          phone?: string | null
-          surname?: string | null
+          parent_comment_id?: number | null
+          post_id: number
+          user_id: number
+          votes?: number | null
         }
         Update: {
-          email?: string | null
+          body?: string | null
+          date?: string | null
           id?: number
-          name?: string
-          occupation?: string | null
-          phone?: string | null
-          surname?: string | null
+          parent_comment_id?: number | null
+          post_id?: number
+          user_id?: number
+          votes?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ForumReply_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "ForumReply"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ForumReply_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "ForumPost"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ForumReply_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "RegisteredUser"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       RegisteredUser: {
         Row: {
           email: string | null
           id: number
           name: string
+          pfp_url: string | null
+          role: string | null
           surname: string | null
         }
         Insert: {
           email?: string | null
           id?: number
           name: string
+          pfp_url?: string | null
+          role?: string | null
           surname?: string | null
         }
         Update: {
           email?: string | null
           id?: number
           name?: string
+          pfp_url?: string | null
+          role?: string | null
           surname?: string | null
         }
         Relationships: []

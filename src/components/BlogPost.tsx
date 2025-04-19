@@ -21,7 +21,6 @@ type BlogPostProps = {
 };
 
 const BlogPost = ({ id, title, body, thumbnail, date }: BlogPostProps) => {
-  const navigate = useNavigate();
   return (
     <Card withBorder radius="md" shadow="sm" padding="lg">
       <Group justify="flex-start">
