@@ -73,13 +73,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "CoAuthors_author_id_fkey"
-            columns: ["author_id"]
-            isOneToOne: true
-            referencedRelation: "Professional"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "CoAuthors_blog_id_fkey"
             columns: ["blog_id"]
             isOneToOne: false
@@ -120,13 +113,6 @@ export type Database = {
           votes?: number | null
         }
         Relationships: [
-          {
-            foreignKeyName: "ForumPost_professional_id_fkey"
-            columns: ["professional_id"]
-            isOneToOne: false
-            referencedRelation: "Professional"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "ForumPost_user_id_fkey"
             columns: ["user_id"]
@@ -188,42 +174,13 @@ export type Database = {
           },
         ]
       }
-      Professional: {
-        Row: {
-          email: string | null
-          id: number
-          name: string
-          occupation: string | null
-          pfp_url: string | null
-          phone: string | null
-          surname: string | null
-        }
-        Insert: {
-          email?: string | null
-          id?: number
-          name: string
-          occupation?: string | null
-          pfp_url?: string | null
-          phone?: string | null
-          surname?: string | null
-        }
-        Update: {
-          email?: string | null
-          id?: number
-          name?: string
-          occupation?: string | null
-          pfp_url?: string | null
-          phone?: string | null
-          surname?: string | null
-        }
-        Relationships: []
-      }
       RegisteredUser: {
         Row: {
           email: string | null
           id: number
           name: string
           pfp_url: string | null
+          role: string | null
           surname: string | null
         }
         Insert: {
@@ -231,6 +188,7 @@ export type Database = {
           id?: number
           name: string
           pfp_url?: string | null
+          role?: string | null
           surname?: string | null
         }
         Update: {
@@ -238,6 +196,7 @@ export type Database = {
           id?: number
           name?: string
           pfp_url?: string | null
+          role?: string | null
           surname?: string | null
         }
         Relationships: []
