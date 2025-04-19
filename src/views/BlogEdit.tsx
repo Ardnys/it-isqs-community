@@ -22,7 +22,7 @@ const BlogEdit = () => {
 
   const editor = useEditor({
     extensions: [StarterKit, Link],
-    content: '<h2 style="text-align: center;">Write your blog post here</h2>',
+    content: '<p style="text-align: center;">Write your blog post here</p>',
   });
 
   const form = useForm({

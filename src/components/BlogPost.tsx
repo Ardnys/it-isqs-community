@@ -7,6 +7,7 @@ import {
   Divider,
   Box,
   Spoiler,
+  Title,
 } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,13 +23,12 @@ const BlogPost = ({ id, title, body, thumbnail, date }: BlogPostProps) => {
   const navigate = useNavigate();
   return (
     <Box onClick={() => navigate(`/blogs/${id}`)} style={{ cursor: 'pointer' }}>
-      <Card withBorder radius="md" shadow="sm" padding="md">
-        <Group justify="center">
-          <Stack gap={6} style={{ flex: 0.45 }}>
+      <Card withBorder radius="md" shadow="sm" padding="lg">
+        <Group justify="flex-start">
+          <Stack justify="flex-start" gap={6} style={{ flex: 1 }}>
+            {/* somehow these are vertically aligned in center */}
             <Group>
-              <Text fw={600} size="lg">
-                {title || 'Untitled'}
-              </Text>
+              <Title order={2}>{title || 'Untitled'}</Title>
               <Text size="sm" c="dimmed">
                 {date ? new Date(date).toLocaleDateString() : ''}
               </Text>
