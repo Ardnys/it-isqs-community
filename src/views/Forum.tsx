@@ -75,7 +75,8 @@ export default function ForumPage() {
                   <Group
                     justify="space-between"
                     mb="xs"
-                    onClick={() => navigate('/forum/{deez}')}
+                    onClick={() => navigate(`/forum/${post.id}`)}
+                    style={{ cursor: 'pointer' }}
                   >
                     <Title order={3}>{post.title ?? 'Untitled'}</Title>
 

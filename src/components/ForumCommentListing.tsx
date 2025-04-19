@@ -11,37 +11,36 @@ type ForumReply = {
   parent_comment_id: number | null;
   body: string | null;
   date: string | null;
-};
-
-type UserWithComments = {
-  id: number;
-  name: string;
-  surname: string | null;
-  pfp_url: string | null;
-  ForumReply: ForumReply[];
+  RegisteredUser: {
+    name: string;
+    surname: string | null;
+    pfp_url: string | null;
+  } | null;
 };
 
 export type CommentNode = ForumReply & {
-  user: { name: string; surname: string | null; pfp_url: string | null };
+  user: {
+    name: string;
+    surname: string | null;
+    pfp_url: string | null;
+  };
   replies: CommentNode[];
 };
 
-function buildCommentTree(data: UserWithComments[]): CommentNode[] {
+function buildCommentTree(data: ForumReply[]): CommentNode[] {
   const allComments: Record<number, CommentNode> = {};
   const tree: CommentNode[] = [];
 
-  data.forEach((user) => {
-    user.ForumReply.forEach((comment) => {
-      allComments[comment.id] = {
-        ...comment,
-        user: {
-          name: user.name,
-          surname: user.surname,
-          pfp_url: user.pfp_url,
-        },
-        replies: [],
-      };
-    });
+  data.forEach((comment) => {
+    allComments[comment.id] = {
+      ...comment,
+      user: {
+        name: comment.RegisteredUser?.name ?? 'Unknown',
+        surname: comment.RegisteredUser?.surname ?? '',
+        pfp_url: comment.RegisteredUser?.pfp_url ?? null,
+      },
+      replies: [],
+    };
   });
 
   Object.values(allComments).forEach((comment) => {
@@ -56,26 +55,29 @@ function buildCommentTree(data: UserWithComments[]): CommentNode[] {
   return tree;
 }
 
-const ForumCommentListing = () => {
+const ForumCommentListing = ({ postId }: { postId: number }) => {
   const [comments, setComments] = useState<CommentNode[]>([]);
 
   useEffect(() => {
     const fetchAllComments = async () => {
-      const { data, error } = await supabaseClient.from('RegisteredUser')
-        .select(`
+      const { data, error } = await supabaseClient
+        .from('ForumReply')
+        .select(
+          `
           id,
-          name,
-          surname,
-          pfp_url,
-          ForumReply (
-            id,
-            user_id,
-            post_id,
-            body,
-            date,
-            parent_comment_id
+          user_id,
+          post_id,
+          body,
+          date,
+          parent_comment_id,
+          RegisteredUser:user_id (
+            name,
+            surname,
+            pfp_url
           )
-        `);
+        `,
+        )
+        .eq('post_id', postId);
 
       if (error) {
         console.error('Error fetching comments:', error);
@@ -83,13 +85,14 @@ const ForumCommentListing = () => {
       }
 
       if (data) {
+        console.log(data);
         const tree = buildCommentTree(data);
         setComments(tree);
       }
     };
 
     fetchAllComments();
-  }, []);
+  }, [postId]);
 
   return (
     <Stack gap="md">

@@ -8,6 +8,7 @@ import Materials from '../views/Materials';
 import SignUp from '../views/SignUp';
 import BlogEdit from '../views/BlogEdit';
 import BlogDetail from '../views/BlogDetail';
+import Foru from '../views/Foru';
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ export const router = createBrowserRouter([
       {
         path: '/forum',
         element: <Forum />,
+      },
+      {
+        path: '/forum/:id',
+        element: <Foru />,
       },
       {
         path: '/blog-edit',
