@@ -24,6 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import { $currUser } from '../global-state/user';
 import { supabaseClient } from '../supabase/supabaseClient';
 import classes from './HeaderTabs.module.css';
+import { openTypedModal } from '../mantine/modals/modals-utils';
 
 const mainLinks = [
   { link: '/', label: 'Home' },
@@ -145,6 +146,7 @@ export function Header() {
               <Button onClick={handleLogin}>Login</Button>
             )}
           </Group>
+
         </Group>
       </Container>
     </div>
