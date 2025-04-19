@@ -43,20 +43,34 @@ const Materials = () => {
     }
   };
 
-  useEffect(() => {
-    fetchFiles();
-  }, []);
-
   const [role, setRole] = useState<'registered' | 'professional' | null>(null);
+
   useEffect(() => {
     const fetchRole = async () => {
-      if (user?.email) {
-        const r = await getUserRole(user.email);
-        setRole(r);
+      if (!user?.id) return; // Using id is better than email for lookups
+
+      const { data, error } = await supabaseClient
+        .from('RegisteredUser')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+
+      if (error) {
+        console.error('Error fetching role:', error);
+        setRole(null);
+        return;
+      }
+
+      // Assuming your role column contains either 'registered' or 'professional'
+      if (data?.role === 'registered' || data?.role === 'professional') {
+        setRole(data.role);
+      } else {
+        setRole(null);
       }
     };
+
     fetchRole();
-  }, [user]);
+  }, [user?.id]); // Only re-run if user.id changes
 
   return (
     <div>
