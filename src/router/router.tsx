@@ -7,6 +7,7 @@ import Home from '../views/Home';
 import Materials from '../views/Materials';
 import SignUp from '../views/SignUp';
 import BlogEdit from '../views/BlogEdit';
+import BlogDetail from '../views/BlogDetail';
 
 export const router = createBrowserRouter([
   {
@@ -28,7 +29,10 @@ export const router = createBrowserRouter([
       {
         path: '/blogs',
         element: <Blogs />,
-        children: [{}],
+      },
+      {
+        path: '/blogs/:id',
+        element: <BlogDetail />,
       },
       {
         path: '/forum',

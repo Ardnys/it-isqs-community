@@ -48,6 +48,7 @@ const Blogs = () => {
       {blogPosts?.map((post) => (
         <BlogPost
           key={post.id}
+          id={post.id}
           title={post.title}
           body={post.body}
           thumbnail={post.thumbnail}
