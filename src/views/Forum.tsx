@@ -13,6 +13,7 @@ import {
 } from '@mantine/core';
 import { IconArrowUp, IconArrowDown, IconMessage } from '@tabler/icons-react';
 import { supabaseClient } from '../supabase/supabaseClient';
+import { useEffect, useState } from 'react';
 
 // Mock posts data (now includes avatar paths)
 const mockPosts = [
@@ -57,15 +58,13 @@ export default function ForumPage() {
 
       <Stack gap="md">
         {mockPosts.map((post) => {
-          // Get public avatar URL from Supabase Storage
           const { data: avatarUrl } = supabaseClient.storage
-            .from('public') // Your bucket name
+            .from('public')
             .getPublicUrl(post.avatarPath);
 
           return (
             <Card key={post.id} shadow="sm" p="lg" radius="md" withBorder>
               <Flex gap="md" align="flex-start">
-                {/* Avatar on the left */}
                 <Avatar
                   src={avatarUrl.publicUrl}
                   alt={post.author}
@@ -73,7 +72,6 @@ export default function ForumPage() {
                   size="lg"
                 />
 
-                {/* Post content on the right */}
                 <div style={{ flex: 1 }}>
                   <Group justify="space-between" mb="xs">
                     <Title order={3}>{post.title}</Title>
