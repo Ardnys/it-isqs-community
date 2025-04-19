@@ -45,8 +45,6 @@ const Blogs = () => {
     <Stack>
       <Button onClick={() => navigate('/blog-edit')}>Create New Post</Button>
 
-      <Title order={2}>Blog Posts</Title>
-
       {blogPosts?.map((post) => (
         <BlogPost
           key={post.id}

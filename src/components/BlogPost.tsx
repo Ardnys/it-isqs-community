@@ -1,4 +1,13 @@
-import { Card, Group, Text, Image, Stack } from '@mantine/core';
+import {
+  Card,
+  Group,
+  Text,
+  Image,
+  Stack,
+  Divider,
+  Box,
+  Spoiler,
+} from '@mantine/core';
 
 type BlogPostProps = {
   title: string | null;
@@ -9,37 +18,42 @@ type BlogPostProps = {
 
 const BlogPost = ({ title, body, thumbnail, date }: BlogPostProps) => {
   return (
-    <Card
-      shadow="sm"
-      padding="md"
-      radius="md"
-      withBorder
-      style={{ display: 'flex', gap: '1rem' }}
-    >
-      {thumbnail && (
-        <Image
-          src={thumbnail}
-          alt={title || 'Blog thumbnail'}
-          width={120}
-          height={80}
-          fit="cover"
-          radius="sm"
-        />
-      )}
+    <Card withBorder radius="md" shadow="sm" padding="md">
+      <Group justify="center">
+        <Stack gap={6} style={{ flex: 0.45 }}>
+          <Group>
+            <Text fw={600} size="lg">
+              {title || 'Untitled'}
+            </Text>
+            <Text size="sm" c="dimmed">
+              {date ? new Date(date).toLocaleDateString() : ''}
+            </Text>
+          </Group>
+          <Divider my={4} />
 
-      <Stack gap="xs" style={{ flex: 1 }}>
-        <Group justify="space-between">
-          <Text fw={600} size="lg">
-            {title || 'Untitled'}
-          </Text>
-          <Text size="sm" color="dimmed">
-            {date ? new Date(date).toLocaleDateString() : ''}
-          </Text>
-        </Group>
-        <Text size="sm" lineClamp={2}>
-          {body || 'No content'}
-        </Text>
-      </Stack>
+          <Spoiler maxHeight={150} showLabel="Read more" hideLabel="Hide">
+            <Box
+              style={{ lineHeight: 1.4 }}
+              // This is actually suggested by docs lol: https://mantine.dev/core/typography-styles-provider/
+              dangerouslySetInnerHTML={{
+                __html: body || '<i>No content</i>',
+              }}
+            />
+          </Spoiler>
+        </Stack>
+
+        {thumbnail && (
+          <Image
+            src={thumbnail}
+            alt={title || 'Blog thumbnail'}
+            w={240}
+            h={240}
+            radius="sm"
+            fit="cover"
+            style={{ flexShrink: 0 }}
+          />
+        )}
+      </Group>
     </Card>
   );
 };
