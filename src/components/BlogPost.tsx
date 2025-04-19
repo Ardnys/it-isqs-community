@@ -8,6 +8,7 @@ import {
   Box,
   Spoiler,
   Title,
+  Anchor,
 } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,44 +23,42 @@ type BlogPostProps = {
 const BlogPost = ({ id, title, body, thumbnail, date }: BlogPostProps) => {
   const navigate = useNavigate();
   return (
-    <Box onClick={() => navigate(`/blogs/${id}`)} style={{ cursor: 'pointer' }}>
-      <Card withBorder radius="md" shadow="sm" padding="lg">
-        <Group justify="flex-start">
-          <Stack justify="flex-start" gap={6} style={{ flex: 1 }}>
-            {/* somehow these are vertically aligned in center */}
-            <Group>
-              <Title order={2}>{title || 'Untitled'}</Title>
-              <Text size="sm" c="dimmed">
-                {date ? new Date(date).toLocaleDateString() : ''}
-              </Text>
-            </Group>
-            <Divider my={4} />
+    <Card withBorder radius="md" shadow="sm" padding="lg">
+      <Group justify="flex-start">
+        <Stack justify="flex-start" gap={6} style={{ flex: 1 }}>
+          {/* somehow these are vertically aligned in center */}
+          <Group>
+            <Title order={2}>{title || 'Untitled'}</Title>
+            <Text size="sm" c="dimmed">
+              {date ? new Date(date).toLocaleDateString() : ''}
+            </Text>
+          </Group>
+          <Divider my={4} />
 
-            <Spoiler maxHeight={150} showLabel="Read more" hideLabel="Hide">
-              <Box
-                style={{ lineHeight: 1.4 }}
-                // This is actually suggested by docs lol: https://mantine.dev/core/typography-styles-provider/
-                dangerouslySetInnerHTML={{
-                  __html: body || '<i>No content</i>',
-                }}
-              />
-            </Spoiler>
-          </Stack>
+          <Text
+            lineClamp={4} // limit to 4 lines if not expanded
+            dangerouslySetInnerHTML={{
+              __html: body || '<i>No content</i>',
+            }}
+          />
+          <Anchor href={`/blogs/${id}`} underline="always" c="teal">
+            Read more
+          </Anchor>
+        </Stack>
 
-          {thumbnail && (
-            <Image
-              src={thumbnail}
-              alt={title || 'Blog thumbnail'}
-              w={240}
-              h={240}
-              radius="sm"
-              fit="cover"
-              style={{ flexShrink: 0 }}
-            />
-          )}
-        </Group>
-      </Card>
-    </Box>
+        {thumbnail && (
+          <Image
+            src={thumbnail}
+            alt={title || 'Blog thumbnail'}
+            w={240}
+            h={240}
+            radius="sm"
+            fit="cover"
+            style={{ flexShrink: 0 }}
+          />
+        )}
+      </Group>
+    </Card>
   );
 };
 
