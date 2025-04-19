@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { $currUser } from '../global-state/user';
 import { supabaseClient } from '../supabase/supabaseClient';
 import classes from './HeaderTabs.module.css';
+import { openTypedModal } from '../mantine/modals/modals-utils';
 
 const mainLinks = [
   { link: '/', label: 'Home' },
@@ -80,9 +81,10 @@ export function Header() {
                 >
                   <Group gap={7}>
                     <Avatar
-                      //   src={user.image} we can add profile image here if needed
+                      src={user?.user_metadata?.profile_picture}
                       radius="xl"
                       size={20}
+                      alt="Profile picture"
                     />
                     <Text fw={500} size="sm" lh={1} mr={3}>
                       {user.name}
@@ -94,8 +96,17 @@ export function Header() {
               <Menu.Dropdown>
                 <Menu.Item
                   leftSection={<IconSettings size={16} stroke={1.5} />}
+                  onClick={() => {
+                    openTypedModal({
+                      modal: 'settings',
+                      title: 'Settings',
+                      body: {
+                        modalBody: '',
+                      },
+                    });
+                  }}
                 >
-                  Account settings
+                  Settings
                 </Menu.Item>
                 <Menu.Item
                   leftSection={<IconLogout size={16} stroke={1.5} />}

@@ -1,7 +1,7 @@
-import { Test } from './Test';
-import { Test2 } from './Test2';
+import { Upload } from './FIleUploadModal';
+import { Settings } from './SettingsModal';
 
 export const mantineModals = {
-  testName: Test,
-  test2name: Test2,
+  upload: Upload,
+  settings: Settings,
 } as const;

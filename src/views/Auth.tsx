@@ -28,11 +28,13 @@ export function Authentication() {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
     },
   });
+
   const navigate = useNavigate();
 
   // redirect if logged in
   const { user } = useUser();
   if (user) {
+    console.log(user.role);
     return <Navigate to="/"></Navigate>;
   }
 
