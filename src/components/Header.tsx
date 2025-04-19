@@ -1,5 +1,4 @@
 import {
-  ActionIcon,
   Anchor,
   Avatar,
   Button,
@@ -8,16 +7,9 @@ import {
   Menu,
   Text,
   UnstyledButton,
-  useMantineColorScheme,
 } from '@mantine/core';
 import { useStore } from '@nanostores/react';
-import {
-  IconChevronDown,
-  IconLogout,
-  IconMoon,
-  IconSettings,
-  IconSun,
-} from '@tabler/icons-react';
+import { IconChevronDown, IconLogout, IconSettings } from '@tabler/icons-react';
 import cx from 'clsx';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -37,8 +29,6 @@ export function Header() {
   const [userMenuOpened, setUserMenuOpened] = useState(false);
   const user = useStore($currUser);
   const navigate = useNavigate();
-  const [theme, setTheme] = useState<string>('dark');
-  const { setColorScheme, clearColorScheme } = useMantineColorScheme();
 
   const handleLogout = () => {
     supabaseClient.auth.signOut();
@@ -65,16 +55,6 @@ export function Header() {
     </Anchor>
   ));
 
-  const handleThemeToggle = () => {
-    if (theme === 'dark') {
-      setTheme('light');
-      setColorScheme('light');
-    } else {
-      setTheme('dark');
-      setColorScheme('dark');
-    }
-  };
-
   return (
     <div className={classes.header}>
       <Container className={classes.mainSection} size="lg">
@@ -83,70 +63,64 @@ export function Header() {
             {mainItems}
           </Group>
 
-          <Group>
-            <ActionIcon
-              variant="subtle"
-              color={theme === 'dark' ? 'yellow' : 'blue'}
-              onClick={() => handleThemeToggle()}
-              title="toggle color scheme"
+          {user ? (
+            // Menu for logged-in user
+            <Menu
+              width={260}
+              position="bottom-end"
+              transitionProps={{ transition: 'pop-top-right' }}
+              onClose={() => setUserMenuOpened(false)}
+              onOpen={() => setUserMenuOpened(true)}
+              withinPortal
             >
-              {theme === 'dark' ? (
-                <IconSun style={{ width: 18, height: 18 }} />
-              ) : (
-                <IconMoon style={{ width: 18, height: 18 }} />
-              )}
-            </ActionIcon>
-
-            {user ? (
-              // Menu for logged-in user
-              <Menu
-                width={260}
-                position="bottom-end"
-                transitionProps={{ transition: 'pop-top-right' }}
-                onClose={() => setUserMenuOpened(false)}
-                onOpen={() => setUserMenuOpened(true)}
-                withinPortal
-              >
-                <Menu.Target>
-                  <UnstyledButton
-                    className={cx(classes.user, {
-                      [classes.userActive]: userMenuOpened,
-                    })}
-                  >
-                    <Group gap={7}>
-                      <Avatar
-                        //   src={user.image} we can add profile image here if needed
-                        radius="xl"
-                        size={20}
-                      />
-                      <Text fw={500} size="sm" lh={1} mr={3}>
-                        {user.name}
-                      </Text>
-                      <IconChevronDown size={12} stroke={1.5} />
-                    </Group>
-                  </UnstyledButton>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item
-                    leftSection={<IconSettings size={16} stroke={1.5} />}
-                  >
-                    Account settings
-                  </Menu.Item>
-                  <Menu.Item
-                    leftSection={<IconLogout size={16} stroke={1.5} />}
-                    onClick={handleLogout}
-                    color="red"
-                  >
-                    Logout
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-            ) : (
-              // Login button for logged-out users
-              <Button onClick={handleLogin}>Login</Button>
-            )}
-          </Group>
-
+              <Menu.Target>
+                <UnstyledButton
+                  className={cx(classes.user, {
+                    [classes.userActive]: userMenuOpened,
+                  })}
+                >
+                  <Group gap={7}>
+                    <Avatar
+                      src={user?.user_metadata?.profile_picture}
+                      radius="xl"
+                      size={20}
+                      alt="Profile picture"
+                    />
+                    <Text fw={500} size="sm" lh={1} mr={3}>
+                      {user.name}
+                    </Text>
+                    <IconChevronDown size={12} stroke={1.5} />
+                  </Group>
+                </UnstyledButton>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item
+                  leftSection={<IconSettings size={16} stroke={1.5} />}
+                  onClick={() => {
+                    openTypedModal({
+                      modal: 'settings',
+                      title: 'Settings',
+                      body: {
+                        modalBody: '',
+                      },
+                    });
+                  }}
+                >
+                  Settings
+                </Menu.Item>
+                <Menu.Item
+                  leftSection={<IconLogout size={16} stroke={1.5} />}
+                  onClick={handleLogout}
+                  color="red"
+                >
+                  Logout
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          ) : (
+            // Login button for logged-out users
+            <Button onClick={handleLogin}>Login</Button>
+          )}
         </Group>
       </Container>
     </div>

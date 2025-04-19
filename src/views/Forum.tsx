@@ -33,6 +33,7 @@ export default function ForumPage() {
           user_id,
           RegisteredUser:user_id(name, surname, email)
         `,
+
         )
         .order('creation_date', { ascending: false });
 
