@@ -115,10 +115,11 @@ const BlogEdit = () => {
             <Image
               src={thumbnailPreview}
               alt="Thumbnail Preview"
-              style={{ width: '50', height: 'auto' }}
               radius="md"
-              width="50"
-              height="50"
+              // width={50}
+              // height={50}
+              fit="cover"
+              style={{ width: 400, height: 200 }}
             />
           )}
 
