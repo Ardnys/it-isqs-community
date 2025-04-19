@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { openTypedModal } from '../mantine/modals/modals-utils';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { useUser } from '../supabase/loader';
-import { getUserRole } from '../Utils/RoleChecker';
+
 import handleDownload from '../Utils/DownloadHandler';
 import { useStore } from '@nanostores/react';
 import { $currUser } from '../global-state/user';
