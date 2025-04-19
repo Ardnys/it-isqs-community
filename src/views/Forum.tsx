@@ -55,15 +55,15 @@ export default function ForumPage() {
         .from('ForumPost')
         .select(
           `
-          id,
-          title,
-          creation_date,
-          votes,
-          user_id,
-          professional_id,
-          RegisteredUser(name, surname, email),
-          Professional(name, surname, email, occupation)
-        `,
+    id,
+    title,
+    creation_date,
+    votes,
+    user_id,
+    professional_id,
+    RegisteredUser:user_id(name, surname, email),
+    Professional:professional_id(name, surname, email, occupation)
+  `,
         )
         .order('creation_date', { ascending: false });
 
