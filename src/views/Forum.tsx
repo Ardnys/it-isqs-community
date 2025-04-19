@@ -47,6 +47,36 @@ const mockPosts = [
 ];
 
 export default function ForumPage() {
+  const [posts, setPosts] = useState<ForumPost[] | null>(null);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      const { data, error } = await supabaseClient
+        .from('ForumPost')
+        .select(
+          `
+          id,
+          title,
+          creation_date,
+          votes,
+          user_id,
+          professional_id,
+          RegisteredUser(name, surname, email),
+          Professional(name, surname, email, occupation)
+        `,
+        )
+        .order('creation_date', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching posts:', error.message);
+      } else {
+        setPosts(data);
+      }
+    }
+
+    fetchPosts();
+  }, []);
+
   return (
     <Container size="md" py="xl">
       <Group justify="space-between" mb="xl">
@@ -57,31 +87,40 @@ export default function ForumPage() {
       </Group>
 
       <Stack gap="md">
-        {mockPosts.map((post) => {
-          const { data: avatarUrl } = supabaseClient.storage
-            .from('public')
-            .getPublicUrl(post.avatarPath);
+        {posts?.map((post) => {
+          // const { data: avatarUrl } = supabaseClient.storage
+          //   .from('public')
+          //   .getPublicUrl(post.avatarPath);
 
           return (
             <Card key={post.id} shadow="sm" p="lg" radius="md" withBorder>
               <Flex gap="md" align="flex-start">
-                <Avatar
+                {/* <Avatar
                   src={avatarUrl.publicUrl}
                   alt={post.author}
                   radius="xl"
                   size="lg"
-                />
+                /> */}
 
                 <div style={{ flex: 1 }}>
                   <Group justify="space-between" mb="xs">
-                    <Title order={3}>{post.title}</Title>
-                    <Badge color={post.votes >= 0 ? 'teal' : 'red'}>
-                      {post.votes} votes
+                    <Title order={3}>{post.title ?? 'Untitled'}</Title>
+
+                    <Badge
+                      color={post.votes && post.votes >= 0 ? 'teal' : 'red'}
+                    >
+                      {post.votes ?? 0} votes
                     </Badge>
                   </Group>
 
                   <Text size="sm" c="dimmed">
-                    Posted by {post.author} · {post.date}
+                    Posted by{' '}
+                    {post.RegisteredUser
+                      ? `${post.RegisteredUser.name} ${post.RegisteredUser.surname ?? ''}`
+                      : post.Professional
+                        ? `${post.Professional.name} ${post.Professional.surname ?? ''}`
+                        : 'Anonymous'}
+                    · {new Date(post.creation_date).toLocaleDateString()}
                   </Text>
 
                   <Group mt="md">
@@ -95,7 +134,7 @@ export default function ForumPage() {
                       leftSection={<IconMessage size="1rem" />}
                       variant="outline"
                     >
-                      {post.comments} comments
+                      {0} comments
                     </Badge>
                   </Group>
                 </div>

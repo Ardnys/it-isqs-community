@@ -1,26 +1,18 @@
-interface BaseAuthor {
-  id: string;
+interface Author {
   name: string;
-  avatar_url: string | null;
-  type: 'professional' | 'user';
+  surname: string | null;
+  email: string | null;
+  avatarPath?: string;
+  profession?: string; // for professionals
 }
-
-interface ProfessionalAuthor extends BaseAuthor {
-  type: 'professional';
-  occupation?: string;
-}
-
-interface UserAuthor extends BaseAuthor {
-  type: 'user';
-}
-
-type PostAuthor = ProfessionalAuthor | UserAuthor;
 
 interface ForumPost {
   id: number;
-  title: string;
-  body: string;
-  created_at: string;
-  votes: number;
-  author: PostAuthor;
+  title: string | null;
+  creation_date: string;
+  votes: number | null;
+  user_id: number | null;
+  professional_id: number | null;
+  RegisteredUser?: Author | null;
+  Professional?: Author | null;
 }
