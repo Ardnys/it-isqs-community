@@ -14,9 +14,11 @@ import {
 import { IconArrowUp, IconArrowDown, IconMessage } from '@tabler/icons-react';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ForumPage() {
   const [posts, setPosts] = useState<ForumPost[] | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchPosts() {
@@ -24,13 +26,13 @@ export default function ForumPage() {
         .from('ForumPost')
         .select(
           `
-    id,
-    title,
-    creation_date,
-    votes,
-    user_id,
-    RegisteredUser:user_id(name, surname, email)
-  `,
+          id,
+          title,
+          creation_date,
+          votes,
+          user_id,
+          RegisteredUser:user_id(name, surname, email)
+        `,
         )
         .order('creation_date', { ascending: false });
 
@@ -70,7 +72,11 @@ export default function ForumPage() {
                 /> */}
 
                 <div style={{ flex: 1 }}>
-                  <Group justify="space-between" mb="xs">
+                  <Group
+                    justify="space-between"
+                    mb="xs"
+                    onClick={() => navigate('/forum/{deez}')}
+                  >
                     <Title order={3}>{post.title ?? 'Untitled'}</Title>
 
                     <Badge
