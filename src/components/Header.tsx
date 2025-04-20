@@ -13,7 +13,7 @@ import { IconChevronDown, IconLogout, IconSettings } from '@tabler/icons-react';
 import cx from 'clsx';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { $currUser, $registeredUser } from '../global-state/user';
+import { $currUser } from '../global-state/user';
 import { supabaseClient } from '../supabase/supabaseClient';
 import classes from './HeaderTabs.module.css';
 import { openTypedModal } from '../mantine/modals/modals-utils';
@@ -27,7 +27,7 @@ const mainLinks = [
 
 export function Header() {
   const [userMenuOpened, setUserMenuOpened] = useState(false);
-  const user = useStore($registeredUser);
+  const user = useStore($currUser);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -81,7 +81,7 @@ export function Header() {
                 >
                   <Group gap={7}>
                     <Avatar
-                      src={user.pfp_url}
+                      src={user?.user_metadata?.profile_picture}
                       radius="xl"
                       size={20}
                       alt="Profile picture"

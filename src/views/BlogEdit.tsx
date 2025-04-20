@@ -10,15 +10,65 @@ import {
   TextInput,
   FileInput,
   Image,
+  Select,
 } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from '@mantine/form';
 import { supabaseClient } from '../supabase/supabaseClient';
 
 const BlogEdit = () => {
   const navigate = useNavigate();
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+  const [professionals, setProfessionals] = useState<
+    Array<{
+      value: string;
+      label: string;
+      avatar: string;
+    }>
+  >([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedProfessional, setSelectedProfessional] = useState<
+    string | null
+  >(null);
+
+  // Fetch professionals from the database
+  useEffect(() => {
+    const fetchProfessionals = async () => {
+      try {
+        setLoading(true);
+        const { data, error } = await supabaseClient
+          .from('RegisteredUser')
+          .select('id, name,pfp_url')
+          .eq('role', 'professional');
+
+        if (error) {
+          throw error;
+        }
+
+        if (data) {
+          const professionalsData = data.map((user) => ({
+            value: String(user.id),
+            label: user.name,
+            avatar: user.pfp_url || '', // maybe we can add the avatar next to name
+          }));
+          setProfessionals(professionalsData);
+        }
+      } catch (error) {
+        setError(
+          error instanceof Error
+            ? error.message
+            : 'Failed to fetch professionals',
+        );
+        console.error('Error fetching professionals:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfessionals();
+  }, []);
 
   const editor = useEditor({
     extensions: [StarterKit, Link],
@@ -29,11 +79,13 @@ const BlogEdit = () => {
     initialValues: {
       title: '',
       thumbnail: null as File | null,
+      professionalId: '',
     },
     validate: {
       title: (value) =>
         value.trim().length === 0 ? 'Title is required' : null,
       thumbnail: (value) => (value ? null : 'Thumbnail is required'),
+      professionalId: (value) => (value ? null : 'Add co-authors'),
     },
   });
 
@@ -54,43 +106,58 @@ const BlogEdit = () => {
     title: string;
     thumbnail: File | null;
     blogContent: string;
+    professionalId: string;
   }) => {
-    {
-      const { data, error } = await supabaseClient.storage
-        .from('storage')
-        .upload(
-          `thumbnails/${blog.thumbnail?.name as string}`,
-          blog.thumbnail as File,
-          {
-            contentType: 'image/jpeg',
-          },
-        );
-      if (error) {
-        console.error('Error while uploading file', error);
-      }
-    }
+    try {
+      // Upload thumbnail
+      const { data: uploadData, error: uploadError } =
+        await supabaseClient.storage
+          .from('storage')
+          .upload(
+            `thumbnails/${blog.thumbnail?.name as string}`,
+            blog.thumbnail as File,
+            {
+              contentType: 'image/jpeg',
+            },
+          );
 
-    const { error } = await supabaseClient.from('Blog').insert({
-      title: blog.title,
-      body: blog.blogContent,
-      thumbnail: blog.thumbnail?.name,
-    });
-    if (error) {
-      console.error('error while saving to db: ', error);
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      // Save blog post to database
+      const { error } = await supabaseClient.from('Blog').insert({
+        title: blog.title,
+        body: blog.blogContent,
+        thumbnail: blog.thumbnail?.name,
+        professional_id: blog.professionalId,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      navigate('/blogs'); // Redirect after successful save
+    } catch (error) {
+      console.error('Error while saving blog post:', error);
+      setError(
+        error instanceof Error ? error.message : 'Failed to save blog post',
+      );
     }
   };
 
-  const handleSave = (values: { title: string; thumbnail: File | null }) => {
+  const handleSave = (values: {
+    title: string;
+    thumbnail: File | null;
+    professionalId: string;
+  }) => {
     const blogContent = editor?.getHTML() as string;
-    console.log('Blog title:', values.title);
-    console.log('Blog content saved:', blogContent);
-    console.log('Thumbnail file:', values.thumbnail);
     saveBlogPost({
       title: values.title,
       thumbnail: values.thumbnail,
       blogContent: blogContent,
+      professionalId: values.professionalId,
     });
-    navigate('/blogs'); // Redirect back to the blogs page after saving
   };
 
   return (
@@ -103,6 +170,19 @@ const BlogEdit = () => {
             required
             {...form.getInputProps('title')}
           />
+
+          <Select
+            label="Add Co-Authors"
+            placeholder="Choose a professional"
+            data={professionals}
+            searchable
+            clearable
+            nothingFoundMessage="No professionals found"
+            disabled={loading}
+            error={form.errors.professionalId}
+            {...form.getInputProps('professionalId')}
+          />
+
           <FileInput
             label="Upload Thumbnail"
             accept="image/jpeg,image/png"
@@ -116,8 +196,6 @@ const BlogEdit = () => {
               src={thumbnailPreview}
               alt="Thumbnail Preview"
               radius="md"
-              // width={50}
-              // height={50}
               fit="cover"
               style={{ width: 400, height: 200 }}
             />
@@ -177,8 +255,14 @@ const BlogEdit = () => {
           <Button variant="outline" onClick={() => navigate('/blogs')}>
             Cancel
           </Button>
-          <Button type="submit">Save</Button>
+          <Button type="submit" loading={loading}>
+            Save
+          </Button>
         </Group>
+
+        {error && (
+          <div style={{ color: 'red', marginTop: '1rem' }}>Error: {error}</div>
+        )}
       </form>
     </div>
   );
