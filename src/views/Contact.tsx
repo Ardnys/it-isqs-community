@@ -48,37 +48,24 @@ function Contact() {
           }}
           align="stretch"
         >
-          {/* Contact Info */}
-          <Grid.Col span={{ base: 12, md: 6 }}>
-            <Box
-              p="md"
-              bg="white"
-              style={{
-                height: '100%',
-                border: '1px solid #ced4da',
-                borderRadius: rem(8),
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                display: 'flex',
-                flexDirection: 'column',
+           {/* Participants Countries */}
+           <Grid.Col span={{ base: 12, md: 6 }}>
+           <Box
+               p="md"
+               bg="white"
+               style={{
+                 height: '100%',
+                 border: '1px solid #ced4da',
+                 borderRadius: rem(8),
+                 boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                 display: 'flex',
+                 flexDirection: 'column',
               }}
             >
-              <Title order={4} mb="sm">Contact</Title>
-              <Text>
-                <strong></strong>{' '}
-                <Anchor
-                  // href="https://www.cankaya.edu.tr"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {/* https://www.cankaya.edu.tr */}
-                </Anchor>
-              </Text>
-              <Text mt="xs">
-                <strong>Phone:</strong> +90 312 233 1291
-              </Text>
-              <Text mt="xs">
-                <strong>Email:</strong> it_isqs@gmail.com
-              </Text>
+              <Title order={4} mb="sm">Participants countries</Title>
+              <Text fw={700}>Netherlands</Text>
+              <Text fw={700}>Spain</Text>
+              <Text fw={700}>Türkiye</Text>
             </Box>
           </Grid.Col>
 
@@ -122,22 +109,7 @@ function Contact() {
             </Box>
           </Grid.Col>
 
-          {/* Participants Countries */}
-          <Grid.Col span={12}>
-            <Box
-              p="md"
-              mt="md"
-              bg="white"
-              style={{
-                border: '1px solid #ced4da',
-                borderRadius: rem(8),
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              <Title order={4} mb="sm">Participants countries</Title>
-              <Text fw={700}>Netherlands, Spain, Türkiye</Text>
-            </Box>
-          </Grid.Col>
+         
         </Grid>
 
         {/* Objectives / Activities / Impact */}
