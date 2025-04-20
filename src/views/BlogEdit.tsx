@@ -353,9 +353,7 @@ const BlogEdit = () => {
           <Button variant="outline" onClick={() => navigate('/blogs')}>
             Cancel
           </Button>
-          <Button type="submit" loading={loading}>
-            Save
-          </Button>
+          <Button type="submit">Save</Button>
         </Group>
 
         {error && (
