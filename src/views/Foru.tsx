@@ -14,6 +14,7 @@ import {
   Skeleton,
   Container,
 } from '@mantine/core';
+import ReplyForm from '../components/ReplyForm';
 
 type ForumPost = {
   id: number;
@@ -104,6 +105,15 @@ const Foru = () => {
         )}
         <Divider label="Discussion" labelPosition="center" my="md" />
         <ForumCommentListing postId={Number(id)} />
+        <Divider
+          label="Add a reply to this post"
+          labelPosition="center"
+          my="md"
+        />
+        <ReplyForm
+          postId={Number(id)}
+          onSuccess={() => window.location.reload()}
+        />
       </Stack>
     </Container>
   );
