@@ -15,36 +15,173 @@ import { IconArrowUp, IconArrowDown, IconMessage } from '@tabler/icons-react';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useStore } from '@nanostores/react';
+import { $registeredUser } from '../global-state/user';
 
 export default function ForumPage() {
   const [posts, setPosts] = useState<ForumPost[] | null>(null);
   const navigate = useNavigate();
+  const user = useStore($registeredUser);
 
   useEffect(() => {
-    async function fetchPosts() {
-      const { data, error } = await supabaseClient
+    const fetchPostVotes = async (id: number) => {
+      const { count: upvotes, error: uperror } = await supabaseClient
+        .from('UserPostVotes')
+        .select('*', { count: 'exact', head: true })
+        .eq('post_id', id)
+        .eq('upvote', true);
+
+      if (uperror) {
+        console.error('Failed to fetch vote count for post', id, uperror);
+        return { upvotes: 0, downvotes: 0 };
+      }
+
+      const { count: downvotes, error: downerror } = await supabaseClient
+        .from('UserPostVotes')
+        .select('*', { count: 'exact', head: true })
+        .eq('post_id', id)
+        .eq('upvote', false);
+
+      if (downerror) {
+        console.error('Failed to fetch vote count for post', id, downerror);
+        return { upvotes: 0, downvotes: 0 };
+      }
+
+      return { upvotes: upvotes || 0, downvotes: downvotes || 0 };
+    };
+
+    const fetchPosts = async () => {
+      const { data: posts, error } = await supabaseClient
         .from('ForumPost')
         .select(
           `
-          id,
-          title,
-          creation_date,
-          votes,
-          user_id,
-          RegisteredUser:user_id(name, surname, email,pfp_url)
-        `,
+        id,
+        title,
+        creation_date,
+        user_id,
+        RegisteredUser:user_id(name, surname, email, pfp_url)
+      `,
         )
         .order('creation_date', { ascending: false });
 
       if (error) {
         console.error('Error fetching posts:', error.message);
-      } else {
-        setPosts(data);
+        return;
       }
-    }
+
+      // Wait for all vote counts to be fetched in parallel
+      const postsWithVotes = await Promise.all(
+        posts.map(async (post) => {
+          const votes = await fetchPostVotes(post.id);
+          return { ...post, ...votes, user_id: post.user_id ?? 0 };
+        }),
+      );
+
+      setPosts(postsWithVotes);
+    };
 
     fetchPosts();
   }, []);
+
+  const handleUpvote = async (postId: number, upvote: boolean) => {
+    try {
+      // Check if the user has already voted on this post
+      const { data: existingVote, error: fetchError } = await supabaseClient
+        .from('UserPostVotes')
+        .select()
+        .eq('post_id', postId)
+        .eq('user_id', user?.id ?? 0)
+        .maybeSingle();
+
+      if (fetchError && fetchError.code !== 'PGRST116') {
+        // Ignore "No rows found" error (PGRST116), as it means the user hasn't voted yet
+        console.error('Error fetching existing vote:', fetchError);
+        return;
+      }
+
+      if (existingVote) {
+        // If the user has already voted, update their vote
+        if (existingVote.upvote === upvote) {
+          // If the vote is the same as the current action, do nothing
+          const { error } = await supabaseClient
+            .from('UserPostVotes')
+            .delete()
+            .eq('id', existingVote.id);
+
+          if (error) {
+            console.error('Error while deleting vote: ', error);
+            return;
+          }
+          // Update the local state to reflect the vote deletion
+          const updatedPosts = posts?.map((post) => {
+            if (post.id === postId) {
+              return upvote
+                ? { ...post, upvotes: post.upvotes - 1 }
+                : { ...post, downvotes: post.downvotes - 1 };
+            }
+            return post;
+          });
+          setPosts(updatedPosts || null);
+        } else {
+          // Update the existing vote
+          const { error: updateError } = await supabaseClient
+            .from('UserPostVotes')
+            .update({ upvote })
+            .eq('id', existingVote.id);
+
+          if (updateError) {
+            console.error('Error updating vote:', updateError);
+            return;
+          }
+          // Update the local state
+          const updatedPosts = posts?.map((post) => {
+            if (post.id === postId) {
+              return upvote
+                ? {
+                    ...post,
+                    upvotes: post.upvotes + 1,
+                    downvotes: post.downvotes - 1,
+                  }
+                : {
+                    ...post,
+                    upvotes: post.upvotes - 1,
+                    downvotes: post.downvotes + 1,
+                  };
+            }
+            return post;
+          });
+          setPosts(updatedPosts || null);
+        }
+      } else {
+        // If the user hasn't voted yet, insert a new vote
+        const { error: insertError } = await supabaseClient
+          .from('UserPostVotes')
+          .insert({
+            post_id: postId,
+            user_id: user?.id ?? 0,
+            upvote,
+          });
+
+        if (insertError) {
+          console.error('Error inserting vote:', insertError);
+          return;
+        }
+
+        // Update the local state
+        const updatedPosts = posts?.map((post) => {
+          if (post.id === postId) {
+            return upvote
+              ? { ...post, upvotes: post.upvotes + 1 }
+              : { ...post, downvotes: post.downvotes + 1 };
+          }
+          return post;
+        });
+        setPosts(updatedPosts || null);
+      }
+    } catch (error) {
+      console.error('Unexpected error while handling vote:', error);
+    }
+  };
 
   return (
     <Container size="lg" py="lg">
@@ -61,10 +198,6 @@ export default function ForumPage() {
 
       <Stack gap="md">
         {posts?.map((post) => {
-          // const { data: avatarUrl } = supabaseClient.storage
-          //   .from('public')
-          //   .getPublicUrl(post.avatarPath);
-
           return (
             <Card key={post.id} shadow="sm" p="lg" radius="md" withBorder>
               <Flex gap="md" align="flex-start">
@@ -83,12 +216,6 @@ export default function ForumPage() {
                     style={{ cursor: 'pointer' }}
                   >
                     <Title order={3}>{post.title ?? 'Untitled'}</Title>
-
-                    <Badge
-                      color={post.votes && post.votes >= 0 ? 'teal' : 'red'}
-                    >
-                      {post.votes ?? 0} votes
-                    </Badge>
                   </Group>
 
                   <Text size="sm" c="dimmed">
@@ -99,13 +226,22 @@ export default function ForumPage() {
                     · {new Date(post.creation_date).toLocaleDateString()}
                   </Text>
 
-                  <Group mt="md">
-                    <ActionIcon variant="light">
+                  <Group mt="md" align="center">
+                    <ActionIcon
+                      variant="light"
+                      onClick={() => handleUpvote(post.id, true)}
+                    >
                       <IconArrowUp size="1rem" />
                     </ActionIcon>
-                    <ActionIcon variant="light">
+                    <Text size="sm">{post.upvotes}</Text>
+                    <ActionIcon
+                      color="red"
+                      variant="light"
+                      onClick={() => handleUpvote(post.id, false)}
+                    >
                       <IconArrowDown size="1rem" />
                     </ActionIcon>
+                    <Text size="sm">{post.downvotes}</Text>
                     <Badge
                       leftSection={<IconMessage size="1rem" />}
                       variant="outline"

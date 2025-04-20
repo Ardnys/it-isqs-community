@@ -10,7 +10,8 @@ interface ForumPost {
   id: number;
   title: string | null;
   creation_date: string;
-  votes: number | null;
-  user_id: number | null;
+  upvotes: number;
+  downvotes: number;
+  user_id: number;
   RegisteredUser?: Author | null;
 }

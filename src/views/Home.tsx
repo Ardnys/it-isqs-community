@@ -30,7 +30,7 @@ const fadeIn = {
   }),
 };
 
-const MotionStack = motion(Stack);
+const MotionStack = motion.create(Stack);
 
 export default function HomePage() {
   const navigate = useNavigate();
