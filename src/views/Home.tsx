@@ -9,11 +9,13 @@ import {
   Divider,
   Image,
   Group,
+  List,
 } from '@mantine/core';
 import {
   IconBook2,
   IconBulb,
   IconCertificate,
+  IconCheck,
   IconRocket,
 } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
@@ -101,31 +103,36 @@ export default function HomePage() {
           </Text>
         </motion.div>
 
-        {/* Cards with images */}
         {[
           {
             title: 'Objectives',
             img: '/assets/seng.svg',
-            text: `✓ Modernize software engineering curricula by embedding ISQS.
-✓ Use AI, gamification, and real-world cases to improve engagement.
-✓ Foster collaboration between academia and industry.
-✓ Empower students and educators with innovative content.`,
+            text: [
+              'Modernize software engineering curricula by embedding ISQS.',
+              'Use AI, gamification, and real-world cases to improve engagement.',
+              'Foster collaboration between academia and industry.',
+              'Empower students and educators with innovative content.',
+            ],
           },
           {
             title: 'Activities',
-            img: '/assets/inspection.png',
-            text: `✓ Literature review, surveys, and interviews with industry experts.
-✓ Designing courses and teaching materials with AI support.
-✓ Pilot programs and feedback collection.
-✓ Dissemination through meetups, workshops, and papers.`,
+            img: '/assets/inspection.svg',
+            text: [
+              'Literature review, surveys, and interviews with industry experts.',
+              'Designing courses and teaching materials with AI support.',
+              'Pilot programs and feedback collection.',
+              'Dissemination through meetups, workshops, and papers.',
+            ],
           },
           {
             title: 'Expected Impact',
-            img: '/assets/quality.png',
-            text: `✓ Improved coverage of ISQS in education.
-✓ Boosted student motivation and skill levels.
-✓ Increased awareness of ISO/IEC standards.
-✓ Strengthened international academic collaboration.`,
+            img: '/assets/quality.svg',
+            text: [
+              'Improved coverage of ISQS in education.',
+              'Boosted student motivation and skill levels.',
+              'Increased awareness of ISO/IEC standards.',
+              'Strengthened international academic collaboration.',
+            ],
           },
         ].map((section, i) => (
           <motion.div key={section.title} variants={fadeIn} custom={i + 2}>
@@ -134,7 +141,11 @@ export default function HomePage() {
                 <Image src={section.img} w={100} h={100} alt={section.title} />
                 <Stack gap={4}>
                   <Title order={3}>{section.title}</Title>
-                  <Text>{section.text}</Text>
+                  <List spacing="xs" size="sm" icon={<IconCheck />}>
+                    {section.text.map((point) => (
+                      <List.Item key={point}>{point}</List.Item>
+                    ))}
+                  </List>
                 </Stack>
               </Group>
             </Card>
