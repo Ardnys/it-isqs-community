@@ -22,7 +22,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { $registeredUser } from '../global-state/user';
 import { supabaseClient } from '../supabase/supabaseClient';
-const user = useStore($registeredUser);
 
 const BlogEdit = () => {
   const navigate = useNavigate();
@@ -34,6 +33,8 @@ const BlogEdit = () => {
       avatar: string;
     }>
   >([]);
+  const user = useStore($registeredUser);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedProfessional, setSelectedProfessional] = useState<
