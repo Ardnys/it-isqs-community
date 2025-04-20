@@ -12,6 +12,7 @@ import {
   Tooltip,
   Divider,
   Skeleton,
+  Container,
 } from '@mantine/core';
 
 type ForumPost = {
@@ -72,40 +73,39 @@ const Foru = () => {
   }, [id]);
 
   return (
-    <Stack gap="xl">
-      {forumPost ? (
-        <Card shadow="sm" padding="lg" radius="md" withBorder>
-          <Stack gap="xs">
-            <Title order={2}>{forumPost.title}</Title>
-
-            <Group align="center" gap="sm">
-              <Avatar radius="xl">
-                {forumPost.RegisteredUser.name.charAt(0)}
-              </Avatar>
-              <Tooltip label={forumPost.RegisteredUser.email}>
-                <Text size="sm" fw={500}>
-                  {forumPost.RegisteredUser.name}{' '}
-                  {forumPost.RegisteredUser.surname}
+    <Container size="lg" py="lg">
+      <Stack gap="xl">
+        {forumPost ? (
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Stack gap="xs">
+              <Title order={2}>{forumPost.title}</Title>
+              <Group align="center" gap="sm">
+                <Avatar radius="xl">
+                  {forumPost.RegisteredUser.name.charAt(0)}
+                </Avatar>
+                <Tooltip label={forumPost.RegisteredUser.email}>
+                  <Text size="sm" fw={500}>
+                    {forumPost.RegisteredUser.name}{' '}
+                    {forumPost.RegisteredUser.surname}
+                  </Text>
+                </Tooltip>
+                <Text size="xs" c="dimmed">
+                  {new Date(forumPost.creation_date).toLocaleString()}
                 </Text>
-              </Tooltip>
-              <Text size="xs" c="dimmed">
-                {new Date(forumPost.creation_date).toLocaleString()}
+              </Group>
+              <Text>{forumPost.body}</Text>
+              <Text size="sm" c="dimmed">
+                Votes: {forumPost.votes}
               </Text>
-            </Group>
-            <Text>{forumPost.body}</Text>
-
-            <Text size="sm" c="dimmed">
-              Votes: {forumPost.votes}
-            </Text>
-          </Stack>
-        </Card>
-      ) : (
-        <Skeleton height={140} radius="md" />
-      )}
-
-      <Divider label="Discussion" labelPosition="center" my="md" />
-      <ForumCommentListing postId={Number(id)} />
-    </Stack>
+            </Stack>
+          </Card>
+        ) : (
+          <Skeleton height={140} radius="md" />
+        )}
+        <Divider label="Discussion" labelPosition="center" my="md" />
+        <ForumCommentListing postId={Number(id)} />
+      </Stack>
+    </Container>
   );
 };
 

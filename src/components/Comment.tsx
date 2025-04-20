@@ -7,8 +7,13 @@ import {
   Stack,
   Collapse,
   Button,
+  Blockquote,
 } from '@mantine/core';
-import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
+import {
+  IconChevronDown,
+  IconChevronUp,
+  IconMessageCircle,
+} from '@tabler/icons-react';
 import { CommentNode } from './ForumCommentListing';
 
 const Comment = ({ comment }: { comment: CommentNode }) => {
@@ -20,12 +25,9 @@ const Comment = ({ comment }: { comment: CommentNode }) => {
       <Paper shadow="xs" radius="md" p="md" withBorder>
         <Group align="flex-start">
           <Group align="flex-start">
-            <Avatar
-              src={comment.user.pfp_url || undefined}
-              alt={comment.user.name}
-              radius="xl"
-              size="md"
-            />
+            <Avatar alt={comment.user.name} radius="xl" size="md">
+              {comment.user.name.charAt(0)}
+            </Avatar>
             <div>
               <Text fw={500}>
                 {comment.user.name} {comment.user.surname || ''}
@@ -35,6 +37,19 @@ const Comment = ({ comment }: { comment: CommentNode }) => {
                   ? new Date(comment.date).toLocaleString()
                   : 'Invalid date'}
               </Text>
+              {comment.parent_comment_id ? (
+                <Blockquote
+                  color="teal"
+                  iconSize={36}
+                  cite={`— ${comment.parent?.user.name} ${comment.parent?.user.surname || ''}`}
+                  icon={<IconMessageCircle />}
+                  mt="xl"
+                >
+                  <Text size="sm" c="dimmed" lineClamp={4}>
+                    {comment.parent?.body}
+                  </Text>
+                </Blockquote>
+              ) : null}
               <Text mt="xs" size="sm">
                 {comment.body}
               </Text>

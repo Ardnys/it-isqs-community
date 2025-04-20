@@ -33,7 +33,6 @@ export default function ForumPage() {
           user_id,
           RegisteredUser:user_id(name, surname, email)
         `,
-
         )
         .order('creation_date', { ascending: false });
 
@@ -48,7 +47,7 @@ export default function ForumPage() {
   }, []);
 
   return (
-    <Container size="md" py="xl">
+    <Container size="lg" py="lg">
       <Group justify="space-between" mb="xl">
         <Title order={1}>Forum</Title>
         <Button color="teal" size="lg">
