@@ -176,6 +176,7 @@ export type Database = {
       }
       RegisteredUser: {
         Row: {
+          auth_uid: string | null
           email: string | null
           id: number
           name: string
@@ -184,6 +185,7 @@ export type Database = {
           surname: string | null
         }
         Insert: {
+          auth_uid?: string | null
           email?: string | null
           id?: number
           name: string
@@ -192,6 +194,7 @@ export type Database = {
           surname?: string | null
         }
         Update: {
+          auth_uid?: string | null
           email?: string | null
           id?: number
           name?: string

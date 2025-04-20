@@ -15,12 +15,16 @@ import { IconArrowUp, IconArrowDown, IconMessage } from '@tabler/icons-react';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useStore } from '@nanostores/react';
+import { $registeredUser } from '../global-state/user';
 
 export default function ForumPage() {
   const [posts, setPosts] = useState<ForumPost[] | null>(null);
   const navigate = useNavigate();
+  const registeredUser = useStore($registeredUser);
 
   useEffect(() => {
+    console.log(registeredUser);
     async function fetchPosts() {
       const { data, error } = await supabaseClient
         .from('ForumPost')
@@ -31,7 +35,7 @@ export default function ForumPage() {
           creation_date,
           votes,
           user_id,
-          RegisteredUser:user_id(name, surname, email)
+          RegisteredUser:user_id(name, surname, email,pfp_url)
         `,
         )
         .order('creation_date', { ascending: false });
@@ -64,9 +68,12 @@ export default function ForumPage() {
           return (
             <Card key={post.id} shadow="sm" p="lg" radius="md" withBorder>
               <Flex gap="md" align="flex-start">
-                <Avatar alt={post.RegisteredUser?.name} radius="xl" size="lg">
-                  {post.RegisteredUser?.name.charAt(0)}
-                </Avatar>
+                <Avatar
+                  src={post.RegisteredUser?.pfp_url}
+                  alt={post.RegisteredUser?.name}
+                  radius="xl"
+                  size="lg"
+                />
 
                 <div style={{ flex: 1 }}>
                   <Group

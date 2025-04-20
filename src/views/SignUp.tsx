@@ -53,6 +53,7 @@ export function SignUp() {
         console.error('Error signing up: ', error.message);
         return;
       }
+
       const { error: insertError } = await supabaseClient
         .from('RegisteredUser')
         .insert([{ email, name, surname }]);

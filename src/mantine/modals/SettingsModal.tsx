@@ -1,19 +1,11 @@
-import {
-  Badge,
-  Button,
-  FileInput,
-  Stack,
-  Image,
-  Group,
-  Avatar,
-} from '@mantine/core';
+import { Button, FileInput, Stack, Image, Group, Avatar } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { ContextModalProps } from '@mantine/modals';
 import { useState, useEffect } from 'react';
 import { supabaseClient } from '../../supabase/supabaseClient';
 import { useStore } from '@nanostores/react';
 
-import { $currUser, ExtendedUser } from '../../global-state/user';
+import { $registeredUser } from '../../global-state/user';
 
 export const Settings = ({
   context,
@@ -23,12 +15,12 @@ export const Settings = ({
   const [file, setFile] = useState<File | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const currentUser = useStore($currUser);
+  const currentUser = useStore($registeredUser);
 
   // Load current profile picture on component mount
   useEffect(() => {
-    if (currentUser?.user_metadata?.profile_picture) {
-      setThumbnailPreview(currentUser.user_metadata.profile_picture);
+    if (currentUser?.pfp_url) {
+      setThumbnailPreview(currentUser.pfp_url);
     }
   }, [currentUser]);
 
@@ -42,7 +34,51 @@ export const Settings = ({
       };
       reader.readAsDataURL(newFile);
     } else {
-      setThumbnailPreview(currentUser?.user_metadata?.profile_picture || null);
+      setThumbnailPreview(currentUser?.pfp_url || null);
+    }
+  };
+  const updateProfilePicture = async (file: File, userEmail: string) => {
+    try {
+      // 1. Upload the file to storage
+      const { data: uploadData, error: uploadError } =
+        await supabaseClient.storage
+          .from('storage')
+          .upload(`profile-pictures/${file.name}`, file, {
+            cacheControl: '3600',
+            upsert: true,
+          });
+
+      if (uploadError) throw uploadError;
+
+      // 2. Get public URL of the uploaded file
+      const { data: publicData } = supabaseClient.storage
+        .from('storage')
+        .getPublicUrl(uploadData.path);
+
+      const profilePictureUrl = publicData.publicUrl;
+
+      $registeredUser.set({
+        pfp_url: profilePictureUrl,
+        id: currentUser?.id || 0,
+        name: currentUser?.name || '',
+        surname: currentUser?.name || '',
+        email: currentUser?.email || '',
+        role: '',
+      });
+
+      // 3. Update RegisteredUser table
+      const { error: dbUpdateError } = await supabaseClient
+        .from('RegisteredUser')
+        .update({ pfp_url: profilePictureUrl })
+        .eq('email', userEmail);
+
+      if (dbUpdateError) throw dbUpdateError;
+
+      setThumbnailPreview(publicData.publicUrl); // Update preview with new image
+      return { success: true, url: profilePictureUrl };
+    } catch (error) {
+      console.error('Error updating profile picture:', error);
+      return { success: false, error };
     }
   };
 
@@ -51,25 +87,7 @@ export const Settings = ({
 
     setIsUploading(true);
     try {
-      const { data, error } = await supabaseClient.storage
-        .from('storage')
-        .upload(`profile-pictures/${file.name}`, file, {
-          cacheControl: '3600',
-          upsert: true,
-        });
-
-      if (error) throw error;
-
-      const { data: publicData } = supabaseClient.storage
-        .from('storage')
-        .getPublicUrl(data?.path ?? '');
-
-      //update the pfp in the metadata
-      const { error: updateError } = await supabaseClient.auth.updateUser({
-        data: { profile_picture: publicData.publicUrl },
-      });
-
-      if (updateError) throw updateError;
+      await updateProfilePicture(file, currentUser?.email!);
 
       notifications.show({
         title: 'Success!',
@@ -77,19 +95,6 @@ export const Settings = ({
         color: 'teal',
         autoClose: 3000,
       });
-
-      const {
-        data: { user },
-      } = await supabaseClient.auth.getUser();
-      if (user) {
-        const extendedUser: ExtendedUser = {
-          ...user,
-          name: user.user_metadata?.name || '',
-          surname: user.user_metadata?.surname || '',
-        };
-        $currUser.set(extendedUser);
-        setThumbnailPreview(publicData.publicUrl); // Update preview with new image
-      }
     } catch (error) {
       notifications.show({
         title: 'Upload failed',
@@ -98,7 +103,7 @@ export const Settings = ({
         autoClose: 3000,
       });
       // Revert to current profile picture on error
-      setThumbnailPreview(currentUser?.user_metadata?.profile_picture || null);
+      setThumbnailPreview(currentUser?.pfp_url || null);
     } finally {
       setIsUploading(false);
     }
