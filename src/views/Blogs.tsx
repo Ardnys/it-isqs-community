@@ -1,4 +1,4 @@
-import { Button, Container, Loader, Skeleton, Stack } from '@mantine/core';
+import { Button, Container, Skeleton, Stack } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabaseClient } from '../supabase/supabaseClient';
@@ -10,7 +10,7 @@ type Blog = {
   id: number;
   thumbnail: string | null;
   title: string | null;
-  coAuthors?: string[]; // Add this property
+  coAuthors?: { name: string; avatar: string | null }[]; // Updated to match BlogPost's prop type
 };
 
 const Blogs = () => {
@@ -22,17 +22,17 @@ const Blogs = () => {
     setLoading(true);
 
     const { data, error } = await supabaseClient.from('Blog').select(`
-    *,
-    CoAuthors (
-      author_id,
-      RegisteredUser:author_id (
-        name
+      *,
+      CoAuthors (
+        RegisteredUser (
+          name,
+          pfp_url
+        )
       )
-    )
-  `);
+    `);
 
     if (error) {
-      console.error('error while fetching blog posts', error);
+      console.error('Error while fetching blog posts', error);
       setLoading(false);
       return;
     }
@@ -44,20 +44,33 @@ const Blogs = () => {
             .getPublicUrl(`thumbnails/${post.thumbnail}`).data.publicUrl
         : null;
 
+      // Mapping coAuthors to include name and avatar (profile picture)
       const coAuthors =
-        post.CoAuthors?.map((ca) => ca.RegisteredUser?.name).filter(Boolean) ??
-        [];
+        post.CoAuthors?.map((ca) => ({
+          name: ca.RegisteredUser?.name,
+          avatar: ca.RegisteredUser?.pfp_url
+            ? ca.RegisteredUser.pfp_url.startsWith('http') // Check if it's already a full URL
+              ? ca.RegisteredUser.pfp_url // Use directly if it's a full URL
+              : supabaseClient.storage
+                  .from('storage')
+                  .getPublicUrl(`profile-pictures/${ca.RegisteredUser.pfp_url}`)
+                  .data.publicUrl // Construct the full URL if not
+            : null,
+        })) ?? [];
 
       return {
         ...post,
         thumbnail: publicUrl,
-        coAuthors, // add names directly
+        coAuthors, // Add coAuthors array with name and avatar
       };
     });
+
+    console.log(postsWithThumbnailsAndCoAuthors);
 
     setBlogPosts(postsWithThumbnailsAndCoAuthors);
     setLoading(false);
   };
+
   useEffect(() => {
     fetchBlogPosts();
   }, []);
@@ -82,7 +95,7 @@ const Blogs = () => {
               body={post.body}
               thumbnail={post.thumbnail}
               date={post.date}
-              coAuthors={post.coAuthors} // Add coAuthors here
+              coAuthors={post.coAuthors} // Pass the correct coAuthors here
             />
           ))
         )}

@@ -10,16 +10,18 @@ import {
   Title,
   Anchor,
   Flex,
+  Avatar, // Import Avatar from Mantine
 } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
+// BlogPost.tsx
 type BlogPostProps = {
   id: number;
   title: string | null;
   body: string | null;
   thumbnail: string | null;
   date: string | null;
-  coAuthors?: string[];
+  coAuthors?: { name: string; avatar: string | null }[]; // Updated to match the structure you pass
 };
 
 const BlogPost = ({
@@ -57,9 +59,28 @@ const BlogPost = ({
                 Read More
               </Anchor>
               {coAuthors?.length > 0 && (
-                <Text fz="sm" c="dimmed">
-                  by {coAuthors.join(', ')}
-                </Text>
+                <Group align="center">
+                  <Text fz="sm" c="dimmed">
+                    by
+                  </Text>
+                  {coAuthors.map((author, index) => (
+                    <Group key={index} align="center">
+                      {author.avatar && (
+                        <Avatar
+                          src={author.avatar}
+                          alt={author.name}
+                          size={24}
+                        />
+                      )}
+                      <Text fz="sm" c="dimmed">
+                        {author.name}
+                      </Text>
+                      {index < coAuthors.length - 1 && (
+                        <Divider orientation="vertical" mx={8} />
+                      )}
+                    </Group>
+                  ))}
+                </Group>
               )}
             </Flex>
           </Stack>
