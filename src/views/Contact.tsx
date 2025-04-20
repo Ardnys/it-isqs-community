@@ -44,13 +44,13 @@ function Contact() {
     >
       <Title order={4} mb="sm">Contact</Title>
       <Text>
-        <strong>Website:</strong>{' '}
+        <strong></strong>{' '}
         <Anchor
-          href="https://www.cankaya.edu.tr"
+          
           target="_blank"
           rel="noopener noreferrer"
         >
-          https://www.cankaya.edu.tr
+          
         </Anchor>
       </Text>
       <Text mt="xs">
@@ -89,7 +89,7 @@ function Contact() {
       <Text>
         <strong>Website:</strong>{' '}
         <Anchor
-          href="https://www.cankaya.edu.tr"
+
           target="_blank"
           rel="noopener noreferrer"
         >
