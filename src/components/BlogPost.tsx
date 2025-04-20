@@ -14,16 +14,6 @@ import {
 } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
-// BlogPost.tsx
-type BlogPostProps = {
-  id: number;
-  title: string | null;
-  body: string | null;
-  thumbnail: string | null;
-  date: string | null;
-  coAuthors?: { name: string; avatar: string | null }[]; // Updated to match the structure you pass
-};
-
 const BlogPost = ({
   id,
   title,
@@ -31,7 +21,7 @@ const BlogPost = ({
   thumbnail,
   date,
   coAuthors = [],
-}: BlogPostProps) => {
+}: Blog) => {
   return (
     <Card withBorder radius="md" shadow="sm" padding="lg">
       <Stack justify="space-between" style={{ height: '100%' }}>

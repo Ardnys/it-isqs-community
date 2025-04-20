@@ -6,15 +6,6 @@ import BlogPost from '../components/BlogPost';
 import { useStore } from '@nanostores/react';
 import { $registeredUser } from '../global-state/user';
 
-type Blog = {
-  body: string | null;
-  date: string | null;
-  id: number;
-  thumbnail: string | null;
-  title: string | null;
-  coAuthors?: { name: string; avatar: string | null }[]; // Updated to match BlogPost's prop type
-};
-
 const Blogs = () => {
   const navigate = useNavigate();
   const [blogPosts, setBlogPosts] = useState<Array<Blog> | null>(null);
