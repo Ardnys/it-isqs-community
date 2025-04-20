@@ -57,6 +57,9 @@ const Blogs = () => {
     setBlogPosts(postsWithThumbnailsAndCoAuthors);
     setLoading(false);
   };
+  useEffect(() => {
+    fetchBlogPosts();
+  }, []);
 
   return (
     <Container size="lg" py="lg">
