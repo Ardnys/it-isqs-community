@@ -29,14 +29,13 @@ function Home() {
                   WELCOME TO
                 </Text>
                 <Title order={1} c="white">
-                  Erasmus+ Programme
+                Innovative Training for International Software Quality Standards
                 </Title>
                 <Text size="lg" c="gray.3" fw={600}>
-                  Enriching lives, opening minds
+                 Quality and customer satisfaction
                 </Text>
                 <Text c="gray.3" size="md" lh={1.7}>
-                  Erasmus+ is the EU’s programme to support education, training, youth and sport in Europe and beyond. It provides opportunities for people of all ages to learn and share experiences across borders.
-                </Text>
+                The IT-ISQS project's aim is to address the vital need for coverage of international software quality standards in higher education to raise awareness among engineers and industry. By incorporating innovative teaching methods such as gamification, real-life case studies,                </Text>
               </Stack>
             </Grid.Col>
 
@@ -67,10 +66,9 @@ function Home() {
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 6 }}>
               <Stack>
-                <Title order={3} c="dark">About Erasmus+</Title>
+                <Title order={3} c="dark">About IT-ISQS</Title>
                 <Text c="gray.7" size="md" lh={1.7}>
-                  Erasmus+ aims to support the educational, professional, and personal development of individuals in education, training, youth, and sport. It contributes to sustainable growth, quality jobs, and social cohesion, while promoting innovation and strengthening European identity and active citizenship.
-                </Text>
+                The IT-ISQS project aims to enhance higher education by integrating international software quality standards into engineering curricula. Through innovative methods like gamification, AI tools, and real-life case studies, the project seeks to make learning more engaging and aligned with global standards. Activities include course development, pilot testing, and collaboration with academia and industry. T                </Text>
               </Stack>
             </Grid.Col>
           </Grid>
@@ -80,39 +78,45 @@ function Home() {
       {/* Erasmus+ Priorities Section */}
       <Box bg="gray.1" py={80}>
         <Container size="lg">
-          <Title order={2} mb="md" c="dark">Erasmus+ Priorities</Title>
+          <Title order={2} mb="md" c="dark">IT-ISQS  Priorities</Title>
           <Grid>
             <Grid.Col span={{ base: 12, md: 4 }}>
               <Box p="md" bg="white" style={{ borderRadius: '8px', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)', transition: '0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)'; }}>
                 <Group mb="xs">
                   <IconTarget size={24} color="#1c7ed6" />
-                  <Title order={4} c="blue.9">Inclusion and Diversity</Title>
+                  <Title order={4} c="blue.9">Objectives
+                  </Title>
                 </Group>
                 <Text c="gray.8" size="sm">
-                  Promoting equal opportunities and access, inclusion, diversity, and fairness across all actions. The programme supports participants with fewer opportunities and aims to make its activities accessible to a diverse range of participants.
-                </Text>
+                The IT-ISQS project's aim is to address the vital need for coverage of international software quality standards in higher education to raise awareness among engineers and industry. By incorporating innovative teaching methods such as gamification, real-life case studies, interactive class activities, and AI integration, the project aims to make learning engaging and relevant for students. The project will also update curricula to ensure related engineering programs align with global standards.                </Text>
               </Box>
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 4 }}>
             <Box p="md" bg="white" style={{ borderRadius: '8px', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)', transition: '0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)'; }}>
             <Group mb="xs">
                   <IconActivity size={24} color="#1c7ed6" />
-                  <Title order={4} c="blue.9">Digital Transformation</Title>
+                  <Title order={4} c="blue.9">Activities
+                  </Title>
                 </Group>
                 <Text c="gray.8" size="sm">
-                  Supporting the development of digital skills and the adoption of digital technologies in education, training, and youth work. Erasmus+ aims to enhance digital literacy and foster innovative practices.
-                </Text>
+                IT-ISQS project activities: scientific literature review, surveys, industry interviews and statistical analysis; building new course design via creating novel teaching materials, AI tools, games, interactive exercises, and case studies; testing the course by pilot programs, collecting feedback, and analyzing it; collaborating with faculty and industry experts to finalize the course design; dissemination activities via community website, academic papers, workshops, meet-ups and multiplier events                </Text>
               </Box>
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 4 }}>
             <Box p="md" bg="white" style={{ borderRadius: '8px', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)', transition: '0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)'; }}>
             <Group mb="xs">
                   <IconTrendingUp size={24} color="#1c7ed6" />
-                  <Title order={4} c="blue.9">Participation in Democratic Life</Title>
+                  <Title order={4} c="blue.9">Impact</Title>
                 </Group>
                 <Text c="gray.8" size="sm">
-                  Encouraging active citizenship and ethics in lifelong learning. The programme fosters social and intercultural competencies, critical thinking, and media literacy, promoting engagement in democratic processes.
-                </Text>
+                  The IT-ISQS project intends to empower;
+                  Improvement of international software quality standards(ISQS) course syllabus via innovative and enriched content.
+                  Comprehensive coverage of ISQS in software engineering and related curricula.
+                  Increased motivation for students and professors with innovative course content.
+                  Enhanced awareness and knowledge among emerging engineers about ISO/IEC software standards.
+                  AI-based tools to support standards training.
+                  Internationalization with partner organization              
+                 </Text>
               </Box>
             </Grid.Col>
           </Grid>
