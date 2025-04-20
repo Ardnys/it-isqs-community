@@ -1,29 +1,41 @@
-import { Box, Container, Grid, Image, Stack, Text, Title } from '@mantine/core';
+import {
+  Box,
+  Container,
+  Grid,
+  Image,
+  Stack,
+  Text,
+  Title,
+  Group,
+} from '@mantine/core';
+import {
+  IconTarget,
+  IconActivity,
+  IconTrendingUp,
+} from '@tabler/icons-react';
 
 function Home() {
   return (
     <Box>
+
       {/* Hero Section */}
-      <Box bg="#0B1E3B" py="xl">
+      <Box bg="#0B1E3B" py={80}>
         <Container size="lg">
           <Grid align="center">
             {/* Left Side - Text */}
             <Grid.Col span={{ base: 12, md: 6 }}>
               <Stack gap="xs">
-                <Text size="sm" c="gray.4" fw={500}>WELCOME TO</Text>
+                <Text size="sm" c="gray.4" fw={500}>
+                  WELCOME TO
+                </Text>
                 <Title order={1} c="white">
-                  The <Text span c="blue.4" fw={1000}>hand</Text>
-                  <Text span c="green.4" fw={1000}>some</Text>
-                  <Text span c="cyan.4" fw={1000}>bois</Text> Kit 4.0!
+                  Erasmus+ Programme
                 </Title>
-                <Text c="gray.3" style={{ lineHeight: 1.6 }}>
-                  European Higher Education Institutions (HEIs) are increasingly engaged in society and therefore play a growing role in regional and social development. As a result of the increasing international cooperation, successful collaboration in the digital sphere is becoming more and more critical.
+                <Text size="lg" c="gray.3" fw={600}>
+                  Enriching lives, opening minds
                 </Text>
-                <Text c="gray.3" style={{ lineHeight: 1.6 }}>
-                  The CoCreAid Kit 4.0 focuses on overcoming barriers to cooperation arising when HEIs and NGOs co-create digitally. The aim is to increase social impact in participating European countries and beyond.
-                </Text>
-                <Text c="gray.3" style={{ lineHeight: 1.6 }}>
-                  This website guides you through the wide variety of digital platforms and co-creation methods. Additionally, you will find best practices for successful digital co-creation.
+                <Text c="gray.3" size="md" lh={1.7}>
+                  Erasmus+ is the EU’s programme to support education, training, youth and sport in Europe and beyond. It provides opportunities for people of all ages to learn and share experiences across borders.
                 </Text>
               </Stack>
             </Grid.Col>
@@ -41,11 +53,10 @@ function Home() {
         </Container>
       </Box>
 
-      {/* About Us Section */}
-      <Box bg="white" py="xl">
+      {/* About Erasmus+ Section */}
+      <Box bg="white" py={80}>
         <Container size="lg">
           <Grid align="center">
-            {/* Left Side - Image */}
             <Grid.Col span={{ base: 12, md: 6 }}>
               <Image
                 src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80"
@@ -54,26 +65,61 @@ function Home() {
                 fit="cover"
               />
             </Grid.Col>
-
-            {/* Right Side - Text */}
             <Grid.Col span={{ base: 12, md: 6 }}>
               <Stack>
-                <Title order={3} c="dark">Introducing Us</Title>
-                <Text c="gray.7" style={{ lineHeight: 1.6 }}>
-                  Research conducted by MUAS has shown that due to the pandemic situation,
-                  a large number of co-creation projects fail due to a lack of appropriate methods
-                  and tools for collaborations.
-                </Text>
-                <Text c="gray.7" style={{ lineHeight: 1.6 }}>
-                  Therefore, a digital CoCreAid Kit could support the collaboration between HEIs
-                  and NGOs to overcome these barriers and to continue and strengthen the cooperations.
-                  Co-creation tools are methods that enable co-creation activities throughout the whole process.
+                <Title order={3} c="dark">About Erasmus+</Title>
+                <Text c="gray.7" size="md" lh={1.7}>
+                  Erasmus+ aims to support the educational, professional, and personal development of individuals in education, training, youth, and sport. It contributes to sustainable growth, quality jobs, and social cohesion, while promoting innovation and strengthening European identity and active citizenship.
                 </Text>
               </Stack>
             </Grid.Col>
           </Grid>
         </Container>
       </Box>
+
+      {/* Erasmus+ Priorities Section */}
+      <Box bg="gray.1" py={80}>
+        <Container size="lg">
+          <Title order={2} mb="md" c="dark">Erasmus+ Priorities</Title>
+          <Grid>
+            <Grid.Col span={{ base: 12, md: 4 }}>
+              <Box p="md" bg="white" style={{ borderRadius: '8px', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)', transition: '0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)'; }}>
+                <Group mb="xs">
+                  <IconTarget size={24} color="#1c7ed6" />
+                  <Title order={4} c="blue.9">Inclusion and Diversity</Title>
+                </Group>
+                <Text c="gray.8" size="sm">
+                  Promoting equal opportunities and access, inclusion, diversity, and fairness across all actions. The programme supports participants with fewer opportunities and aims to make its activities accessible to a diverse range of participants.
+                </Text>
+              </Box>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 4 }}>
+            <Box p="md" bg="white" style={{ borderRadius: '8px', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)', transition: '0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)'; }}>
+            <Group mb="xs">
+                  <IconActivity size={24} color="#1c7ed6" />
+                  <Title order={4} c="blue.9">Digital Transformation</Title>
+                </Group>
+                <Text c="gray.8" size="sm">
+                  Supporting the development of digital skills and the adoption of digital technologies in education, training, and youth work. Erasmus+ aims to enhance digital literacy and foster innovative practices.
+                </Text>
+              </Box>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 4 }}>
+            <Box p="md" bg="white" style={{ borderRadius: '8px', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)', transition: '0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)'; }}>
+            <Group mb="xs">
+                  <IconTrendingUp size={24} color="#1c7ed6" />
+                  <Title order={4} c="blue.9">Participation in Democratic Life</Title>
+                </Group>
+                <Text c="gray.8" size="sm">
+                  Encouraging active citizenship and ethics in lifelong learning. The programme fosters social and intercultural competencies, critical thinking, and media literacy, promoting engagement in democratic processes.
+                </Text>
+              </Box>
+            </Grid.Col>
+          </Grid>
+        </Container>
+      </Box>
+
+     
     </Box>
   );
 }
