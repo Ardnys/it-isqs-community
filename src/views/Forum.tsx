@@ -15,12 +15,16 @@ import { IconArrowUp, IconArrowDown, IconMessage } from '@tabler/icons-react';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useStore } from '@nanostores/react';
+import { $registeredUser } from '../global-state/user';
 
 export default function ForumPage() {
   const [posts, setPosts] = useState<ForumPost[] | null>(null);
   const navigate = useNavigate();
+  const registeredUser = useStore($registeredUser);
 
   useEffect(() => {
+    console.log(registeredUser);
     async function fetchPosts() {
       const { data, error } = await supabaseClient
         .from('ForumPost')
@@ -33,7 +37,6 @@ export default function ForumPage() {
           user_id,
           RegisteredUser:user_id(name, surname, email)
         `,
-
         )
         .order('creation_date', { ascending: false });
 
