@@ -4,7 +4,7 @@ import { supabaseClient } from '../supabase/supabaseClient';
 import { notifications } from '@mantine/notifications';
 
 export const $currUser = atom<ExtendedUser | null>(null);
-export const $registeredUser = atom<RegisteredUser | null>(null); // New nanostore for RegisteredUser data
+export const $registeredUser = atom<RegisteredUser | null>(null);
 
 export interface ExtendedUser extends User {
   name: string;
@@ -21,16 +21,15 @@ export interface RegisteredUser {
   surname: string;
   email: string;
   role: string;
-  auth_uid: string;
   pfp_url?: string;
 }
 
-const fetchRegisteredUserData = async (authUid: string) => {
+const fetchRegisteredUserData = async (email?: string) => {
   try {
     const { data, error } = await supabaseClient
       .from('RegisteredUser')
-      .select('id, name, surname, email, role, auth_uid, pfp_url')
-      .eq('auth_uid', authUid)
+      .select('id, name, surname, email, role, pfp_url')
+      .eq('email', email ?? '')
       .single();
 
     if (error) {
@@ -53,14 +52,13 @@ const fetchRegisteredUserData = async (authUid: string) => {
 supabaseClient.auth.onAuthStateChange((authChangeEvent, session) => {
   if (session?.user) {
     // Fetch RegisteredUser data and store it in $registeredUser
-    fetchRegisteredUserData(session.user.id).then((registeredUserData) => {
+    fetchRegisteredUserData(session.user.email).then((registeredUserData) => {
       if (registeredUserData) {
         $registeredUser.set({
           ...registeredUserData,
           surname: registeredUserData.surname || '',
           email: registeredUserData.email || '',
           role: registeredUserData.role || '',
-          auth_uid: registeredUserData.auth_uid || '',
           pfp_url: registeredUserData.pfp_url || '',
         });
       } else {
