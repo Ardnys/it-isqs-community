@@ -153,13 +153,49 @@ const BlogEdit = () => {
         throw uploadError;
       }
 
-      // Save blog post to database
-      const { error } = await supabaseClient.from('Blog').insert({
-        title: blog.title,
-        body: blog.blogContent,
-        thumbnail: blog.thumbnail?.name,
-        date: new Date().toISOString(),
-      });
+      const { data, error } = await supabaseClient
+        .from('Blog')
+        .insert({
+          title: blog.title,
+          body: blog.blogContent,
+          thumbnail: blog.thumbnail?.name,
+          date: new Date().toISOString(),
+        })
+        .select();
+
+      if (error) {
+        console.error('Error inserting blog:', error);
+        return;
+      }
+
+      const insertedBlog = data?.[0];
+      const blogId = insertedBlog?.id;
+
+      if (!blogId) {
+        console.error('No blog ID returned from insert');
+        return;
+      }
+
+      // Create array of all co-author IDs (including current user)
+      const allCoAuthorIds = [
+        Number(user?.id),
+        ...coAuthors.map((author) => Number(author.value)),
+      ];
+
+      // Map them into insert objects
+      const coAuthorInserts = allCoAuthorIds.map((authorId) => ({
+        blog_id: blogId,
+        author_id: authorId,
+      }));
+
+      // Insert into join table
+      const { error: coAuthorError } = await supabaseClient
+        .from('CoAuthors') // your join table name
+        .insert(coAuthorInserts);
+
+      if (coAuthorError) {
+        console.error('Error inserting co-authors:', coAuthorError);
+      }
 
       if (error) {
         throw error;
