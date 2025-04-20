@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Textarea, Button, Stack } from '@mantine/core';
+import { Button, Stack } from '@mantine/core';
 import { supabaseClient } from '../supabase/supabaseClient';
 
 import { useStore } from '@nanostores/react';

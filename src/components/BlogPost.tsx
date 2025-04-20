@@ -5,12 +5,9 @@ import {
   Image,
   Stack,
   Divider,
-  Box,
-  Spoiler,
   Title,
   Anchor,
 } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
 
 type BlogPostProps = {
   id: number;

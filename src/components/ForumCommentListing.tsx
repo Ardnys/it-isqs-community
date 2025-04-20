@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { Title } from '@mantine/core';
-import { Avatar, Paper, Text, Group, Stack } from '@mantine/core';
+import { Stack } from '@mantine/core';
 import Comment from './Comment';
 
 type ForumReply = {

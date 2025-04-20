@@ -1,17 +1,8 @@
 // Materials.tsx
-import {
-  Button,
-  Card,
-  Container,
-  Grid,
-  List,
-  Stack,
-  Text,
-} from '@mantine/core';
+import { Button, Card, Container, Grid, Stack, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { openTypedModal } from '../mantine/modals/modals-utils';
 import { supabaseClient } from '../supabase/supabaseClient';
-import { useUser } from '../supabase/loader';
 
 import handleDownload from '../Utils/DownloadHandler';
 import { useStore } from '@nanostores/react';
