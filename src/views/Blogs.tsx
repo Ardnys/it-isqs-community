@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabaseClient } from '../supabase/supabaseClient';
 import BlogPost from '../components/BlogPost';
+import { useStore } from '@nanostores/react';
+import { $registeredUser } from '../global-state/user';
 
 type Blog = {
   body: string | null;
@@ -17,7 +19,7 @@ const Blogs = () => {
   const navigate = useNavigate();
   const [blogPosts, setBlogPosts] = useState<Array<Blog> | null>(null);
   const [loading, setLoading] = useState(true);
-
+  const user = useStore($registeredUser);
   const fetchBlogPosts = async () => {
     setLoading(true);
 
@@ -78,7 +80,11 @@ const Blogs = () => {
   return (
     <Container size="lg" py="lg">
       <Stack justify="flex-start" gap="lg">
-        <Button onClick={() => navigate('/blog-edit')}>Create New Post</Button>
+        {user?.role === 'professional' && (
+          <Button onClick={() => navigate('/blog-edit')}>
+            Create New Post
+          </Button>
+        )}
 
         {loading ? (
           <>
