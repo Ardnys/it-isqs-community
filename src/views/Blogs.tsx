@@ -19,30 +19,44 @@ const Blogs = () => {
 
   const fetchBlogPosts = async () => {
     setLoading(true);
-    const { data, error } = await supabaseClient.from('Blog').select();
+
+    const { data, error } = await supabaseClient.from('Blog').select(`
+        *,
+        CoAuthors (
+          author_id,
+          RegisteredUser (
+            name
+          )
+        )
+      `);
+
     if (error) {
       console.error('error while fetching blog posts', error);
       setLoading(false);
       return;
     }
-    const postsWithThumbnails = data.map((post) => {
+
+    const postsWithThumbnailsAndCoAuthors = data.map((post) => {
       const publicUrl = post.thumbnail
         ? supabaseClient.storage
             .from('storage')
             .getPublicUrl(`thumbnails/${post.thumbnail}`).data.publicUrl
         : null;
+
+      const coAuthors =
+        post.CoAuthors?.map((ca) => ca.RegisteredUser?.name).filter(Boolean) ??
+        [];
+
       return {
         ...post,
         thumbnail: publicUrl,
+        coAuthors, // add names directly
       };
     });
-    setBlogPosts(postsWithThumbnails);
+
+    setBlogPosts(postsWithThumbnailsAndCoAuthors);
     setLoading(false);
   };
-
-  useEffect(() => {
-    fetchBlogPosts();
-  }, []);
 
   return (
     <Container size="lg" py="lg">
