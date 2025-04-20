@@ -35,7 +35,7 @@ export default function ForumPage() {
           creation_date,
           votes,
           user_id,
-          RegisteredUser:user_id(name, surname, email)
+          RegisteredUser:user_id(name, surname, email,pfp_url)
         `,
         )
         .order('creation_date', { ascending: false });
@@ -68,12 +68,12 @@ export default function ForumPage() {
           return (
             <Card key={post.id} shadow="sm" p="lg" radius="md" withBorder>
               <Flex gap="md" align="flex-start">
-                {/* <Avatar
-                  src={avatarUrl.publicUrl}
-                  alt={post.author}
+                <Avatar
+                  src={post.RegisteredUser?.pfp_url}
+                  alt={post.RegisteredUser?.name}
                   radius="xl"
                   size="lg"
-                /> */}
+                />
 
                 <div style={{ flex: 1 }}>
                   <Group
