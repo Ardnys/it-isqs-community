@@ -9,7 +9,26 @@ import {
   rem,
   Accordion,
 } from '@mantine/core';
-import { IconMail, IconPhone, IconWorld, IconPlus, IconX } from '@tabler/icons-react';
+import { IconPlus, IconX } from '@tabler/icons-react';
+
+// Themed section card with color props
+const SectionCard = ({ icon, title, children, bgColor, textColor = '#212529' }) => (
+  <Box
+    p="lg"
+    mb="md"
+    style={{
+      backgroundColor: bgColor,
+      borderRadius: rem(10),
+      boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
+      color: textColor,
+    }}
+  >
+    <Title order={3} mb="xs" style={{ color: textColor }}>
+      {icon} {title}
+    </Title>
+    <Text size="sm">{children}</Text>
+  </Box>
+);
 
 function Contact() {
   return (
@@ -19,110 +38,140 @@ function Contact() {
           Contact Us
         </Title>
 
+        {/* Contact and Coordinator Info */}
         <Grid
-  gutter="md"
-  style={{
-    width: '100%',
-    maxWidth: '1200px',
-    margin: '0 auto',
-  }}
-  align="stretch"
->
-  {/* Contact Info */}
-  <Grid.Col span={{ base: 12, md: 6 }}>
-    <Box
-      p="md"
-      bg="white"
-      style={{
-        height: '100%',
-        border: '1px solid #ced4da',
-        borderRadius: rem(8),
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <Title order={4} mb="sm">Contact</Title>
-      <Text>
-        <strong></strong>{' '}
-        <Anchor
-          
-          target="_blank"
-          rel="noopener noreferrer"
+          gutter="md"
+          style={{
+            width: '100%',
+            maxWidth: '1200px',
+            margin: '0 auto',
+          }}
+          align="stretch"
         >
-          
-        </Anchor>
-      </Text>
-      <Text mt="xs">
-        <strong>Phone:</strong> +90 312 233 1291
-      </Text>
-      <Text mt="xs">
-        <strong>Email:</strong> it_isqs@gmail.com
-      </Text>
-    </Box>
-  </Grid.Col>
+          {/* Contact Info */}
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <Box
+              p="md"
+              bg="white"
+              style={{
+                height: '100%',
+                border: '1px solid #ced4da',
+                borderRadius: rem(8),
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <Title order={4} mb="sm">Contact</Title>
+              <Text>
+                <strong></strong>{' '}
+                <Anchor
+                  // href="https://www.cankaya.edu.tr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {/* https://www.cankaya.edu.tr */}
+                </Anchor>
+              </Text>
+              <Text mt="xs">
+                <strong>Phone:</strong> +90 312 233 1291
+              </Text>
+              <Text mt="xs">
+                <strong>Email:</strong> it_isqs@gmail.com
+              </Text>
+            </Box>
+          </Grid.Col>
 
-  {/* Coordinator Info */}
-  <Grid.Col span={{ base: 12, md: 6 }}>
-    <Box
-      p="md"
-      bg="white"
-      style={{
-        height: '100%',
-        border: '1px solid #ced4da',
-        borderRadius: rem(8),
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <Title order={4} mb="sm">Coordinator</Title>
-      <Text fw={700}>CANKAYA UNIVERSITESI</Text>
-      <Text>OGRETMENLER CADDESI 14 BALGAT</Text>
-      <Text>06530 ANKARA</Text>
-      <Text>Ankara</Text>
-      <Text>🇹🇷 <strong>Türkiye</strong></Text>
+          {/* Coordinator Info */}
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <Box
+              p="md"
+              bg="white"
+              style={{
+                height: '100%',
+                border: '1px solid #ced4da',
+                borderRadius: rem(8),
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <Title order={4} mb="sm">Coordinator</Title>
+              <Text fw={700}>CANKAYA UNIVERSITESI</Text>
+              <Text>OGRETMENLER CADDESI 14 BALGAT</Text>
+              <Text>06530 ANKARA</Text>
+              <Text>Ankara</Text>
+              <Text>🇹🇷 <strong>Türkiye</strong></Text>
 
-      <Text mt="sm">
-        <strong>Coordinator Type:</strong> Higher education institution (tertiary level)
-      </Text>
-      <Text>
-        <strong>Website:</strong>{' '}
-        <Anchor
+              <Text mt="sm">
+                <strong>Coordinator Type:</strong> Higher education institution (tertiary level)
+              </Text>
+              <Text>
+                <strong>Website:</strong>{' '}
+                <Anchor
+                  href="https://www.cankaya.edu.tr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  https://www.cankaya.edu.tr
+                </Anchor>
+              </Text>
+              <Text>
+                <strong>Phone:</strong> +903122331291
+              </Text>
+            </Box>
+          </Grid.Col>
 
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          https://www.cankaya.edu.tr
-        </Anchor>
-      </Text>
-      <Text>
-        <strong>Phone:</strong> +903122331291
-      </Text>
-    </Box>
-  </Grid.Col>
+          {/* Participants Countries */}
+          <Grid.Col span={12}>
+            <Box
+              p="md"
+              mt="md"
+              bg="white"
+              style={{
+                border: '1px solid #ced4da',
+                borderRadius: rem(8),
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              <Title order={4} mb="sm">Participants countries</Title>
+              <Text fw={700}>Netherlands, Spain, Türkiye</Text>
+            </Box>
+          </Grid.Col>
+        </Grid>
 
-  <Grid.Col span={{ base: 12, md: 12 }}>
-    <Box
-      p="md"
-      bg="white"
-      style={{
-        height: '100%',
-        border: '1px solid #ced4da',
-        borderRadius: rem(8),
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <Title order={4} mb="sm">Participants countries
-      </Title>
-      <Text fw={700}>Netherlands, Spain, Türkiye
-      </Text>
-    </Box>
-  </Grid.Col>
-</Grid>
+        {/* Objectives / Activities / Impact */}
+        <Container size="md" my="xl">
+          <SectionCard
+            icon="📌"
+            title="Objectives"
+            bgColor="#d4edda"
+            textColor="#155724"
+          >
+            The IT-ISQS project enhances higher education by integrating international software quality standards
+            into engineering programs using gamification, AI, and real-world cases.
+          </SectionCard>
 
+          <SectionCard
+            icon="🛠️"
+            title="Activities"
+            bgColor="#f8d7da"
+            textColor="#721c24"
+          >
+            Activities include literature reviews, surveys, course development with interactive tools and case studies,
+            pilot testing, expert collaboration, and broad dissemination through academic and community channels.
+          </SectionCard>
+
+          <SectionCard
+            icon="🌍"
+            title="Impact"
+            bgColor="#d1ecf1"
+            textColor="#0c5460"
+          >
+            The project will lead to improved ISQS curricula, higher motivation, enhanced awareness of ISO/IEC standards,
+            AI-supported training, and stronger international collaboration.
+          </SectionCard>
+        </Container>
 
         {/* Partners Section */}
         <Box bg="white" py="sm">
@@ -131,11 +180,11 @@ function Contact() {
 
             <Accordion
               chevronPosition="left"
-              multiple={false}
+              multiple={true}
               variant="default"
               transitionDuration={200}
               chevron={({ opened }) =>
-                opened ? <IconX size={20} /> : <IconPlus size={20} />
+                opened ? <IconX size={20} color="#c62828" /> : <IconPlus size={20} color="#2e7d32" />
               }
               styles={{
                 item: {
@@ -144,13 +193,15 @@ function Contact() {
                   marginBottom: 12,
                   backgroundColor: '#fff',
                   padding: '8px 12px',
+                  transition: 'background 0.2s ease',
                 },
                 itemOpened: {
-                  backgroundColor: '#e9f5fb',
+                  backgroundColor: '#e8f5e9',
                 },
                 control: {
                   fontWeight: 600,
                   fontSize: '16px',
+                  color: '#2e7d32',
                 },
                 content: {
                   paddingTop: 10,
@@ -180,11 +231,7 @@ function Contact() {
                   <Group mt="xs" gap="md" wrap="wrap">
                     <Text>
                       <strong>Website:</strong>{' '}
-                      <Anchor
-                        href="https://www.ufv.es"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+                      <Anchor href="https://www.ufv.es" target="_blank" rel="noopener noreferrer">
                         https://www.ufv.es
                       </Anchor>
                     </Text>
@@ -216,11 +263,7 @@ function Contact() {
                   <Group mt="xs" gap="md" wrap="wrap">
                     <Text>
                       <strong>Website:</strong>{' '}
-                      <Anchor
-                        href="https://www.ou.nl"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+                      <Anchor href="https://www.ou.nl" target="_blank" rel="noopener noreferrer">
                         https://www.ou.nl
                       </Anchor>
                     </Text>
@@ -251,11 +294,7 @@ function Contact() {
                   <Group mt="xs" gap="md" wrap="wrap">
                     <Text>
                       <strong>Website:</strong>{' '}
-                      <Anchor
-                        href="https://www.tedu.edu.tr"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+                      <Anchor href="https://www.tedu.edu.tr" target="_blank" rel="noopener noreferrer">
                         https://www.tedu.edu.tr
                       </Anchor>
                     </Text>
