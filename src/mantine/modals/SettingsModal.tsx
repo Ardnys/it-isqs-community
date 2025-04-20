@@ -45,31 +45,55 @@ export const Settings = ({
       setThumbnailPreview(currentUser?.user_metadata?.profile_picture || null);
     }
   };
+  const updateProfilePicture = async (file: File, userEmail: string) => {
+    try {
+      // 1. Upload the file to storage
+      const { data: uploadData, error: uploadError } =
+        await supabaseClient.storage
+          .from('storage')
+          .upload(`profile-pictures/${file.name}`, file, {
+            cacheControl: '3600',
+            upsert: true,
+          });
+
+      if (uploadError) throw uploadError;
+
+      // 2. Get public URL of the uploaded file
+      const { data: publicData } = supabaseClient.storage
+        .from('storage')
+        .getPublicUrl(uploadData.path);
+
+      const profilePictureUrl = publicData.publicUrl;
+
+      // 3. Update auth user metadata
+      const { error: authUpdateError } = await supabaseClient.auth.updateUser({
+        data: { profile_picture: profilePictureUrl },
+      });
+
+      if (authUpdateError) throw authUpdateError;
+
+      // 4. Update RegisteredUser table
+      const { error: dbUpdateError } = await supabaseClient
+        .from('RegisteredUser')
+        .update({ pfp_url: profilePictureUrl })
+        .eq('email', userEmail);
+
+      if (dbUpdateError) throw dbUpdateError;
+
+      setThumbnailPreview(publicData.publicUrl); // Update preview with new image
+      return { success: true, url: profilePictureUrl };
+    } catch (error) {
+      console.error('Error updating profile picture:', error);
+      return { success: false, error };
+    }
+  };
 
   const handleUpload = async () => {
     if (!file) return;
 
     setIsUploading(true);
     try {
-      const { data, error } = await supabaseClient.storage
-        .from('storage')
-        .upload(`profile-pictures/${file.name}`, file, {
-          cacheControl: '3600',
-          upsert: true,
-        });
-
-      if (error) throw error;
-
-      const { data: publicData } = supabaseClient.storage
-        .from('storage')
-        .getPublicUrl(data?.path ?? '');
-
-      //update the pfp in the metadata
-      const { error: updateError } = await supabaseClient.auth.updateUser({
-        data: { profile_picture: publicData.publicUrl },
-      });
-
-      if (updateError) throw updateError;
+      await updateProfilePicture(file, currentUser?.email!);
 
       notifications.show({
         title: 'Success!',
@@ -77,19 +101,6 @@ export const Settings = ({
         color: 'teal',
         autoClose: 3000,
       });
-
-      const {
-        data: { user },
-      } = await supabaseClient.auth.getUser();
-      if (user) {
-        const extendedUser: ExtendedUser = {
-          ...user,
-          name: user.user_metadata?.name || '',
-          surname: user.user_metadata?.surname || '',
-        };
-        $currUser.set(extendedUser);
-        setThumbnailPreview(publicData.publicUrl); // Update preview with new image
-      }
     } catch (error) {
       notifications.show({
         title: 'Upload failed',

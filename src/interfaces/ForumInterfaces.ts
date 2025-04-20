@@ -2,7 +2,7 @@ interface Author {
   name: string;
   surname: string | null;
   email: string | null;
-  avatarPath?: string;
+  pfp_url?: string | null;
   profession?: string; // for professionals
 }
 
