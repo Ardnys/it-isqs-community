@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { Textarea, Button, Stack } from '@mantine/core';
 import { supabaseClient } from '../supabase/supabaseClient';
 
+import { useStore } from '@nanostores/react';
+import { $registeredUser } from '../global-state/user';
+
 type ReplyFormProps = {
   postId: number;
   parentCommentId?: number | null;
@@ -15,23 +18,27 @@ const ReplyForm = ({
 }: ReplyFormProps) => {
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
+  const user = useStore($registeredUser);
 
   const handleSubmit = async () => {
     if (!value.trim()) return;
     setLoading(true);
     // TODO: real insert query
-    const { error } = await supabaseClient.from('ForumReply').insert({
-      post_id: postId,
-      parent_comment_id: parentCommentId,
-      user_id: 1, // Replace with actual logged-in user ID
-      body: value,
-    });
-    setLoading(false);
-    if (!error) {
-      setValue('');
-      onSuccess();
-    } else {
-      console.error('Reply failed:', error);
+    if (user?.id) {
+      const { error } = await supabaseClient.from('ForumReply').insert({
+        post_id: postId,
+        parent_comment_id: parentCommentId,
+        user_id: user?.id, // Replace with actual logged-in user ID
+        body: value,
+      });
+
+      setLoading(false);
+      if (!error) {
+        setValue('');
+        onSuccess();
+      } else {
+        console.error('Reply failed:', error);
+      }
     }
   };
 
