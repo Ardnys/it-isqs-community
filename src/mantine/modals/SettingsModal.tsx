@@ -1,19 +1,11 @@
-import {
-  Badge,
-  Button,
-  FileInput,
-  Stack,
-  Image,
-  Group,
-  Avatar,
-} from '@mantine/core';
+import { Button, FileInput, Stack, Image, Group, Avatar } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { ContextModalProps } from '@mantine/modals';
 import { useState, useEffect } from 'react';
 import { supabaseClient } from '../../supabase/supabaseClient';
 import { useStore } from '@nanostores/react';
 
-import { $currUser, ExtendedUser } from '../../global-state/user';
+import { $registeredUser } from '../../global-state/user';
 
 export const Settings = ({
   context,
@@ -23,12 +15,12 @@ export const Settings = ({
   const [file, setFile] = useState<File | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const currentUser = useStore($currUser);
+  const currentUser = useStore($registeredUser);
 
   // Load current profile picture on component mount
   useEffect(() => {
-    if (currentUser?.user_metadata?.profile_picture) {
-      setThumbnailPreview(currentUser.user_metadata.profile_picture);
+    if (currentUser?.pfp_url) {
+      setThumbnailPreview(currentUser.pfp_url);
     }
   }, [currentUser]);
 
@@ -42,7 +34,7 @@ export const Settings = ({
       };
       reader.readAsDataURL(newFile);
     } else {
-      setThumbnailPreview(currentUser?.user_metadata?.profile_picture || null);
+      setThumbnailPreview(currentUser?.pfp_url || null);
     }
   };
   const updateProfilePicture = async (file: File, userEmail: string) => {
@@ -65,14 +57,16 @@ export const Settings = ({
 
       const profilePictureUrl = publicData.publicUrl;
 
-      // 3. Update auth user metadata
-      const { error: authUpdateError } = await supabaseClient.auth.updateUser({
-        data: { profile_picture: profilePictureUrl },
+      $registeredUser.set({
+        pfp_url: profilePictureUrl,
+        id: currentUser?.id || 0,
+        name: currentUser?.name || '',
+        surname: currentUser?.name || '',
+        email: currentUser?.email || '',
+        role: '',
       });
 
-      if (authUpdateError) throw authUpdateError;
-
-      // 4. Update RegisteredUser table
+      // 3. Update RegisteredUser table
       const { error: dbUpdateError } = await supabaseClient
         .from('RegisteredUser')
         .update({ pfp_url: profilePictureUrl })
@@ -109,7 +103,7 @@ export const Settings = ({
         autoClose: 3000,
       });
       // Revert to current profile picture on error
-      setThumbnailPreview(currentUser?.user_metadata?.profile_picture || null);
+      setThumbnailPreview(currentUser?.pfp_url || null);
     } finally {
       setIsUploading(false);
     }

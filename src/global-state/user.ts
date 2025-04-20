@@ -9,10 +9,6 @@ export const $registeredUser = atom<RegisteredUser | null>(null);
 export interface ExtendedUser extends User {
   name: string;
   surname: string;
-  user_metadata: {
-    profile_picture?: string;
-    // ... other metadata
-  };
 }
 
 export interface RegisteredUser {
