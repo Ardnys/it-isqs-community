@@ -11,11 +11,15 @@ import {
   FileInput,
   Image,
   Select,
+  Badge,
+  Flex,
+  Box,
 } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useForm } from '@mantine/form';
 import { supabaseClient } from '../supabase/supabaseClient';
+import { IconX } from '@tabler/icons-react';
 
 const BlogEdit = () => {
   const navigate = useNavigate();
@@ -32,6 +36,9 @@ const BlogEdit = () => {
   const [selectedProfessional, setSelectedProfessional] = useState<
     string | null
   >(null);
+  const [coAuthors, setCoAuthors] = useState<
+    Array<{ value: string; label: string }>
+  >([]);
 
   // Fetch professionals from the database
   useEffect(() => {
@@ -69,6 +76,24 @@ const BlogEdit = () => {
 
     fetchProfessionals();
   }, []);
+
+  const handleAddCoAuthor = () => {
+    if (!selectedProfessional) return;
+
+    const prof = professionals.find((p) => p.value === selectedProfessional);
+    if (!prof) return;
+
+    const alreadyAdded = coAuthors.some((ca) => ca.value === prof.value);
+    if (!alreadyAdded) {
+      setCoAuthors((prev) => [...prev, prof]);
+    }
+
+    setSelectedProfessional(null); // clear select
+  };
+  // Handle removing co-author
+  const handleRemoveCoAuthor = (value: string) => {
+    setCoAuthors((prev) => prev.filter((author) => author.value !== value));
+  };
 
   const editor = useEditor({
     extensions: [StarterKit, Link],
@@ -171,17 +196,50 @@ const BlogEdit = () => {
             {...form.getInputProps('title')}
           />
 
-          <Select
-            label="Add Co-Authors"
-            placeholder="Choose a professional"
-            data={professionals}
-            searchable
-            clearable
-            nothingFoundMessage="No professionals found"
-            disabled={loading}
-            error={form.errors.professionalId}
-            {...form.getInputProps('professionalId')}
-          />
+          <Flex align="flex-end" gap="sm">
+            <Box style={{ flex: 1 }}>
+              <Select
+                label="Add Co-Authors"
+                placeholder="Choose a professional"
+                data={professionals}
+                value={selectedProfessional}
+                onChange={setSelectedProfessional}
+                searchable
+                clearable
+                nothingFoundMessage="No professionals found"
+                disabled={loading}
+                w="100%"
+              />
+            </Box>
+
+            <Button
+              onClick={handleAddCoAuthor}
+              disabled={!selectedProfessional}
+            >
+              Add
+            </Button>
+          </Flex>
+          <Stack mt="xs">
+            {coAuthors.map((author) => (
+              <Badge
+                key={author.value}
+                variant="light"
+                size="lg"
+                rightSection={
+                  <Button
+                    variant="subtle"
+                    size="m"
+                    onClick={() => handleRemoveCoAuthor(author.value)}
+                    p={0}
+                  >
+                    <IconX size={14} /> {/* IconX as the remove button */}
+                  </Button>
+                }
+              >
+                {author.label}
+              </Badge>
+            ))}
+          </Stack>
 
           <FileInput
             label="Upload Thumbnail"
