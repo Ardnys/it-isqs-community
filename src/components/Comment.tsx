@@ -112,6 +112,7 @@ const Comment = ({ comment }: { comment: CommentNode }) => {
 
           {/* Inline reply form */}
           {replying && (
+            // TODO: pass the current user id
             <ReplyForm
               postId={comment.post_id}
               parentCommentId={comment.id}
