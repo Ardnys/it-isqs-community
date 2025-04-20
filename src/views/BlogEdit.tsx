@@ -1,25 +1,28 @@
 import '@mantine/tiptap/styles.css';
 
-import { RichTextEditor, Link } from '@mantine/tiptap';
-import { useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
 import {
+  Badge,
+  Box,
   Button,
-  Group,
-  Stack,
-  TextInput,
   FileInput,
+  Flex,
+  Group,
   Image,
   Select,
-  Badge,
-  Flex,
-  Box,
+  Stack,
+  TextInput,
 } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 import { useForm } from '@mantine/form';
-import { supabaseClient } from '../supabase/supabaseClient';
+import { Link, RichTextEditor } from '@mantine/tiptap';
+import { useStore } from '@nanostores/react';
 import { IconX } from '@tabler/icons-react';
+import { useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { $registeredUser } from '../global-state/user';
+import { supabaseClient } from '../supabase/supabaseClient';
+const user = useStore($registeredUser);
 
 const BlogEdit = () => {
   const navigate = useNavigate();
@@ -155,7 +158,7 @@ const BlogEdit = () => {
         title: blog.title,
         body: blog.blogContent,
         thumbnail: blog.thumbnail?.name,
-        professional_id: blog.professionalId,
+        date: new Date().toISOString(),
       });
 
       if (error) {
