@@ -54,9 +54,11 @@ export default function ForumPage() {
     <Container size="md" py="xl">
       <Group justify="space-between" mb="xl">
         <Title order={1}>Forum</Title>
-        <Button color="teal" size="lg">
-          Create Post
-        </Button>
+        {registeredUser?.role === 'professional' && (
+          <Button color="teal" size="lg">
+            Create Post
+          </Button>
+        )}
       </Group>
 
       <Stack gap="md">
