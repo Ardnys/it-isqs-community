@@ -27,6 +27,7 @@ type ForumPost = {
     name: string;
     surname: string;
     email: string;
+    pfp_url: string | null;
   };
 };
 
@@ -46,7 +47,7 @@ const Foru = () => {
           votes,
           user_id,
           body,
-          RegisteredUser:user_id(name, surname, email)
+          RegisteredUser:user_id(name, surname, email, pfp_url)
         `,
         )
         .eq('id', Number(id))
@@ -66,6 +67,7 @@ const Foru = () => {
             name: data.RegisteredUser?.name || '',
             surname: data.RegisteredUser?.surname || '',
             email: data.RegisteredUser?.email || '',
+            pfp_url: data.RegisteredUser?.pfp_url || '',
           },
         });
       }
@@ -81,9 +83,7 @@ const Foru = () => {
             <Stack gap="xs">
               <Title order={2}>{forumPost.title}</Title>
               <Group align="center" gap="sm">
-                <Avatar radius="xl">
-                  {forumPost.RegisteredUser.name.charAt(0)}
-                </Avatar>
+                <Avatar src={forumPost.RegisteredUser.pfp_url} radius="xl" />
                 <Tooltip label={forumPost.RegisteredUser.email}>
                   <Text size="sm" fw={500}>
                     {forumPost.RegisteredUser.name}{' '}

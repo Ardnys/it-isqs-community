@@ -36,9 +36,12 @@ const Comment = ({ comment }: { comment: CommentNode }) => {
         <Stack gap="xs">
           {/* Top row: Avatar + Name + Date */}
           <Group align="flex-start" gap="sm">
-            <Avatar alt={comment.user.name} radius="xl" size="md">
-              {comment.user.name.charAt(0)}
-            </Avatar>
+            <Avatar
+              src={comment.user.pfp_url}
+              alt={comment.user.name}
+              radius="xl"
+              size="md"
+            />
             <Stack gap={2} style={{ flex: 1 }}>
               <Group gap="xs">
                 <Text fw={500}>
