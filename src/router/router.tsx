@@ -9,6 +9,7 @@ import SignUp from '../views/SignUp';
 import BlogEdit from '../views/BlogEdit';
 import BlogDetail from '../views/BlogDetail';
 import Foru from '../views/Foru';
+import ForuCreate from '../views/ForuCreate';
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +48,7 @@ export const router = createBrowserRouter([
         path: '/blog-edit',
         element: <BlogEdit />,
       },
+      { path: '/forum/create', element: <ForuCreate /> },
     ],
   },
 

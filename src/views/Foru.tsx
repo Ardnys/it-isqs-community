@@ -94,7 +94,11 @@ const Foru = () => {
                   {new Date(forumPost.creation_date).toLocaleString()}
                 </Text>
               </Group>
-              <Text>{forumPost.body}</Text>
+              <Text
+                dangerouslySetInnerHTML={{
+                  __html: forumPost.body,
+                }}
+              />
               <Text size="sm" c="dimmed">
                 Votes: {forumPost.votes}
               </Text>

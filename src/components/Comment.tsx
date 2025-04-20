@@ -24,7 +24,6 @@ const Comment = ({ comment }: { comment: CommentNode }) => {
   const [opened, setOpened] = useState(true);
   const [replying, setReplying] = useState(false);
   const hasReplies = comment.replies.length > 0;
-
   const handleReplySuccess = () => {
     setReplying(false);
     window.location.reload(); // Can be improved
@@ -64,16 +63,24 @@ const Comment = ({ comment }: { comment: CommentNode }) => {
                   icon={<IconMessageCircle size={14} />}
                   mt="xs"
                 >
-                  <Text size="sm" c="dimmed" lineClamp={4}>
-                    {comment.parent.body}
-                  </Text>
+                  <Text
+                    dangerouslySetInnerHTML={{
+                      __html: comment.parent.body || '<i> No comment </i>',
+                    }}
+                    size="sm"
+                    c="dimmed"
+                  />
                 </Blockquote>
               )}
 
               {/* Body */}
-              <Text size="sm" mt="xs">
-                {comment.body}
-              </Text>
+              <Text
+                dangerouslySetInnerHTML={{
+                  __html: comment.body || '<i> No comment </i>',
+                }}
+                size="sm"
+                mt="xs"
+              />
             </Stack>
           </Group>
 

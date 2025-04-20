@@ -50,7 +50,11 @@ export default function ForumPage() {
     <Container size="lg" py="lg">
       <Group justify="space-between" mb="xl">
         <Title order={1}>Forum</Title>
-        <Button color="teal" size="lg">
+        <Button
+          color="teal"
+          size="lg"
+          onClick={() => navigate('/forum/create')}
+        >
           Create Post
         </Button>
       </Group>

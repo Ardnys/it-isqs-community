@@ -4,6 +4,7 @@ import { supabaseClient } from '../supabase/supabaseClient';
 
 import { useStore } from '@nanostores/react';
 import { $registeredUser } from '../global-state/user';
+import TextEditor from './TextEditor';
 
 type ReplyFormProps = {
   postId: number;
@@ -43,13 +44,7 @@ const ReplyForm = ({
 
   return (
     <Stack gap="xs">
-      <Textarea
-        value={value}
-        onChange={(e) => setValue(e.currentTarget.value)}
-        placeholder="Write your reply..."
-        autosize
-        minRows={2}
-      />
+      <TextEditor setBody={setValue} />
       <Button onClick={handleSubmit} loading={loading}>
         Reply
       </Button>
