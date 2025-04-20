@@ -10,6 +10,7 @@ type Blog = {
   id: number;
   thumbnail: string | null;
   title: string | null;
+  coAuthors?: string[]; // Add this property
 };
 
 const Blogs = () => {
@@ -21,14 +22,14 @@ const Blogs = () => {
     setLoading(true);
 
     const { data, error } = await supabaseClient.from('Blog').select(`
-        *,
-        CoAuthors (
-          author_id,
-          RegisteredUser (
-            name
-          )
-        )
-      `);
+    *,
+    CoAuthors (
+      author_id,
+      RegisteredUser:author_id (
+        name
+      )
+    )
+  `);
 
     if (error) {
       console.error('error while fetching blog posts', error);
@@ -81,6 +82,7 @@ const Blogs = () => {
               body={post.body}
               thumbnail={post.thumbnail}
               date={post.date}
+              coAuthors={post.coAuthors} // Add coAuthors here
             />
           ))
         )}

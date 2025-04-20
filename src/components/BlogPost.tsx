@@ -9,6 +9,7 @@ import {
   Spoiler,
   Title,
   Anchor,
+  Flex,
 } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
@@ -48,9 +49,19 @@ const BlogPost = ({
                 __html: body || '<i>No content</i>',
               }}
             />
-            <Anchor href={`/blogs/${id}`} underline="always" c="teal">
-              Read more
-            </Anchor>
+            <Flex justify="space-between" mt="md" align="center">
+              <Anchor
+                href={`/blog/${title?.replace(/\s+/g, '-')}`}
+                target="_blank"
+              >
+                Read More
+              </Anchor>
+              {coAuthors?.length > 0 && (
+                <Text fz="sm" c="dimmed">
+                  by {coAuthors.join(', ')}
+                </Text>
+              )}
+            </Flex>
           </Stack>
 
           {thumbnail && (
@@ -65,15 +76,6 @@ const BlogPost = ({
             />
           )}
         </Group>
-
-        {/* Co-authors at bottom right */}
-        {coAuthors.length > 0 && (
-          <Group justify="flex-end" mt="sm">
-            <Text size="xs" c="dimmed">
-              Co-authors: {coAuthors.join(', ')}
-            </Text>
-          </Group>
-        )}
       </Stack>
     </Card>
   );
