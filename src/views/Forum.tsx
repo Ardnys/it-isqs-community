@@ -64,12 +64,9 @@ export default function ForumPage() {
           return (
             <Card key={post.id} shadow="sm" p="lg" radius="md" withBorder>
               <Flex gap="md" align="flex-start">
-                {/* <Avatar
-                  src={avatarUrl.publicUrl}
-                  alt={post.author}
-                  radius="xl"
-                  size="lg"
-                /> */}
+                <Avatar alt={post.RegisteredUser?.name} radius="xl" size="lg">
+                  {post.RegisteredUser?.name.charAt(0)}
+                </Avatar>
 
                 <div style={{ flex: 1 }}>
                   <Group
