@@ -108,13 +108,11 @@ const BlogEdit = () => {
     initialValues: {
       title: '',
       thumbnail: null as File | null,
-      professionalId: '',
     },
     validate: {
       title: (value) =>
         value.trim().length === 0 ? 'Title is required' : null,
       thumbnail: (value) => (value ? null : 'Thumbnail is required'),
-      professionalId: (value) => (value ? null : 'Add co-authors'),
     },
   });
 
@@ -135,25 +133,19 @@ const BlogEdit = () => {
     title: string;
     thumbnail: File | null;
     blogContent: string;
-    professionalId: string;
   }) => {
     try {
       // Upload thumbnail
       const { data: uploadData, error: uploadError } =
         await supabaseClient.storage
           .from('storage')
-          .upload(
-            `thumbnails/${blog.thumbnail?.name as string}`,
-            blog.thumbnail as File,
-            {
-              contentType: 'image/jpeg',
-            },
-          );
+          .upload(`thumbnails/${blog.thumbnail?.name}`, blog.thumbnail!, {
+            contentType: 'image/jpeg',
+          });
 
-      if (uploadError) {
-        throw uploadError;
-      }
+      if (uploadError) throw uploadError;
 
+      // Insert blog post
       const { data, error } = await supabaseClient
         .from('Blog')
         .insert({
@@ -169,40 +161,32 @@ const BlogEdit = () => {
         return;
       }
 
-      const insertedBlog = data?.[0];
-      const blogId = insertedBlog?.id;
-
+      const blogId = data?.[0]?.id;
       if (!blogId) {
-        console.error('No blog ID returned from insert');
+        console.error('No blog ID returned');
         return;
       }
 
-      // Create array of all co-author IDs (including current user)
+      // Co-author insert (including current user)
       const allCoAuthorIds = [
         Number(user?.id),
         ...coAuthors.map((author) => Number(author.value)),
       ];
 
-      // Map them into insert objects
       const coAuthorInserts = allCoAuthorIds.map((authorId) => ({
         blog_id: blogId,
         author_id: authorId,
       }));
 
-      // Insert into join table
       const { error: coAuthorError } = await supabaseClient
-        .from('CoAuthors') // your join table name
+        .from('CoAuthors')
         .insert(coAuthorInserts);
 
       if (coAuthorError) {
         console.error('Error inserting co-authors:', coAuthorError);
       }
 
-      if (error) {
-        throw error;
-      }
-
-      navigate('/blogs'); // Redirect after successful save
+      navigate('/blogs');
     } catch (error) {
       console.error('Error while saving blog post:', error);
       setError(
@@ -211,18 +195,15 @@ const BlogEdit = () => {
     }
   };
 
-  const handleSave = (values: {
-    title: string;
-    thumbnail: File | null;
-    professionalId: string;
-  }) => {
-    const blogContent = editor?.getHTML() as string;
+  const handleSave = (values: { title: string; thumbnail: File | null }) => {
+    const blogContent = editor?.getHTML() || '';
+
     saveBlogPost({
       title: values.title,
       thumbnail: values.thumbnail,
-      blogContent: blogContent,
-      professionalId: values.professionalId,
+      blogContent,
     });
+    navigate('/blogs');
   };
 
   return (
