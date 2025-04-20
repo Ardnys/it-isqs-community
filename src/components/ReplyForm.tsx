@@ -23,7 +23,6 @@ const ReplyForm = ({
   const handleSubmit = async () => {
     if (!value.trim()) return;
     setLoading(true);
-    // TODO: real insert query
     if (user?.id) {
       const { error } = await supabaseClient.from('ForumReply').insert({
         post_id: postId,
