@@ -12,7 +12,13 @@ import {
 import { IconPlus, IconX } from '@tabler/icons-react';
 
 // Themed section card with color props
-const SectionCard = ({ icon, title, children, bgColor, textColor = '#212529' }) => (
+const SectionCard: React.FC<{
+  icon: React.ReactNode;
+  title: string;
+  children: React.ReactNode;
+  bgColor: string;
+  textColor?: string;
+}> = ({ icon, title, children, bgColor, textColor = '#212529' }) => (
   <Box
     p="lg"
     mb="md"
@@ -155,31 +161,15 @@ function Contact() {
               multiple={true}
               variant="default"
               transitionDuration={200}
-              chevron={({ opened }) =>
-                opened ? <IconX size={20} color="#c62828" /> : <IconPlus size={20} color="#2e7d32" />
+              chevron={
+                <>{({ opened }: { opened: boolean }) =>
+                  opened ? <IconX size={20} color="#c62828" /> : <IconPlus size={20} color="#2e7d32" />
+                }</>
               }
-              styles={{
-                item: {
-                  border: '1px solid #adb5bd',
-                  borderRadius: 6,
-                  marginBottom: 12,
-                  backgroundColor: '#fff',
-                  padding: '8px 12px',
-                  transition: 'background 0.2s ease',
-                },
-                itemOpened: {
-                  backgroundColor: '#e8f5e9',
-                },
-                control: {
-                  fontWeight: 600,
-                  fontSize: '16px',
-                  color: '#2e7d32',
-                },
-                content: {
-                  paddingTop: 10,
-                  fontSize: '14px',
-                  lineHeight: 1.6,
-                },
+              classNames={{
+                item: 'accordion-item',
+                control: 'accordion-control',
+                content: 'accordion-content',
               }}
             >
               {/* Partner 1 */}
