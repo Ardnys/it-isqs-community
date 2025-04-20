@@ -68,7 +68,7 @@ function Home() {
               <Stack>
                 <Title order={3} c="dark">About IT-ISQS</Title>
                 <Text c="gray.7" size="md" lh={1.7}>
-                The IT-ISQS project aims to enhance higher education by integrating international software quality standards into engineering curricula. Through innovative methods like gamification, AI tools, and real-life case studies, the project seeks to make learning more engaging and aligned with global standards. Activities include course development, pilot testing, and collaboration with academia and industry. T                </Text>
+                The IT-ISQS project aims to enhance higher education by integrating international software quality standards into engineering curricula. Through innovative methods like gamification, AI tools, and real-life case studies, the project seeks to make learning more engaging and aligned with global standards. Activities include course development, pilot testing, and collaboration with academia and industry. </Text>
               </Stack>
             </Grid.Col>
           </Grid>
@@ -88,7 +88,7 @@ function Home() {
                   </Title>
                 </Group>
                 <Text c="gray.8" size="sm">
-                The IT-ISQS project's aim is to address the vital need for coverage of international software quality standards in higher education to raise awareness among engineers and industry. By incorporating innovative teaching methods such as gamification, real-life case studies, interactive class activities, and AI integration, the project aims to make learning engaging and relevant for students. The project will also update curricula to ensure related engineering programs align with global standards.                </Text>
+                The IT-ISQS project's aim is to address the vital need for coverage of international software quality standards in higher education to raise awareness among engineers and industry. By incorporating innovative teaching methods such as gamification, real-life case studies, interactive class activities, and AI integration, the project aims to make learning engaging and relevant for students.</Text>
               </Box>
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 4 }}>
@@ -99,7 +99,7 @@ function Home() {
                   </Title>
                 </Group>
                 <Text c="gray.8" size="sm">
-                IT-ISQS project activities: scientific literature review, surveys, industry interviews and statistical analysis; building new course design via creating novel teaching materials, AI tools, games, interactive exercises, and case studies; testing the course by pilot programs, collecting feedback, and analyzing it; collaborating with faculty and industry experts to finalize the course design; dissemination activities via community website, academic papers, workshops, meet-ups and multiplier events                </Text>
+                IT-ISQS project activities: scientific literature review, surveys, industry interviews and statistical analysis; building new course design via creating novel teaching materials, AI tools, games, </Text>
               </Box>
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 4 }}>
@@ -112,10 +112,7 @@ function Home() {
                   The IT-ISQS project intends to empower;
                   Improvement of international software quality standards(ISQS) course syllabus via innovative and enriched content.
                   Comprehensive coverage of ISQS in software engineering and related curricula.
-                  Increased motivation for students and professors with innovative course content.
-                  Enhanced awareness and knowledge among emerging engineers about ISO/IEC software standards.
-                  AI-based tools to support standards training.
-                  Internationalization with partner organization              
+          
                  </Text>
               </Box>
             </Grid.Col>
