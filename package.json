@@ -1,5 +1,6 @@
 {
   "name": "mantine-supabase-template",
+  "homepage": "https://Ardnys.github.io/it-isqs-community/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,7 +9,9 @@
     "build": "tsc && vite build",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "typegen": "npx supabase gen types typescript --linked > src/supabase/supabase.ts"
+    "typegen": "npx supabase gen types typescript --linked > src/supabase/supabase.ts",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@mantine/core": "^7.17.4",
