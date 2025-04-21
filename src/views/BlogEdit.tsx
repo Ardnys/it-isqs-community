@@ -32,18 +32,13 @@ const BlogEdit = () => {
     Array<{
       value: string;
       label: string;
-      avatar: string;
     }>
   >([]);
   const currentUser = useStore($registeredUser);
 
   const [error, setError] = useState<string | null>(null);
-  const [selectedProfessional, setSelectedProfessional] = useState<
-    string | null
-  >(null);
-  const [coAuthors, setCoAuthors] = useState<
-    Array<{ value: string; label: string }>
-  >([]);
+
+  const [coAuthors, setCoAuthors] = useState<string[]>([]);
 
   // Fetch professionals from the database
   useEffect(() => {
@@ -64,7 +59,6 @@ const BlogEdit = () => {
             .map((user) => ({
               value: String(user.id),
               label: user.name,
-              avatar: user.pfp_url || '', // maybe we can add the avatar next to name
             }));
           setProfessionals(professionalsData);
         }
@@ -154,14 +148,15 @@ const BlogEdit = () => {
 
       // Co-author insert (including current user)
       const allCoAuthorIds = [
-        Number(currentUser?.id),
-        ...coAuthors.map((author) => Number(author.value)),
+        Number(currentUser?.id), // current user ID
+        ...coAuthors.map((authorId) => Number(authorId)), // Co-authors IDs
       ];
 
       const coAuthorInserts = allCoAuthorIds.map((authorId) => ({
         blog_id: blogId,
         author_id: authorId,
       }));
+      console.log(coAuthorInserts);
 
       const { error: coAuthorError } = await supabaseClient
         .from('CoAuthors')
@@ -203,8 +198,10 @@ const BlogEdit = () => {
           />
           <MultiSelect
             label="Choose Co-Authors"
-            placeholder="Pick Pick Professional"
+            placeholder="Pick Professional"
             data={professionals}
+            value={coAuthors}
+            onChange={setCoAuthors}
             clearable
           />
 
