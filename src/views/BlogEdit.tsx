@@ -118,12 +118,12 @@ const BlogEdit = () => {
             contentType: blog.thumbnail!.type,
           });
 
-      if (uploadData) {
+      if (uploadError) {
         notifications.show({
           title: 'Error uploading thumbnail',
           message:
-            uploadData instanceof Error
-              ? uploadData.message
+            uploadError instanceof Error
+              ? uploadError.message
               : String(uploadData),
           color: 'red',
           icon: <IconX size={16} />,
