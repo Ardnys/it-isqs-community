@@ -217,30 +217,6 @@ const BlogEdit = () => {
             required
             {...form.getInputProps('title')}
           />
-
-          {/* <Flex align="flex-end" gap="sm">
-            <Box style={{ flex: 1 }}>
-              <Select
-                label="Add Co-Authors"
-                placeholder="Choose a professional"
-                data={professionals}
-                value={selectedProfessional}
-                onChange={setSelectedProfessional}
-                searchable
-                clearable
-                nothingFoundMessage="No professionals found"
-                disabled={loading}
-                w="100%"
-              />
-            </Box>
-
-            <Button
-              onClick={handleAddCoAuthor}
-              disabled={!selectedProfessional}
-            >
-              Add
-            </Button>
-          </Flex> */}
           <MultiSelect
             label="Choose Co-Authors"
             placeholder="Pick Pick Professional"
