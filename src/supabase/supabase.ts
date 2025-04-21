@@ -73,6 +73,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "CoAuthors_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: true
+            referencedRelation: "RegisteredUser"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "CoAuthors_blog_id_fkey"
             columns: ["blog_id"]
             isOneToOne: false
@@ -176,7 +183,6 @@ export type Database = {
       }
       RegisteredUser: {
         Row: {
-          auth_uid: string | null
           email: string | null
           id: number
           name: string
@@ -185,7 +191,6 @@ export type Database = {
           surname: string | null
         }
         Insert: {
-          auth_uid?: string | null
           email?: string | null
           id?: number
           name: string
@@ -194,7 +199,6 @@ export type Database = {
           surname?: string | null
         }
         Update: {
-          auth_uid?: string | null
           email?: string | null
           id?: number
           name?: string

@@ -81,7 +81,7 @@ export function Header() {
                 >
                   <Group gap={7}>
                     <Avatar
-                      src={user.pfp_url}
+                      src={user?.pfp_url}
                       radius="xl"
                       size={20}
                       alt="Profile picture"

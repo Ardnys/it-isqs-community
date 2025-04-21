@@ -4,7 +4,7 @@ import { ContextModalProps } from '@mantine/modals';
 import { useState, useEffect } from 'react';
 import { supabaseClient } from '../../supabase/supabaseClient';
 import { useStore } from '@nanostores/react';
-
+import { v4 as uuidv4 } from 'uuid';
 import { $registeredUser } from '../../global-state/user';
 
 export const Settings = ({
@@ -39,24 +39,29 @@ export const Settings = ({
   };
   const updateProfilePicture = async (file: File, userEmail: string) => {
     try {
-      // 1. Upload the file to storage
+      // 1. Generate unique filename
+      const fileExt = file.name.split('.').pop();
+      const uniqueFileName = `${uuidv4()}.${fileExt}`;
+
+      // 2. Upload the file to Supabase Storage
       const { data: uploadData, error: uploadError } =
         await supabaseClient.storage
           .from('storage')
-          .upload(`profile-pictures/${file.name}`, file, {
+          .upload(`profile-pictures/${uniqueFileName}`, file, {
             cacheControl: '3600',
             upsert: true,
           });
 
       if (uploadError) throw uploadError;
 
-      // 2. Get public URL of the uploaded file
+      // 3. Get public URL of the uploaded file
       const { data: publicData } = supabaseClient.storage
         .from('storage')
         .getPublicUrl(uploadData.path);
 
       const profilePictureUrl = publicData.publicUrl;
 
+      // 4. Update local state
       $registeredUser.set({
         pfp_url: profilePictureUrl,
         id: currentUser?.id || 0,
@@ -66,7 +71,7 @@ export const Settings = ({
         role: '',
       });
 
-      // 3. Update RegisteredUser table
+      // 5. Update RegisteredUser table
       const { error: dbUpdateError } = await supabaseClient
         .from('RegisteredUser')
         .update({ pfp_url: profilePictureUrl })
