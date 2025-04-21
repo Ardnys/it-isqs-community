@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { Title } from '@mantine/core';
-import { Avatar, Paper, Text, Group, Stack } from '@mantine/core';
+import { Stack } from '@mantine/core';
 import Comment from './Comment';
 
 type ForumReply = {
@@ -25,6 +25,7 @@ export type CommentNode = ForumReply & {
     pfp_url: string | null;
   };
   replies: CommentNode[];
+  parent?: CommentNode;
 };
 
 function buildCommentTree(data: ForumReply[]): CommentNode[] {
@@ -48,7 +49,10 @@ function buildCommentTree(data: ForumReply[]): CommentNode[] {
       tree.push(comment);
     } else {
       const parent = allComments[comment.parent_comment_id];
-      if (parent) parent.replies.push(comment);
+      if (parent) {
+        parent.replies.push(comment);
+        comment.parent = parent;
+      }
     }
   });
 
@@ -85,7 +89,6 @@ const ForumCommentListing = ({ postId }: { postId: number }) => {
       }
 
       if (data) {
-        console.log(data);
         const tree = buildCommentTree(data);
         setComments(tree);
       }

@@ -208,12 +208,53 @@ export type Database = {
         }
         Relationships: []
       }
+      UserPostVotes: {
+        Row: {
+          id: number
+          post_id: number
+          upvote: boolean
+          user_id: number
+        }
+        Insert: {
+          id?: number
+          post_id: number
+          upvote: boolean
+          user_id: number
+        }
+        Update: {
+          id?: number
+          post_id?: number
+          upvote?: boolean
+          user_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "UserPostVotes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "ForumPost"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "UserPostVotes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "RegisteredUser"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      handle_vote: {
+        Args:
+          | { p_post_id: number; p_user_id: number; p_upvote: boolean }
+          | { p_post_id: number; p_user_id: string; p_upvote: boolean }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

@@ -5,14 +5,11 @@ import {
   Image,
   Stack,
   Divider,
-  Box,
-  Spoiler,
   Title,
   Anchor,
   Flex,
   Avatar, // Import Avatar from Mantine
 } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
 
 const BlogPost = ({
   id,

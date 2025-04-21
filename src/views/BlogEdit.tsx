@@ -246,6 +246,7 @@ const BlogEdit = () => {
             />
           )}
 
+          {/* TODO make this a component like TextEditor */}
           <RichTextEditor editor={editor} title="Blog Body">
             <RichTextEditor.Toolbar sticky stickyOffset={60}>
               <RichTextEditor.ControlsGroup>

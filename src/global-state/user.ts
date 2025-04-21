@@ -1,4 +1,4 @@
-import { Session, User } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
 import { atom } from 'nanostores';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { notifications } from '@mantine/notifications';
@@ -45,7 +45,7 @@ const fetchRegisteredUserData = async (email?: string) => {
   }
 };
 
-supabaseClient.auth.onAuthStateChange((authChangeEvent, session) => {
+supabaseClient.auth.onAuthStateChange((_authChangeEvent, session) => {
   if (session?.user) {
     // Fetch RegisteredUser data and store it in $registeredUser
     fetchRegisteredUserData(session.user.email).then((registeredUserData) => {

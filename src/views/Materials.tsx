@@ -1,9 +1,8 @@
 // Materials.tsx
-import { Button, Card, Grid, List, Stack, Text } from '@mantine/core';
+import { Button, Card, Container, Grid, Stack, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { openTypedModal } from '../mantine/modals/modals-utils';
 import { supabaseClient } from '../supabase/supabaseClient';
-import { useUser } from '../supabase/loader';
 
 import handleDownload from '../Utils/DownloadHandler';
 import { useStore } from '@nanostores/react';
@@ -76,7 +75,7 @@ const Materials = () => {
   }, [user?.email]);
 
   return (
-    <div>
+    <Container size="lg" py="lg">
       {role === 'professional' && (
         <Button
           onClick={() => {
@@ -134,7 +133,7 @@ const Materials = () => {
           </Grid.Col>
         ))}
       </Grid>
-    </div>
+    </Container>
   );
 };
 
