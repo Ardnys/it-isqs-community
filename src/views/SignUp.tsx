@@ -53,6 +53,7 @@ export function SignUp() {
         console.error('Error signing up: ', error.message);
         return;
       }
+      console.log('Data: ', data);
 
       const { error: insertError } = await supabaseClient
         .from('RegisteredUser')

@@ -1,15 +1,11 @@
 import '@mantine/tiptap/styles.css';
 
 import {
-  Badge,
-  Box,
   Button,
   FileInput,
-  Flex,
   Group,
   Image,
   MultiSelect,
-  Select,
   Stack,
   TextInput,
 } from '@mantine/core';
@@ -37,8 +33,6 @@ const BlogEdit = () => {
   >([]);
   const currentUser = useStore($registeredUser);
 
-  const [error, setError] = useState<string | null>(null);
-
   const [coAuthors, setCoAuthors] = useState<string[]>([]);
   useEffect(() => {
     const fetchProfessionals = async () => {
@@ -47,6 +41,10 @@ const BlogEdit = () => {
           .from('RegisteredUser')
           .select('id, name,pfp_url')
           .eq('role', 'professional');
+
+        if (error) {
+          console.error('Error: ', error);
+        }
 
         if (data) {
           const professionalsData = data
@@ -192,9 +190,6 @@ const BlogEdit = () => {
         autoClose: 4000,
         position: 'top-center',
       });
-      setError(
-        error instanceof Error ? error.message : 'Failed to save blog post',
-      );
     }
   };
 

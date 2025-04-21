@@ -8,8 +8,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { $registeredUser } from '../../global-state/user';
 
 export const Settings = ({
-  context,
-  id,
   innerProps,
 }: ContextModalProps<{ modalBody: string }>) => {
   const [file, setFile] = useState<File | null>(null);

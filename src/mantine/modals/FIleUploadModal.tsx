@@ -5,12 +5,9 @@ import { useState } from 'react';
 import { supabaseClient } from '../../supabase/supabaseClient';
 
 export const Upload = ({
-  context,
-  id,
   innerProps,
 }: ContextModalProps<{ modalBody: string }>) => {
   const [file, setFile] = useState<File | null>(null);
-  const [fileUrl, setFileUrl] = useState<string | null>(null);
 
   const handleFileChange = (newFile: File | null) => {
     setFile(newFile);
@@ -27,11 +24,6 @@ export const Upload = ({
           throw error;
         }
 
-        const { data: publicData } = supabaseClient.storage
-          .from('storage')
-          .getPublicUrl(data?.path ?? '');
-
-        setFileUrl(publicData.publicUrl);
         console.log('File uploaded successfully!', data);
       } catch (error) {
         console.error('Error uploading file:', error);

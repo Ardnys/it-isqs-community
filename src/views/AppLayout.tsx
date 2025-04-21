@@ -1,4 +1,4 @@
-import { Box, Group, Stack } from '@mantine/core';
+import { Box, Stack } from '@mantine/core';
 import { Outlet } from 'react-router-dom';
 import { Header } from '../components/Header';
 
