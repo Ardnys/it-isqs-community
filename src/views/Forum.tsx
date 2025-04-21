@@ -63,10 +63,6 @@ export default function ForumPage() {
 
       <Stack gap="md">
         {posts?.map((post) => {
-          // const { data: avatarUrl } = supabaseClient.storage
-          //   .from('public')
-          //   .getPublicUrl(post.avatarPath);
-
           return (
             <Card key={post.id} shadow="sm" p="lg" radius="md" withBorder>
               <Flex gap="md" align="flex-start">
