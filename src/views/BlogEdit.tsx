@@ -23,6 +23,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { $registeredUser } from '../global-state/user';
 import { supabaseClient } from '../supabase/supabaseClient';
+import { v4 as uuidv4 } from 'uuid';
 
 const BlogEdit = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const BlogEdit = () => {
       avatar: string;
     }>
   >([]);
-  const user = useStore($registeredUser);
+  const currentUser = useStore($registeredUser);
 
   const [error, setError] = useState<string | null>(null);
   const [selectedProfessional, setSelectedProfessional] = useState<
@@ -58,11 +59,13 @@ const BlogEdit = () => {
         }
 
         if (data) {
-          const professionalsData = data.map((user) => ({
-            value: String(user.id),
-            label: user.name,
-            avatar: user.pfp_url || '', // maybe we can add the avatar next to name
-          }));
+          const professionalsData = data
+            .filter((user) => user.id !== currentUser!.id)
+            .map((user) => ({
+              value: String(user.id),
+              label: user.name,
+              avatar: user.pfp_url || '', // maybe we can add the avatar next to name
+            }));
           setProfessionals(professionalsData);
         }
       } catch (error) {
@@ -115,12 +118,14 @@ const BlogEdit = () => {
     blogContent: string;
   }) => {
     try {
-      // Upload thumbnail
+      const fileExt = blog.thumbnail!.name.split('.').pop();
+      const uniqueFileName = `${uuidv4()}.${fileExt}`;
+
       const { data: uploadData, error: uploadError } =
         await supabaseClient.storage
           .from('storage')
-          .upload(`thumbnails/${blog.thumbnail?.name}`, blog.thumbnail!, {
-            contentType: 'image/jpeg',
+          .upload(`thumbnails/${uniqueFileName}`, blog.thumbnail!, {
+            contentType: blog.thumbnail!.type,
           });
 
       if (uploadError) throw uploadError;
@@ -131,7 +136,7 @@ const BlogEdit = () => {
         .insert({
           title: blog.title,
           body: blog.blogContent,
-          thumbnail: blog.thumbnail?.name,
+          thumbnail: uniqueFileName,
           date: new Date().toISOString(),
         })
         .select();
@@ -149,7 +154,7 @@ const BlogEdit = () => {
 
       // Co-author insert (including current user)
       const allCoAuthorIds = [
-        Number(user?.id),
+        Number(currentUser?.id),
         ...coAuthors.map((author) => Number(author.value)),
       ];
 
