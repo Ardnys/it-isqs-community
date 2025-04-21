@@ -10,6 +10,7 @@ import {
   ActionIcon,
   Avatar,
   Flex,
+  Pagination, // 🔥 NEW
 } from '@mantine/core';
 import {
   IconArrowUp,
@@ -25,8 +26,11 @@ import { useStore } from '@nanostores/react';
 import { $registeredUser } from '../global-state/user';
 import { notifications } from '@mantine/notifications';
 
+const POSTS_PER_PAGE = 5; // 🔥 Customize this value as you like
+
 export default function ForumPage() {
   const [posts, setPosts] = useState<ForumPost[] | null>(null);
+  const [currentPage, setCurrentPage] = useState(1); // 🔥 Track current page
   const navigate = useNavigate();
   const user = useStore($registeredUser);
 
@@ -58,7 +62,6 @@ export default function ForumPage() {
         return;
       }
 
-      // Wait for all vote counts to be fetched in parallel
       const postsWithVotes = await Promise.all(
         posts.map(async (post) => {
           const votes = await fetchPostVotes(post.id);
@@ -71,6 +74,12 @@ export default function ForumPage() {
 
     fetchPosts();
   }, []);
+
+  // 🔥 Calculate pagination bounds
+  const paginatedPosts = posts?.slice(
+    (currentPage - 1) * POSTS_PER_PAGE,
+    currentPage * POSTS_PER_PAGE,
+  );
 
   return (
     <Container size="lg" py="lg">
@@ -88,7 +97,7 @@ export default function ForumPage() {
       </Group>
 
       <Stack gap="md">
-        {posts?.map((post) => {
+        {paginatedPosts?.map((post) => {
           return (
             <Card key={post.id} shadow="sm" p="lg" radius="md" withBorder>
               <Flex gap="md" align="flex-start">
@@ -162,6 +171,19 @@ export default function ForumPage() {
           );
         })}
       </Stack>
+
+      {/* 🔥 Pagination control */}
+      {posts && posts.length > POSTS_PER_PAGE && (
+        <Group justify="center" mt="xl">
+          <Pagination
+            total={Math.ceil(posts.length / POSTS_PER_PAGE)}
+            value={currentPage}
+            onChange={setCurrentPage}
+            size="md"
+            radius="md"
+          />
+        </Group>
+      )}
     </Container>
   );
 }
