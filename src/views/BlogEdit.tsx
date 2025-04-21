@@ -24,6 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import { $registeredUser } from '../global-state/user';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { v4 as uuidv4 } from 'uuid';
+import { notifications } from '@mantine/notifications';
 
 const BlogEdit = () => {
   const navigate = useNavigate();
@@ -39,8 +40,6 @@ const BlogEdit = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [coAuthors, setCoAuthors] = useState<string[]>([]);
-
-  // Fetch professionals from the database
   useEffect(() => {
     const fetchProfessionals = async () => {
       try {
@@ -48,10 +47,6 @@ const BlogEdit = () => {
           .from('RegisteredUser')
           .select('id, name,pfp_url')
           .eq('role', 'professional');
-
-        if (error) {
-          throw error;
-        }
 
         if (data) {
           const professionalsData = data
@@ -63,13 +58,14 @@ const BlogEdit = () => {
           setProfessionals(professionalsData);
         }
       } catch (error) {
-        setError(
-          error instanceof Error
-            ? error.message
-            : 'Failed to fetch professionals',
-        );
-        console.error('Error fetching professionals:', error);
-      } finally {
+        notifications.show({
+          title: 'Error while fetching professionals',
+          message: error instanceof Error ? error.message : String(error),
+          color: 'red',
+          icon: <IconX size={16} />,
+          autoClose: 4000,
+          position: 'top-center',
+        });
       }
     };
 
@@ -122,7 +118,19 @@ const BlogEdit = () => {
             contentType: blog.thumbnail!.type,
           });
 
-      if (uploadError) throw uploadError;
+      if (uploadData) {
+        notifications.show({
+          title: 'Error uploading thumbnail',
+          message:
+            uploadData instanceof Error
+              ? uploadData.message
+              : String(uploadData),
+          color: 'red',
+          icon: <IconX size={16} />,
+          autoClose: 4000,
+          position: 'top-center',
+        });
+      }
 
       // Insert blog post
       const { data, error } = await supabaseClient
@@ -136,7 +144,15 @@ const BlogEdit = () => {
         .select();
 
       if (error) {
-        console.error('Error inserting blog:', error);
+        notifications.show({
+          title: 'Error inserting blog',
+          message: error instanceof Error ? error.message : String(error),
+          color: 'red',
+          icon: <IconX size={16} />,
+          autoClose: 4000,
+          position: 'top-center',
+        });
+
         return;
       }
 
@@ -168,7 +184,14 @@ const BlogEdit = () => {
 
       navigate('/blogs');
     } catch (error) {
-      console.error('Error while saving blog post:', error);
+      notifications.show({
+        title: 'Error while saving blog post',
+        message: error instanceof Error ? error.message : String(error),
+        color: 'red',
+        icon: <IconX size={16} />,
+        autoClose: 4000,
+        position: 'top-center',
+      });
       setError(
         error instanceof Error ? error.message : 'Failed to save blog post',
       );
@@ -279,10 +302,6 @@ const BlogEdit = () => {
           </Button>
           <Button type="submit">Save</Button>
         </Group>
-
-        {error && (
-          <div style={{ color: 'red', marginTop: '1rem' }}>Error: {error}</div>
-        )}
       </form>
     </div>
   );
