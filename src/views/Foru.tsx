@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import ForumCommentListing from '../components/ForumCommentListing';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { useParams } from 'react-router-dom';
@@ -13,27 +13,18 @@ import {
   Divider,
   Skeleton,
   Container,
+  ActionIcon,
 } from '@mantine/core';
 import ReplyForm from '../components/ReplyForm';
-
-type ForumPost = {
-  id: number;
-  title: string;
-  creation_date: string;
-  votes: number;
-  body: string;
-  user_id: number;
-  RegisteredUser: {
-    name: string;
-    surname: string;
-    email: string;
-    pfp_url: string | null;
-  };
-};
+import { IconArrowUp, IconArrowDown } from '@tabler/icons-react';
+import handlePostVote, { fetchPostVotes } from '../Utils/PostVoteHandler';
+import { useStore } from '@nanostores/react';
+import { $registeredUser } from '../global-state/user';
 
 const Foru = () => {
   const { id } = useParams();
   const [forumPost, setForumPost] = useState<ForumPost | null>(null);
+  const user = useStore($registeredUser);
 
   useEffect(() => {
     const fetchForumPost = async () => {
@@ -44,7 +35,6 @@ const Foru = () => {
           id,
           title,
           creation_date,
-          votes,
           user_id,
           body,
           RegisteredUser:user_id(name, surname, email, pfp_url)
@@ -55,22 +45,24 @@ const Foru = () => {
 
       if (error) {
         console.error('Error while fetching forum post: ', error);
-      } else {
-        setForumPost({
-          id: data.id,
-          title: data.title || '',
-          creation_date: data.creation_date,
-          votes: data.votes || 0,
-          user_id: data.user_id || 0,
-          body: data.body || '',
-          RegisteredUser: {
-            name: data.RegisteredUser?.name || '',
-            surname: data.RegisteredUser?.surname || '',
-            email: data.RegisteredUser?.email || '',
-            pfp_url: data.RegisteredUser?.pfp_url || '',
-          },
-        });
+        return;
       }
+      const { upvotes, downvotes } = await fetchPostVotes(Number(id));
+      setForumPost({
+        id: data.id,
+        title: data.title || '',
+        creation_date: data.creation_date,
+        upvotes: upvotes,
+        downvotes: downvotes,
+        user_id: data.user_id || 0,
+        body: data.body || '',
+        RegisteredUser: {
+          name: data.RegisteredUser?.name || '',
+          surname: data.RegisteredUser?.surname || '',
+          email: data.RegisteredUser?.email || '',
+          pfp_url: data.RegisteredUser?.pfp_url || '',
+        },
+      });
     };
     fetchForumPost();
   }, [id]);
@@ -83,11 +75,11 @@ const Foru = () => {
             <Stack gap="xs">
               <Title order={2}>{forumPost.title}</Title>
               <Group align="center" gap="sm">
-                <Avatar src={forumPost.RegisteredUser.pfp_url} radius="xl" />
-                <Tooltip label={forumPost.RegisteredUser.email}>
+                <Avatar src={forumPost.RegisteredUser?.pfp_url} radius="xl" />
+                <Tooltip label={forumPost.RegisteredUser?.email}>
                   <Text size="sm" fw={500}>
-                    {forumPost.RegisteredUser.name}{' '}
-                    {forumPost.RegisteredUser.surname}
+                    {forumPost.RegisteredUser?.name}{' '}
+                    {forumPost.RegisteredUser?.surname}
                   </Text>
                 </Tooltip>
                 <Text size="xs" c="dimmed">
@@ -96,12 +88,43 @@ const Foru = () => {
               </Group>
               <Text
                 dangerouslySetInnerHTML={{
-                  __html: forumPost.body,
+                  __html: forumPost.body || '<i> No content </i>',
                 }}
               />
-              <Text size="sm" c="dimmed">
-                Votes: {forumPost.votes}
-              </Text>
+              <Group mt="xs" gap="xs">
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  onClick={() =>
+                    handlePostVote(
+                      forumPost.id,
+                      true,
+                      user?.id ?? 0,
+                      forumPost,
+                      (value) => setForumPost(value as ForumPost | null),
+                    )
+                  }
+                >
+                  <IconArrowUp size={16} />
+                </ActionIcon>
+                <Text size="sm">{forumPost.upvotes}</Text>
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  onClick={() =>
+                    handlePostVote(
+                      forumPost.id,
+                      false,
+                      user?.id ?? 0,
+                      forumPost,
+                      (value) => setForumPost(value as ForumPost | null),
+                    )
+                  }
+                >
+                  <IconArrowDown size={16} />
+                </ActionIcon>
+                <Text size="sm">{forumPost.downvotes}</Text>
+              </Group>
             </Stack>
           </Card>
         ) : (

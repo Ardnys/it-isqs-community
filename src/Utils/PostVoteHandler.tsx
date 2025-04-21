@@ -1,11 +1,37 @@
 import { supabaseClient } from '../supabase/supabaseClient';
 
+export const fetchPostVotes = async (id: number) => {
+  const { count: upvotes, error: uperror } = await supabaseClient
+    .from('UserPostVotes')
+    .select('*', { count: 'exact', head: true })
+    .eq('post_id', id)
+    .eq('upvote', true);
+
+  if (uperror) {
+    console.error('Failed to fetch vote count for post', id, uperror);
+    return { upvotes: 0, downvotes: 0 };
+  }
+
+  const { count: downvotes, error: downerror } = await supabaseClient
+    .from('UserPostVotes')
+    .select('*', { count: 'exact', head: true })
+    .eq('post_id', id)
+    .eq('upvote', false);
+
+  if (downerror) {
+    console.error('Failed to fetch vote count for post', id, downerror);
+    return { upvotes: 0, downvotes: 0 };
+  }
+
+  return { upvotes: upvotes || 0, downvotes: downvotes || 0 };
+};
+
 const handlePostVote = async (
   postId: number,
   upvote: boolean,
   userId: number,
-  posts: ForumPost[] | null,
-  setPosts: (a: ForumPost[] | null) => void,
+  posts: ForumPost | ForumPost[] | null,
+  setPosts: (value: ForumPost | ForumPost[] | null) => void,
 ) => {
   try {
     // Check if the user has already voted on this post
@@ -34,16 +60,24 @@ const handlePostVote = async (
           console.error('Error while deleting vote: ', error);
           return;
         }
+
         // Update the local state to reflect the vote deletion
-        const updatedPosts = posts?.map((post) => {
-          if (post.id === postId) {
-            return upvote
-              ? { ...post, upvotes: post.upvotes - 1 }
-              : { ...post, downvotes: post.downvotes - 1 };
-          }
-          return post;
-        });
-        setPosts(updatedPosts || null);
+        if (Array.isArray(posts)) {
+          const updatedPosts = posts.map((post) => {
+            if (post.id === postId) {
+              return upvote
+                ? { ...post, upvotes: post.upvotes - 1 }
+                : { ...post, downvotes: post.downvotes - 1 };
+            }
+            return post;
+          });
+          setPosts(updatedPosts);
+        } else if (posts && posts.id === postId) {
+          const updatedPost = upvote
+            ? { ...posts, upvotes: posts.upvotes - 1 }
+            : { ...posts, downvotes: posts.downvotes - 1 };
+          setPosts(updatedPost);
+        }
       } else {
         // If the user casts the other vote, update the existing vote
         const { error: updateError } = await supabaseClient
@@ -55,24 +89,40 @@ const handlePostVote = async (
           console.error('Error updating vote:', updateError);
           return;
         }
-        // Update the local state to reflect different vote
-        const updatedPosts = posts?.map((post) => {
-          if (post.id === postId) {
-            return upvote
-              ? {
-                  ...post,
-                  upvotes: post.upvotes + 1,
-                  downvotes: post.downvotes - 1,
-                }
-              : {
-                  ...post,
-                  upvotes: post.upvotes - 1,
-                  downvotes: post.downvotes + 1,
-                };
-          }
-          return post;
-        });
-        setPosts(updatedPosts || null);
+
+        // Update the local state to reflect the different vote
+        if (Array.isArray(posts)) {
+          const updatedPosts = posts.map((post) => {
+            if (post.id === postId) {
+              return upvote
+                ? {
+                    ...post,
+                    upvotes: post.upvotes + 1,
+                    downvotes: post.downvotes - 1,
+                  }
+                : {
+                    ...post,
+                    upvotes: post.upvotes - 1,
+                    downvotes: post.downvotes + 1,
+                  };
+            }
+            return post;
+          });
+          setPosts(updatedPosts);
+        } else if (posts && posts.id === postId) {
+          const updatedPost = upvote
+            ? {
+                ...posts,
+                upvotes: posts.upvotes + 1,
+                downvotes: posts.downvotes - 1,
+              }
+            : {
+                ...posts,
+                upvotes: posts.upvotes - 1,
+                downvotes: posts.downvotes + 1,
+              };
+          setPosts(updatedPost);
+        }
       }
     } else {
       // If the user hasn't voted yet, insert a new vote
@@ -90,15 +140,22 @@ const handlePostVote = async (
       }
 
       // Update the local state
-      const updatedPosts = posts?.map((post) => {
-        if (post.id === postId) {
-          return upvote
-            ? { ...post, upvotes: post.upvotes + 1 }
-            : { ...post, downvotes: post.downvotes + 1 };
-        }
-        return post;
-      });
-      setPosts(updatedPosts || null);
+      if (Array.isArray(posts)) {
+        const updatedPosts = posts.map((post) => {
+          if (post.id === postId) {
+            return upvote
+              ? { ...post, upvotes: post.upvotes + 1 }
+              : { ...post, downvotes: post.downvotes + 1 };
+          }
+          return post;
+        });
+        setPosts(updatedPosts);
+      } else if (posts && posts.id === postId) {
+        const updatedPost = upvote
+          ? { ...posts, upvotes: posts.upvotes + 1 }
+          : { ...posts, downvotes: posts.downvotes + 1 };
+        setPosts(updatedPost);
+      }
     }
   } catch (error) {
     console.error('Unexpected error while handling vote:', error);

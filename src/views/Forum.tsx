@@ -15,7 +15,7 @@ import { IconArrowUp, IconArrowDown, IconMessage } from '@tabler/icons-react';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import handlePostVote from '../Utils/PostVoteHandler';
+import handlePostVote, { fetchPostVotes } from '../Utils/PostVoteHandler';
 import { useStore } from '@nanostores/react';
 import { $registeredUser } from '../global-state/user';
 
@@ -25,32 +25,6 @@ export default function ForumPage() {
   const user = useStore($registeredUser);
 
   useEffect(() => {
-    const fetchPostVotes = async (id: number) => {
-      const { count: upvotes, error: uperror } = await supabaseClient
-        .from('UserPostVotes')
-        .select('*', { count: 'exact', head: true })
-        .eq('post_id', id)
-        .eq('upvote', true);
-
-      if (uperror) {
-        console.error('Failed to fetch vote count for post', id, uperror);
-        return { upvotes: 0, downvotes: 0 };
-      }
-
-      const { count: downvotes, error: downerror } = await supabaseClient
-        .from('UserPostVotes')
-        .select('*', { count: 'exact', head: true })
-        .eq('post_id', id)
-        .eq('upvote', false);
-
-      if (downerror) {
-        console.error('Failed to fetch vote count for post', id, downerror);
-        return { upvotes: 0, downvotes: 0 };
-      }
-
-      return { upvotes: upvotes || 0, downvotes: downvotes || 0 };
-    };
-
     const fetchPosts = async () => {
       const { data: posts, error } = await supabaseClient
         .from('ForumPost')
@@ -59,6 +33,7 @@ export default function ForumPage() {
         id,
         title,
         creation_date,
+        body,
         user_id,
         RegisteredUser:user_id(name, surname, email, pfp_url)
       `,
@@ -136,7 +111,7 @@ export default function ForumPage() {
                           true,
                           user?.id ?? 0,
                           posts,
-                          setPosts,
+                          (value) => setPosts(value as ForumPost[] | null),
                         )
                       }
                     >
@@ -152,7 +127,7 @@ export default function ForumPage() {
                           false,
                           user?.id ?? 0,
                           posts,
-                          setPosts,
+                          (value) => setPosts(value as ForumPost[] | null),
                         )
                       }
                     >
