@@ -25,7 +25,6 @@ import { notifications } from '@mantine/notifications';
 const Foru = () => {
   const { id } = useParams();
   const [forumPost, setForumPost] = useState<ForumPost | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const user = useStore($registeredUser);
 
   useEffect(() => {
@@ -46,7 +45,14 @@ const Foru = () => {
         .single();
 
       if (error) {
-        setErrorMessage('Failed to load the forum post.');
+        notifications.show({
+          title: 'Error',
+          message: error.message,
+          color: 'red',
+          icon: <IconX size={16} />,
+          autoClose: 4000,
+          position: 'top-center',
+        });
         return;
       }
 
