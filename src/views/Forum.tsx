@@ -10,6 +10,7 @@ import {
   ActionIcon,
   Avatar,
   Flex,
+  Pagination,
 } from '@mantine/core';
 import { IconArrowUp, IconArrowDown, IconMessage } from '@tabler/icons-react';
 import { supabaseClient } from '../supabase/supabaseClient';
@@ -50,6 +51,13 @@ export default function ForumPage() {
     fetchPosts();
   }, []);
 
+  const POSTS_PER_PAGE = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
+  const endIndex = startIndex + POSTS_PER_PAGE;
+  const paginatedPosts = posts?.slice(startIndex, endIndex) || [];
+
   return (
     <Container size="md" py="xl">
       <Group justify="space-between" mb="xl">
@@ -62,61 +70,67 @@ export default function ForumPage() {
       </Group>
 
       <Stack gap="md">
-        {posts?.map((post) => {
-          return (
-            <Card key={post.id} shadow="sm" p="lg" radius="md" withBorder>
-              <Flex gap="md" align="flex-start">
-                <Avatar
-                  src={post.RegisteredUser?.pfp_url}
-                  alt={post.RegisteredUser?.name}
-                  radius="xl"
-                  size="lg"
-                />
+        {paginatedPosts.map((post) => (
+          <Card key={post.id} shadow="sm" p="lg" radius="md" withBorder>
+            <Flex gap="md" align="flex-start">
+              <Avatar
+                src={post.RegisteredUser?.pfp_url}
+                alt={post.RegisteredUser?.name}
+                radius="xl"
+                size="lg"
+              />
 
-                <div style={{ flex: 1 }}>
-                  <Group
-                    justify="space-between"
-                    mb="xs"
-                    onClick={() => navigate(`/forum/${post.id}`)}
-                    style={{ cursor: 'pointer' }}
+              <div style={{ flex: 1 }}>
+                <Group
+                  justify="space-between"
+                  mb="xs"
+                  onClick={() => navigate(`/forum/${post.id}`)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <Title order={3}>{post.title ?? 'Untitled'}</Title>
+                  <Badge color={post.votes && post.votes >= 0 ? 'teal' : 'red'}>
+                    {post.votes ?? 0} votes
+                  </Badge>
+                </Group>
+
+                <Text size="sm" c="dimmed">
+                  Posted by{' '}
+                  {post.RegisteredUser
+                    ? `${post.RegisteredUser.name} ${post.RegisteredUser.surname ?? ''}`
+                    : 'Anonymous'}{' '}
+                  · {new Date(post.creation_date).toLocaleDateString()}
+                </Text>
+
+                <Group mt="md">
+                  <ActionIcon variant="light">
+                    <IconArrowUp size="1rem" />
+                  </ActionIcon>
+                  <ActionIcon variant="light">
+                    <IconArrowDown size="1rem" />
+                  </ActionIcon>
+                  <Badge
+                    leftSection={<IconMessage size="1rem" />}
+                    variant="outline"
                   >
-                    <Title order={3}>{post.title ?? 'Untitled'}</Title>
-
-                    <Badge
-                      color={post.votes && post.votes >= 0 ? 'teal' : 'red'}
-                    >
-                      {post.votes ?? 0} votes
-                    </Badge>
-                  </Group>
-
-                  <Text size="sm" c="dimmed">
-                    Posted by{' '}
-                    {post.RegisteredUser
-                      ? `${post.RegisteredUser.name} ${post.RegisteredUser.surname ?? ''}`
-                      : 'Anonymous'}
-                    · {new Date(post.creation_date).toLocaleDateString()}
-                  </Text>
-
-                  <Group mt="md">
-                    <ActionIcon variant="light">
-                      <IconArrowUp size="1rem" />
-                    </ActionIcon>
-                    <ActionIcon variant="light">
-                      <IconArrowDown size="1rem" />
-                    </ActionIcon>
-                    <Badge
-                      leftSection={<IconMessage size="1rem" />}
-                      variant="outline"
-                    >
-                      {0} comments
-                    </Badge>
-                  </Group>
-                </div>
-              </Flex>
-            </Card>
-          );
-        })}
+                    {0} comments
+                  </Badge>
+                </Group>
+              </div>
+            </Flex>
+          </Card>
+        ))}
       </Stack>
+
+      {posts && posts.length > POSTS_PER_PAGE && (
+        <Group justify="center">
+          <Pagination
+            total={Math.ceil(posts.length / POSTS_PER_PAGE)}
+            value={currentPage}
+            onChange={setCurrentPage}
+            mt="xl"
+          />
+        </Group>
+      )}
     </Container>
   );
 }

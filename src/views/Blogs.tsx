@@ -1,4 +1,11 @@
-import { Button, Container, Skeleton, Stack } from '@mantine/core';
+import {
+  Button,
+  Container,
+  Group,
+  Pagination,
+  Skeleton,
+  Stack,
+} from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabaseClient } from '../supabase/supabaseClient';
@@ -68,6 +75,13 @@ const Blogs = () => {
     fetchBlogPosts();
   }, []);
 
+  const POSTS_PER_PAGE = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
+  const endIndex = startIndex + POSTS_PER_PAGE;
+  const paginatedPosts = blogPosts?.slice(startIndex, endIndex) || [];
+
   return (
     <Container size="lg" py="lg">
       <Stack justify="flex-start" gap="lg">
@@ -84,7 +98,7 @@ const Blogs = () => {
             ))}
           </>
         ) : (
-          blogPosts?.map((post) => (
+          paginatedPosts?.map((post) => (
             <BlogPost
               key={post.id}
               id={post.id}
@@ -97,6 +111,17 @@ const Blogs = () => {
           ))
         )}
       </Stack>
+
+      {blogPosts && blogPosts.length > POSTS_PER_PAGE && (
+        <Group justify="center">
+          <Pagination
+            total={Math.ceil(blogPosts.length / POSTS_PER_PAGE)}
+            value={currentPage}
+            onChange={setCurrentPage}
+            mt="xl"
+          />
+        </Group>
+      )}
     </Container>
   );
 };
