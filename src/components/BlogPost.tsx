@@ -42,11 +42,8 @@ const BlogPost = ({
               }}
             />
             <Flex justify="space-between" mt="md" align="center">
-              <Anchor
-                href={`/blog/${title?.replace(/\s+/g, '-')}`}
-                target="_blank"
-              >
-                Read More
+              <Anchor href={`/blogs/${id}`} underline="always" c="teal">
+                Read more
               </Anchor>
               {coAuthors?.length > 0 && (
                 <Group align="center">
