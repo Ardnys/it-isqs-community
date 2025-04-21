@@ -14,8 +14,6 @@ import {
 import {
   IconAB2,
   IconBook2,
-  IconBulb,
-  IconCertificate,
   IconCheck,
   IconChecklist,
   IconClipboardSearch,

@@ -1,4 +1,11 @@
-import { Button, Container, Skeleton, Stack } from '@mantine/core';
+import {
+  Button,
+  Container,
+  Group,
+  Pagination,
+  Skeleton,
+  Stack,
+} from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabaseClient } from '../supabase/supabaseClient';
