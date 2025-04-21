@@ -8,6 +8,7 @@ import {
   Flex,
   Group,
   Image,
+  MultiSelect,
   Select,
   Stack,
   TextInput,
@@ -217,7 +218,7 @@ const BlogEdit = () => {
             {...form.getInputProps('title')}
           />
 
-          <Flex align="flex-end" gap="sm">
+          {/* <Flex align="flex-end" gap="sm">
             <Box style={{ flex: 1 }}>
               <Select
                 label="Add Co-Authors"
@@ -239,7 +240,13 @@ const BlogEdit = () => {
             >
               Add
             </Button>
-          </Flex>
+          </Flex> */}
+          <MultiSelect
+            label="Choose Co-Authors"
+            placeholder="Pick Pick Professional"
+            data={professionals}
+            clearable
+          />
           <Stack mt="xs">
             {coAuthors.map((author) => (
               <Badge
