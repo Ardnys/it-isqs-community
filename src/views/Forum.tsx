@@ -11,13 +11,19 @@ import {
   Avatar,
   Flex,
 } from '@mantine/core';
-import { IconArrowUp, IconArrowDown, IconMessage } from '@tabler/icons-react';
+import {
+  IconArrowUp,
+  IconArrowDown,
+  IconMessage,
+  IconX,
+} from '@tabler/icons-react';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import handlePostVote, { fetchPostVotes } from '../Utils/PostVoteHandler';
 import { useStore } from '@nanostores/react';
 import { $registeredUser } from '../global-state/user';
+import { notifications } from '@mantine/notifications';
 
 export default function ForumPage() {
   const [posts, setPosts] = useState<ForumPost[] | null>(null);
@@ -41,7 +47,14 @@ export default function ForumPage() {
         .order('creation_date', { ascending: false });
 
       if (error) {
-        console.error('Error fetching posts:', error.message);
+        notifications.show({
+          title: 'Error while fetching posts',
+          message: error.message,
+          color: 'red',
+          icon: <IconX size={16} />,
+          autoClose: 4000,
+          position: 'top-center',
+        });
         return;
       }
 
@@ -63,13 +76,15 @@ export default function ForumPage() {
     <Container size="lg" py="lg">
       <Group justify="space-between" mb="xl">
         <Title order={1}>Forum</Title>
-        <Button
-          color="teal"
-          size="lg"
-          onClick={() => navigate('/forum/create')}
-        >
-          Create Post
-        </Button>
+        {user?.role === 'professional' ? (
+          <Button
+            color="teal"
+            size="lg"
+            onClick={() => navigate('/forum/create')}
+          >
+            Create Post
+          </Button>
+        ) : null}
       </Group>
 
       <Stack gap="md">

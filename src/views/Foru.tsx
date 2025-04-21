@@ -1,7 +1,3 @@
-import { use, useEffect, useState } from 'react';
-import ForumCommentListing from '../components/ForumCommentListing';
-import { supabaseClient } from '../supabase/supabaseClient';
-import { useParams } from 'react-router-dom';
 import {
   Card,
   Title,
@@ -15,15 +11,21 @@ import {
   Container,
   ActionIcon,
 } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import ForumCommentListing from '../components/ForumCommentListing';
 import ReplyForm from '../components/ReplyForm';
-import { IconArrowUp, IconArrowDown } from '@tabler/icons-react';
+import { supabaseClient } from '../supabase/supabaseClient';
+import { IconArrowUp, IconArrowDown, IconX } from '@tabler/icons-react';
 import handlePostVote, { fetchPostVotes } from '../Utils/PostVoteHandler';
 import { useStore } from '@nanostores/react';
 import { $registeredUser } from '../global-state/user';
+import { notifications } from '@mantine/notifications';
 
 const Foru = () => {
   const { id } = useParams();
   const [forumPost, setForumPost] = useState<ForumPost | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const user = useStore($registeredUser);
 
   useEffect(() => {
@@ -44,16 +46,18 @@ const Foru = () => {
         .single();
 
       if (error) {
-        console.error('Error while fetching forum post: ', error);
+        setErrorMessage('Failed to load the forum post.');
         return;
       }
+
       const { upvotes, downvotes } = await fetchPostVotes(Number(id));
+
       setForumPost({
         id: data.id,
         title: data.title || '',
         creation_date: data.creation_date,
-        upvotes: upvotes,
-        downvotes: downvotes,
+        upvotes,
+        downvotes,
         user_id: data.user_id || 0,
         body: data.body || '',
         RegisteredUser: {
@@ -64,8 +68,42 @@ const Foru = () => {
         },
       });
     };
+
     fetchForumPost();
   }, [id]);
+
+  const handleVoteClick = async (isUpvote: boolean) => {
+    if (!user?.id) {
+      notifications.show({
+        title: 'Error',
+        message: 'Please log in or create an account to vote discussions.',
+        color: 'red',
+        icon: <IconX size={16} />,
+        autoClose: 4000,
+        position: 'top-center',
+      });
+      return;
+    }
+
+    try {
+      await handlePostVote(
+        forumPost!.id,
+        isUpvote,
+        user.id,
+        forumPost!,
+        (value) => setForumPost(value as ForumPost | null),
+      );
+    } catch (error: any) {
+      notifications.show({
+        title: 'Error',
+        message: 'Something wrong happened',
+        color: 'red',
+        icon: <IconX size={16} />,
+        autoClose: 4000,
+        position: 'top-center',
+      });
+    }
+  };
 
   return (
     <Container size="lg" py="lg">
@@ -95,15 +133,7 @@ const Foru = () => {
                 <ActionIcon
                   variant="subtle"
                   color="gray"
-                  onClick={() =>
-                    handlePostVote(
-                      forumPost.id,
-                      true,
-                      user?.id ?? 0,
-                      forumPost,
-                      (value) => setForumPost(value as ForumPost | null),
-                    )
-                  }
+                  onClick={() => handleVoteClick(true)}
                 >
                   <IconArrowUp size={16} />
                 </ActionIcon>
@@ -111,15 +141,7 @@ const Foru = () => {
                 <ActionIcon
                   variant="subtle"
                   color="gray"
-                  onClick={() =>
-                    handlePostVote(
-                      forumPost.id,
-                      false,
-                      user?.id ?? 0,
-                      forumPost,
-                      (value) => setForumPost(value as ForumPost | null),
-                    )
-                  }
+                  onClick={() => handleVoteClick(false)}
                 >
                   <IconArrowDown size={16} />
                 </ActionIcon>
@@ -130,6 +152,7 @@ const Foru = () => {
         ) : (
           <Skeleton height={140} radius="md" />
         )}
+
         <Divider label="Discussion" labelPosition="center" my="md" />
         <ForumCommentListing postId={Number(id)} />
         <Divider
