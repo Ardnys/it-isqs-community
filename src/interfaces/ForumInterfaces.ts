@@ -14,5 +14,6 @@ interface ForumPost {
   upvotes: number;
   downvotes: number;
   user_id: number;
+  num_replies: number | null;
   RegisteredUser: Author | null;
 }

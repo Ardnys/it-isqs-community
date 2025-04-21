@@ -66,6 +66,7 @@ const Foru = () => {
         downvotes,
         user_id: data.user_id || 0,
         body: data.body || '',
+        num_replies: 0,
         RegisteredUser: {
           name: data.RegisteredUser?.name || '',
           surname: data.RegisteredUser?.surname || '',

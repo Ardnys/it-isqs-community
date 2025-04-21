@@ -1,5 +1,18 @@
 import { supabaseClient } from '../supabase/supabaseClient';
 
+export const fetchPostComments = async (id: number) => {
+  const { count, error } = await supabaseClient
+    .from('ForumReply')
+    .select('*', { count: 'exact', head: true })
+    .eq('post_id', id);
+
+  if (error) {
+    console.error('Error while fetching number of replies: ', error.message);
+    return 0;
+  }
+  return count;
+};
+
 export const fetchPostVotes = async (id: number) => {
   const { count: upvotes, error: uperror } = await supabaseClient
     .from('UserPostVotes')

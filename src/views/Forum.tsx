@@ -21,7 +21,10 @@ import {
 import { supabaseClient } from '../supabase/supabaseClient';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import handlePostVote, { fetchPostVotes } from '../Utils/PostVoteHandler';
+import handlePostVote, {
+  fetchPostComments,
+  fetchPostVotes,
+} from '../Utils/PostVoteHandler';
 import { useStore } from '@nanostores/react';
 import { $registeredUser } from '../global-state/user';
 import { notifications } from '@mantine/notifications';
@@ -65,7 +68,13 @@ export default function ForumPage() {
       const postsWithVotes = await Promise.all(
         posts.map(async (post) => {
           const votes = await fetchPostVotes(post.id);
-          return { ...post, ...votes, user_id: post.user_id ?? 0 };
+          const replies = await fetchPostComments(post.id);
+          return {
+            ...post,
+            ...votes,
+            user_id: post.user_id ?? 0,
+            num_replies: replies,
+          };
         }),
       );
 
@@ -162,7 +171,7 @@ export default function ForumPage() {
                       leftSection={<IconMessage size="1rem" />}
                       variant="outline"
                     >
-                      {0} comments
+                      {post.num_replies} replies
                     </Badge>
                   </Group>
                 </div>
