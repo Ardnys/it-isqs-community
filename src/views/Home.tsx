@@ -1,81 +1,222 @@
-import { Box, Container, Grid, Image, Stack, Text, Title } from '@mantine/core';
+import {
+  Container,
+  Title,
+  Text,
+  Button,
+  Stack,
+  Timeline,
+  Card,
+  Divider,
+  Image,
+  Group,
+  List,
+} from '@mantine/core';
+import {
+  IconBook2,
+  IconBulb,
+  IconCertificate,
+  IconCheck,
+  IconRocket,
+} from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
-function Home() {
+const fadeIn = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.15 },
+  }),
+};
+
+const MotionStack = motion.create(Stack);
+
+export default function HomePage() {
+  const navigate = useNavigate();
+
   return (
-    <Box>
+    <Container size="lg" py="xl">
       {/* Hero Section */}
-      <Box bg="#0B1E3B" py="xl">
-        <Container size="lg">
-          <Grid align="center">
-            {/* Left Side - Text */}
-            <Grid.Col span={{ base: 12, md: 6 }}>
-              <Stack gap="xs">
-                <Text size="sm" c="gray.4" fw={500}>WELCOME TO</Text>
-                <Title order={1} c="white">
-                  The <Text span c="blue.4" fw={1000}>hand</Text>
-                  <Text span c="green.4" fw={1000}>some</Text>
-                  <Text span c="cyan.4" fw={1000}>bois</Text> Kit 4.0!
-                </Title>
-                <Text c="gray.3" style={{ lineHeight: 1.6 }}>
-                  European Higher Education Institutions (HEIs) are increasingly engaged in society and therefore play a growing role in regional and social development. As a result of the increasing international cooperation, successful collaboration in the digital sphere is becoming more and more critical.
-                </Text>
-                <Text c="gray.3" style={{ lineHeight: 1.6 }}>
-                  The CoCreAid Kit 4.0 focuses on overcoming barriers to cooperation arising when HEIs and NGOs co-create digitally. The aim is to increase social impact in participating European countries and beyond.
-                </Text>
-                <Text c="gray.3" style={{ lineHeight: 1.6 }}>
-                  This website guides you through the wide variety of digital platforms and co-creation methods. Additionally, you will find best practices for successful digital co-creation.
-                </Text>
-              </Stack>
-            </Grid.Col>
+      <MotionStack
+        gap="md"
+        align="center"
+        mb="xl"
+        component={motion.div}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.div variants={fadeIn} custom={0}>
+          <Image
+            src="/assets/collaboration.svg"
+            alt="Erasmus Banner"
+            radius="md"
+            w="100%"
+            maw={800}
+            mx="auto"
+            mb="md"
+          />
+        </motion.div>
 
-            {/* Right Side - Image */}
-            <Grid.Col span={{ base: 12, md: 6 }}>
-              <Image
-                src="https://images.unsplash.com/photo-1573497491208-6b1acb260507?auto=format&fit=crop&w=800&q=80"
-                alt="Students Collaborating"
-                radius="md"
-                fit="cover"
-              />
-            </Grid.Col>
-          </Grid>
-        </Container>
-      </Box>
+        <motion.div variants={fadeIn} custom={1}>
+          <Title order={1} ta="center" size="3rem">
+            IT-ISQS Erasmus+ Project
+          </Title>
+        </motion.div>
 
-      {/* About Us Section */}
-      <Box bg="white" py="xl">
-        <Container size="lg">
-          <Grid align="center">
-            {/* Left Side - Image */}
-            <Grid.Col span={{ base: 12, md: 6 }}>
-              <Image
-                src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80"
-                alt="Person writing"
-                radius="md"
-                fit="cover"
-              />
-            </Grid.Col>
+        <motion.div variants={fadeIn} custom={2}>
+          <Text ta="center" size="lg" c="dimmed" maw={700}>
+            Enhancing software engineering education with international quality
+            standards, gamification, AI integration, and innovative teaching
+            methods.
+          </Text>
+        </motion.div>
 
-            {/* Right Side - Text */}
-            <Grid.Col span={{ base: 12, md: 6 }}>
-              <Stack>
-                <Title order={3} c="dark">Introducing Us</Title>
-                <Text c="gray.7" style={{ lineHeight: 1.6 }}>
-                  Research conducted by MUAS has shown that due to the pandemic situation,
-                  a large number of co-creation projects fail due to a lack of appropriate methods
-                  and tools for collaborations.
-                </Text>
-                <Text c="gray.7" style={{ lineHeight: 1.6 }}>
-                  Therefore, a digital CoCreAid Kit could support the collaboration between HEIs
-                  and NGOs to overcome these barriers and to continue and strengthen the cooperations.
-                  Co-creation tools are methods that enable co-creation activities throughout the whole process.
-                </Text>
-              </Stack>
-            </Grid.Col>
-          </Grid>
-        </Container>
-      </Box>
-    </Box>
+        <motion.div variants={fadeIn} custom={3}>
+          <Button size="lg" color="teal" onClick={() => navigate('/forum')}>
+            Join the Discussion
+          </Button>
+        </motion.div>
+      </MotionStack>
+
+      <Divider my="xl" />
+
+      {/* About Section */}
+      <MotionStack
+        gap="xl"
+        component={motion.div}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.div variants={fadeIn} custom={0}>
+          <Title order={2}>About the Project</Title>
+        </motion.div>
+
+        <motion.div variants={fadeIn} custom={1}>
+          <Text size="md">
+            The <strong>IT-ISQS</strong> project addresses the crucial need to
+            improve awareness and understanding of international software
+            quality standards (ISQS) in higher education. By integrating
+            gamification, real-life case studies, interactive activities, and AI
+            tools, it aims to create engaging and effective learning
+            environments for future engineers.
+          </Text>
+        </motion.div>
+
+        {[
+          {
+            title: 'Objectives',
+            img: '/assets/seng.svg',
+            text: [
+              'Modernize software engineering curricula by embedding ISQS.',
+              'Use AI, gamification, and real-world cases to improve engagement.',
+              'Foster collaboration between academia and industry.',
+              'Empower students and educators with innovative content.',
+            ],
+          },
+          {
+            title: 'Activities',
+            img: '/assets/inspection.svg',
+            text: [
+              'Literature review, surveys, and interviews with industry experts.',
+              'Designing courses and teaching materials with AI support.',
+              'Pilot programs and feedback collection.',
+              'Dissemination through meetups, workshops, and papers.',
+            ],
+          },
+          {
+            title: 'Expected Impact',
+            img: '/assets/quality.svg',
+            text: [
+              'Improved coverage of ISQS in education.',
+              'Boosted student motivation and skill levels.',
+              'Increased awareness of ISO/IEC standards.',
+              'Strengthened international academic collaboration.',
+            ],
+          },
+        ].map((section, i) => (
+          <motion.div key={section.title} variants={fadeIn} custom={i + 2}>
+            <Card shadow="sm" p="lg" radius="md" withBorder>
+              <Group align="flex-start">
+                <Image src={section.img} w={100} h={100} alt={section.title} />
+                <Stack gap={4}>
+                  <Title order={3}>{section.title}</Title>
+                  <List spacing="xs" size="sm" icon={<IconCheck />}>
+                    {section.text.map((point) => (
+                      <List.Item key={point}>{point}</List.Item>
+                    ))}
+                  </List>
+                </Stack>
+              </Group>
+            </Card>
+          </motion.div>
+        ))}
+      </MotionStack>
+
+      <Divider my="xl" />
+
+      {/* Timeline */}
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={fadeIn}
+        custom={6}
+      >
+        <Title order={2} mb="md">
+          Project Timeline
+        </Title>
+        <Timeline active={3} bulletSize={28} lineWidth={2}>
+          <Timeline.Item
+            bullet={<IconBook2 size={16} />}
+            title="Kick-off & Research"
+          >
+            <Text c="dimmed" size="sm">
+              Jan 2024 – Mar 2024
+            </Text>
+            <Text size="sm">
+              Initial research, literature review, and stakeholder interviews.
+            </Text>
+          </Timeline.Item>
+
+          <Timeline.Item
+            bullet={<IconBulb size={16} />}
+            title="Design & Development"
+          >
+            <Text c="dimmed" size="sm">
+              Apr 2024 – Jul 2024
+            </Text>
+            <Text size="sm">
+              Creation of course materials, AI tools, and gamified activities.
+            </Text>
+          </Timeline.Item>
+
+          <Timeline.Item
+            bullet={<IconCertificate size={16} />}
+            title="Pilot & Feedback"
+          >
+            <Text c="dimmed" size="sm">
+              Aug 2024 – Nov 2024
+            </Text>
+            <Text size="sm">
+              Pilot programs run in partner universities with active feedback
+              loops.
+            </Text>
+          </Timeline.Item>
+
+          <Timeline.Item
+            bullet={<IconRocket size={16} />}
+            title="Finalization & Dissemination"
+          >
+            <Text c="dimmed" size="sm">
+              Dec 2024 – May 2025
+            </Text>
+            <Text size="sm">
+              Finalizing curriculum, publishing findings, organizing events and
+              workshops.
+            </Text>
+          </Timeline.Item>
+        </Timeline>
+      </motion.div>
+    </Container>
   );
 }
-
-export default Home;

@@ -28,6 +28,7 @@ export function Authentication() {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
     },
   });
+
   const navigate = useNavigate();
 
   // redirect if logged in

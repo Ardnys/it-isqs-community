@@ -36,25 +36,22 @@ export type Database = {
     Tables: {
       Blog: {
         Row: {
-          attached_content: string | null
           body: string | null
-          date: string
+          date: string | null
           id: number
           thumbnail: string | null
           title: string | null
         }
         Insert: {
-          attached_content?: string | null
           body?: string | null
-          date?: string
+          date?: string | null
           id?: number
           thumbnail?: string | null
           title?: string | null
         }
         Update: {
-          attached_content?: string | null
           body?: string | null
-          date?: string
+          date?: string | null
           id?: number
           thumbnail?: string | null
           title?: string | null
@@ -79,7 +76,7 @@ export type Database = {
             foreignKeyName: "CoAuthors_author_id_fkey"
             columns: ["author_id"]
             isOneToOne: true
-            referencedRelation: "Professional"
+            referencedRelation: "RegisteredUser"
             referencedColumns: ["id"]
           },
           {
@@ -87,61 +84,6 @@ export type Database = {
             columns: ["blog_id"]
             isOneToOne: false
             referencedRelation: "Blog"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      ForumComment: {
-        Row: {
-          body: string | null
-          date: string
-          id: number
-          parent_comment_id: number | null
-          post_id: number | null
-          professional_id: number | null
-          user_id: number | null
-          votes: number | null
-        }
-        Insert: {
-          body?: string | null
-          date?: string
-          id?: number
-          parent_comment_id?: number | null
-          post_id?: number | null
-          professional_id?: number | null
-          user_id?: number | null
-          votes?: number | null
-        }
-        Update: {
-          body?: string | null
-          date?: string
-          id?: number
-          parent_comment_id?: number | null
-          post_id?: number | null
-          professional_id?: number | null
-          user_id?: number | null
-          votes?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "ForumComment_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "ForumComment"
-            referencedColumns: ["parent_comment_id"]
-          },
-          {
-            foreignKeyName: "ForumComment_professional_id_fkey"
-            columns: ["professional_id"]
-            isOneToOne: false
-            referencedRelation: "Professional"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "ForumComment_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "RegisteredUser"
             referencedColumns: ["id"]
           },
         ]
@@ -179,13 +121,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "ForumPost_professional_id_fkey"
-            columns: ["professional_id"]
-            isOneToOne: false
-            referencedRelation: "Professional"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "ForumPost_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -194,60 +129,132 @@ export type Database = {
           },
         ]
       }
-      Professional: {
+      ForumReply: {
         Row: {
-          email: string | null
+          body: string | null
+          date: string | null
           id: number
-          name: string
-          occupation: string | null
-          phone: string | null
-          surname: string | null
+          parent_comment_id: number | null
+          post_id: number
+          user_id: number
+          votes: number | null
         }
         Insert: {
-          email?: string | null
+          body?: string | null
+          date?: string | null
           id?: number
-          name: string
-          occupation?: string | null
-          phone?: string | null
-          surname?: string | null
+          parent_comment_id?: number | null
+          post_id: number
+          user_id: number
+          votes?: number | null
         }
         Update: {
-          email?: string | null
+          body?: string | null
+          date?: string | null
           id?: number
-          name?: string
-          occupation?: string | null
-          phone?: string | null
-          surname?: string | null
+          parent_comment_id?: number | null
+          post_id?: number
+          user_id?: number
+          votes?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ForumReply_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "ForumReply"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ForumReply_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "ForumPost"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ForumReply_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "RegisteredUser"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       RegisteredUser: {
         Row: {
           email: string | null
           id: number
           name: string
+          pfp_url: string | null
+          role: string | null
           surname: string | null
         }
         Insert: {
           email?: string | null
           id?: number
           name: string
+          pfp_url?: string | null
+          role?: string | null
           surname?: string | null
         }
         Update: {
           email?: string | null
           id?: number
           name?: string
+          pfp_url?: string | null
+          role?: string | null
           surname?: string | null
         }
         Relationships: []
+      }
+      UserPostVotes: {
+        Row: {
+          id: number
+          post_id: number
+          upvote: boolean
+          user_id: number
+        }
+        Insert: {
+          id?: number
+          post_id: number
+          upvote: boolean
+          user_id: number
+        }
+        Update: {
+          id?: number
+          post_id?: number
+          upvote?: boolean
+          user_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "UserPostVotes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "ForumPost"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "UserPostVotes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "RegisteredUser"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      handle_vote: {
+        Args:
+          | { p_post_id: number; p_user_id: number; p_upvote: boolean }
+          | { p_post_id: number; p_user_id: string; p_upvote: boolean }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
@@ -475,30 +482,19 @@ export type Database = {
     }
     Functions: {
       can_insert_object: {
-        Args: {
-          bucketid: string
-          name: string
-          owner: string
-          metadata: Json
-        }
+        Args: { bucketid: string; name: string; owner: string; metadata: Json }
         Returns: undefined
       }
       extension: {
-        Args: {
-          name: string
-        }
+        Args: { name: string }
         Returns: string
       }
       filename: {
-        Args: {
-          name: string
-        }
+        Args: { name: string }
         Returns: string
       }
       foldername: {
-        Args: {
-          name: string
-        }
+        Args: { name: string }
         Returns: string[]
       }
       get_size_by_bucket: {
@@ -573,27 +569,29 @@ export type Database = {
   }
 }
 
-type PublicSchema = Database[Extract<keyof Database, "public">]
+type DefaultSchema = Database[Extract<keyof Database, "public">]
 
 export type Tables<
-  PublicTableNameOrOptions extends
-    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-        Database[PublicTableNameOrOptions["schema"]]["Views"])
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
-        PublicSchema["Views"])
-    ? (PublicSchema["Tables"] &
-        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -601,20 +599,22 @@ export type Tables<
     : never
 
 export type TablesInsert<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
+  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -622,20 +622,22 @@ export type TablesInsert<
     : never
 
 export type TablesUpdate<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
+  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -643,21 +645,23 @@ export type TablesUpdate<
     : never
 
 export type Enums<
-  PublicEnumNameOrOptions extends
-    | keyof PublicSchema["Enums"]
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
     | { schema: keyof Database },
-  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
-> = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
-    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+> = DefaultSchemaEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof PublicSchema["CompositeTypes"]
+    | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof Database },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof Database
@@ -666,6 +670,18 @@ export type CompositeTypes<
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
   ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
-    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
+
+export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
+  public: {
+    Enums: {},
+  },
+  storage: {
+    Enums: {},
+  },
+} as const

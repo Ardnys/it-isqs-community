@@ -5,9 +5,8 @@ import Blogs from '../views/Blogs';
 import Forum from '../views/Forum';
 import Materials from '../views/Materials';
 import SignUp from '../views/SignUp';
-import Contact from '../views/Contact';
-import Home from '../views/Home';
-
+import { BlogDetail } from '../views/BlogDetail';
+import { Home } from '../views/Home';
 
 export const router = createBrowserRouter([
   {
@@ -27,15 +26,13 @@ export const router = createBrowserRouter([
         element: <Blogs />,
       },
       {
+        path: '/blogs/:id',
+        element: <BlogDetail />,
+      },
+      {
         path: '/forum',
         element: <Forum />,
       },
-
-     
-      {
-        path: '/Contact',
-        element: <Contact/>,
-      }
     ],
   },
 
