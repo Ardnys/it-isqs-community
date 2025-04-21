@@ -36,7 +36,6 @@ const BlogEdit = () => {
   >([]);
   const user = useStore($registeredUser);
 
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedProfessional, setSelectedProfessional] = useState<
     string | null
@@ -49,7 +48,6 @@ const BlogEdit = () => {
   useEffect(() => {
     const fetchProfessionals = async () => {
       try {
-        setLoading(true);
         const { data, error } = await supabaseClient
           .from('RegisteredUser')
           .select('id, name,pfp_url')
@@ -75,30 +73,11 @@ const BlogEdit = () => {
         );
         console.error('Error fetching professionals:', error);
       } finally {
-        setLoading(false);
       }
     };
 
     fetchProfessionals();
   }, []);
-
-  const handleAddCoAuthor = () => {
-    if (!selectedProfessional) return;
-
-    const prof = professionals.find((p) => p.value === selectedProfessional);
-    if (!prof) return;
-
-    const alreadyAdded = coAuthors.some((ca) => ca.value === prof.value);
-    if (!alreadyAdded) {
-      setCoAuthors((prev) => [...prev, prof]);
-    }
-
-    setSelectedProfessional(null); // clear select
-  };
-  // Handle removing co-author
-  const handleRemoveCoAuthor = (value: string) => {
-    setCoAuthors((prev) => prev.filter((author) => author.value !== value));
-  };
 
   const editor = useEditor({
     extensions: [StarterKit, Link],
@@ -223,27 +202,6 @@ const BlogEdit = () => {
             data={professionals}
             clearable
           />
-          <Stack mt="xs">
-            {coAuthors.map((author) => (
-              <Badge
-                key={author.value}
-                variant="light"
-                size="lg"
-                rightSection={
-                  <Button
-                    variant="subtle"
-                    size="m"
-                    onClick={() => handleRemoveCoAuthor(author.value)}
-                    p={0}
-                  >
-                    <IconX size={14} /> {/* IconX as the remove button */}
-                  </Button>
-                }
-              >
-                {author.label}
-              </Badge>
-            ))}
-          </Stack>
 
           <FileInput
             label="Upload Thumbnail"
