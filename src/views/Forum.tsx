@@ -10,7 +10,7 @@ import {
   ActionIcon,
   Avatar,
   Flex,
-  Pagination, // 🔥 NEW
+  Pagination,
 } from '@mantine/core';
 import {
   IconArrowUp,
@@ -29,11 +29,11 @@ import { useStore } from '@nanostores/react';
 import { $registeredUser } from '../global-state/user';
 import { notifications } from '@mantine/notifications';
 
-const POSTS_PER_PAGE = 5; // 🔥 Customize this value as you like
+const POSTS_PER_PAGE = 5; 
 
 export default function ForumPage() {
   const [posts, setPosts] = useState<ForumPost[] | null>(null);
-  const [currentPage, setCurrentPage] = useState(1); // 🔥 Track current page
+  const [currentPage, setCurrentPage] = useState(1); 
   const navigate = useNavigate();
   const user = useStore($registeredUser);
 
@@ -84,16 +84,15 @@ export default function ForumPage() {
     fetchPosts();
   }, []);
 
-  // 🔥 Calculate pagination bounds
   const paginatedPosts = posts?.slice(
     (currentPage - 1) * POSTS_PER_PAGE,
     currentPage * POSTS_PER_PAGE,
   );
-
   return (
     <Container size="lg" py="lg">
       <Group justify="space-between" mb="xl">
         <Title order={1}>Forum</Title>
+
         {user?.role === 'professional' ? (
           <Button
             color="teal"

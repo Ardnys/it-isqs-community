@@ -7,6 +7,10 @@
     var(--mantine-color-dark-6)
   );
   border-bottom: 1px solid light-dark(var(--mantine-color-gray-2), transparent);
+
+  position: sticky; /* Make the header sticky */
+  top: 0; /* Stick to the top of the page */
+  z-index: 10; /* Ensure the header stays above other content */
 }
 
 .mainSection {
