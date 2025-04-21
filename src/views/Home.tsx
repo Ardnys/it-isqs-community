@@ -12,10 +12,13 @@ import {
   List,
 } from '@mantine/core';
 import {
+  IconAB2,
   IconBook2,
   IconBulb,
   IconCertificate,
   IconCheck,
+  IconChecklist,
+  IconClipboardSearch,
   IconRocket,
 } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
@@ -165,25 +168,34 @@ export default function HomePage() {
         <Title order={2} mb="md">
           Project Timeline
         </Title>
-        <Timeline active={3} bulletSize={28} lineWidth={2}>
+        <Timeline active={1} bulletSize={28} lineWidth={2}>
           <Timeline.Item
-            bullet={<IconBook2 size={16} />}
-            title="Kick-off & Research"
+            bullet={<IconChecklist size={16} />}
+            title="Work Package 1 - Project Management"
           >
             <Text c="dimmed" size="sm">
-              Jan 2024 – Mar 2024
+              Dec 2024 – Nov 2026
+            </Text>
+            <Text size="sm">Planning the IT-ISQS Project and its goals.</Text>
+          </Timeline.Item>
+          <Timeline.Item
+            bullet={<IconClipboardSearch size={16} />}
+            title="Work Package 2 - Research, Define Challenges"
+          >
+            <Text c="dimmed" size="sm">
+              Dec 2024 – Jun 2025
             </Text>
             <Text size="sm">
-              Initial research, literature review, and stakeholder interviews.
+              Initial research, literature review, define them challenges.
             </Text>
           </Timeline.Item>
 
           <Timeline.Item
-            bullet={<IconBulb size={16} />}
-            title="Design & Development"
+            bullet={<IconBook2 size={16} />}
+            title="Create Course Content & Design Course"
           >
             <Text c="dimmed" size="sm">
-              Apr 2024 – Jul 2024
+              Jul 2025 – Jan 2026
             </Text>
             <Text size="sm">
               Creation of course materials, AI tools, and gamified activities.
@@ -191,24 +203,23 @@ export default function HomePage() {
           </Timeline.Item>
 
           <Timeline.Item
-            bullet={<IconCertificate size={16} />}
-            title="Pilot & Feedback"
+            bullet={<IconAB2 size={16} />}
+            title="Test New Course Design"
           >
             <Text c="dimmed" size="sm">
-              Aug 2024 – Nov 2024
+              Oct 2025 – Jul 2026
             </Text>
             <Text size="sm">
-              Pilot programs run in partner universities with active feedback
-              loops.
+              Testing the effectiveness of created courses and refining them.
             </Text>
           </Timeline.Item>
 
           <Timeline.Item
             bullet={<IconRocket size={16} />}
-            title="Finalization & Dissemination"
+            title="Dissemination & Finalization"
           >
             <Text c="dimmed" size="sm">
-              Dec 2024 – May 2025
+              May 2026 – Nov 2026
             </Text>
             <Text size="sm">
               Finalizing curriculum, publishing findings, organizing events and
