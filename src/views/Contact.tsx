@@ -20,7 +20,7 @@ function Contact() {
 
   return (
     <Box>
-      <Container size="md" py="lg">
+      <Container size="lg" py="lg">
         <Title order={2} ta="center" mb="xl">
           Contact Us
         </Title>
