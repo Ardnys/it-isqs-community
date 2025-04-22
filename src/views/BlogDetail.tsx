@@ -54,7 +54,7 @@ const BlogDetail = () => {
     return (
       <Center h="100vh">
         <Stack align="center" gap="xs">
-          <Loader color="blue" size="lg" variant="dots" />
+          <Loader color="teal" size="lg" variant="dots" />
           <Text size="sm" c="dimmed">
             Loading blog post...
           </Text>

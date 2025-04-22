@@ -139,7 +139,7 @@ export default function HomePage() {
           <motion.div key={section.title} variants={fadeIn} custom={i + 2}>
             <Card shadow="sm" p="lg" radius="md" withBorder>
               <Group align="flex-start">
-                <Image src={section.img} w={100} h={100} alt={section.title} />
+                <Image src={section.img} h="auto" w={200} alt={section.title} />
                 <Stack gap={4}>
                   <Title order={3}>{section.title}</Title>
                   <List spacing="xs" size="sm" icon={<IconCheck />}>
@@ -169,7 +169,7 @@ export default function HomePage() {
         <Timeline active={1} bulletSize={28} lineWidth={2}>
           <Timeline.Item
             bullet={<IconChecklist size={16} />}
-            title="Work Package 1 - Project Management"
+            title="Project Management"
           >
             <Text c="dimmed" size="sm">
               Dec 2024 – Nov 2026
@@ -178,7 +178,7 @@ export default function HomePage() {
           </Timeline.Item>
           <Timeline.Item
             bullet={<IconClipboardSearch size={16} />}
-            title="Work Package 2 - Research, Define Challenges"
+            title="Research, Define Challenges"
           >
             <Text c="dimmed" size="sm">
               Dec 2024 – Jun 2025
