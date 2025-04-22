@@ -78,6 +78,10 @@ const Blogs = () => {
   const POSTS_PER_PAGE = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
+
   const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
   const endIndex = startIndex + POSTS_PER_PAGE;
   const paginatedPosts = blogPosts?.slice(startIndex, endIndex) || [];
