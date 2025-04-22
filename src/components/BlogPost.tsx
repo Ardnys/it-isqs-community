@@ -6,7 +6,6 @@ import {
   Stack,
   Divider,
   Title,
-  Anchor,
   Flex,
   Avatar,
   Button, // Import Avatar from Mantine
