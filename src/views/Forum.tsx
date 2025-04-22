@@ -113,7 +113,18 @@ export default function ForumPage() {
         <Button
           color="teal"
           size="lg"
-          onClick={() => navigate('/forum/create')}
+          onClick={() => {
+            if (user) {
+              navigate('/forum/create');
+            } else {
+              notifications.show({
+                title: 'You must be logged in for that!',
+                message: 'Login to join the discussion!',
+                color: 'red',
+                autoClose: 3000,
+              });
+            }
+          }}
         >
           Create Post
         </Button>
@@ -152,15 +163,24 @@ export default function ForumPage() {
                   <Group mt="md" align="center">
                     <ActionIcon
                       variant="light"
-                      onClick={() =>
-                        handlePostVote(
-                          post.id,
-                          true,
-                          user?.id ?? 0,
-                          posts,
-                          (value) => setPosts(value as ForumPost[] | null),
-                        )
-                      }
+                      onClick={() => {
+                        if (user) {
+                          handlePostVote(
+                            post.id,
+                            true,
+                            user?.id ?? 0,
+                            posts,
+                            (value) => setPosts(value as ForumPost[] | null),
+                          );
+                        } else {
+                          notifications.show({
+                            title: 'You must be logged in for that!',
+                            message: 'Login to vote posts',
+                            color: 'red',
+                            autoClose: 3000,
+                          });
+                        }
+                      }}
                     >
                       <IconArrowUp size="1rem" />
                     </ActionIcon>
@@ -168,15 +188,24 @@ export default function ForumPage() {
                     <ActionIcon
                       color="red"
                       variant="light"
-                      onClick={() =>
-                        handlePostVote(
-                          post.id,
-                          false,
-                          user?.id ?? 0,
-                          posts,
-                          (value) => setPosts(value as ForumPost[] | null),
-                        )
-                      }
+                      onClick={() => {
+                        if (user) {
+                          handlePostVote(
+                            post.id,
+                            false,
+                            user?.id ?? 0,
+                            posts,
+                            (value) => setPosts(value as ForumPost[] | null),
+                          );
+                        } else {
+                          notifications.show({
+                            title: 'You must be logged in for that!',
+                            message: 'Login to vote posts',
+                            color: 'red',
+                            autoClose: 3000,
+                          });
+                        }
+                      }}
                     >
                       <IconArrowDown size="1rem" />
                     </ActionIcon>
