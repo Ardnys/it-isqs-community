@@ -11,6 +11,8 @@ import {
   Avatar,
   Flex,
   Pagination,
+  Loader,
+  Center,
 } from '@mantine/core';
 import {
   IconArrowUp,
@@ -29,13 +31,14 @@ import { useStore } from '@nanostores/react';
 import { $registeredUser } from '../global-state/user';
 import { notifications } from '@mantine/notifications';
 
-const POSTS_PER_PAGE = 5; 
+const POSTS_PER_PAGE = 5;
 
 export default function ForumPage() {
   const [posts, setPosts] = useState<ForumPost[] | null>(null);
-  const [currentPage, setCurrentPage] = useState(1); 
+  const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
   const user = useStore($registeredUser);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -79,6 +82,7 @@ export default function ForumPage() {
       );
 
       setPosts(postsWithVotes);
+      setLoading(false);
     };
 
     fetchPosts();
@@ -88,20 +92,31 @@ export default function ForumPage() {
     (currentPage - 1) * POSTS_PER_PAGE,
     currentPage * POSTS_PER_PAGE,
   );
+
+  if (loading) {
+    return (
+      <Center h="100vh">
+        <Stack align="center" gap="xs">
+          <Loader color="teal" size="lg" variant="dots" />
+          <Text size="sm" c="dimmed">
+            Loading forum posts...
+          </Text>
+        </Stack>
+      </Center>
+    );
+  }
   return (
     <Container size="lg" py="lg">
       <Group justify="space-between" mb="xl">
         <Title order={1}>Forum</Title>
 
-        {user?.role === 'professional' ? (
-          <Button
-            color="teal"
-            size="lg"
-            onClick={() => navigate('/forum/create')}
-          >
-            Create Post
-          </Button>
-        ) : null}
+        <Button
+          color="teal"
+          size="lg"
+          onClick={() => navigate('/forum/create')}
+        >
+          Create Post
+        </Button>
       </Group>
 
       <Stack gap="md">
