@@ -6,10 +6,11 @@ import {
   Stack,
   Divider,
   Title,
-  Anchor,
   Flex,
-  Avatar, // Import Avatar from Mantine
+  Avatar,
+  Button, // Import Avatar from Mantine
 } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 
 const BlogPost = ({
   id,
@@ -19,6 +20,7 @@ const BlogPost = ({
   date,
   coAuthors = [],
 }: Blog) => {
+  const navigate = useNavigate();
   return (
     <Card withBorder radius="md" shadow="sm" padding="lg">
       <Stack justify="space-between" style={{ height: '100%' }}>
@@ -39,9 +41,13 @@ const BlogPost = ({
               }}
             />
             <Flex justify="space-between" mt="md" align="center">
-              <Anchor href={`/blogs/${id}`} underline="always" c="teal">
+              <Button
+                variant="subtle"
+                color="teal"
+                onClick={() => navigate(`/blogs/${id}`)}
+              >
                 Read more
-              </Anchor>
+              </Button>
               {coAuthors?.length > 0 && (
                 <Group align="center">
                   <Text fz="sm" c="dimmed">

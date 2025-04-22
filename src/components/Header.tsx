@@ -31,6 +31,7 @@ const mainLinks = [
   { link: '/materials', label: 'Materials' },
   { link: '/blogs', label: 'Blogs' },
   { link: '/forum', label: 'Forum' },
+  { link: '/contact', label: 'Contact' },
 ];
 
 export function Header() {

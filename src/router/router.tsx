@@ -10,6 +10,7 @@ import BlogEdit from '../views/BlogEdit';
 import BlogDetail from '../views/BlogDetail';
 import Foru from '../views/Foru';
 import ForuCreate from '../views/ForuCreate';
+import Contact from '../views/Contact';
 
 export const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
         element: <BlogEdit />,
       },
       { path: '/forum/create', element: <ForuCreate /> },
+      {
+        path: '/contact',
+        element: <Contact />,
+      },
     ],
   },
 
