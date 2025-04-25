@@ -71,7 +71,7 @@ const Materials = () => {
   }, []);
 
   return (
-    <Container size="lg" py="lg">
+    <Container size="lg" py="lg" px="md">
       {/* Upload Button for Professionals */}
       {user?.role === 'professional' ? (
         <motion.div
@@ -194,7 +194,15 @@ const Materials = () => {
       {/* Materials List */}
       <Grid gutter="lg" justify="flex-start" align="flex-start">
         {files.map((file, index) => (
-          <Grid.Col span={3} key={index}>
+          <Grid.Col
+            key={index}
+            span={{
+              xs: 12, // Full width on extra-small screens
+              sm: 6, // 2 columns on small screens
+              md: 4, // 3 columns on medium screens
+              lg: 3, // 4 columns on large and up
+            }}
+          >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
