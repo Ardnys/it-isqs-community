@@ -28,10 +28,6 @@
       var(--mantine-color-dark-8)
     );
   }
-
-  @media (max-width: 576px) {
-    display: none;
-  }
 }
 
 .userActive {
