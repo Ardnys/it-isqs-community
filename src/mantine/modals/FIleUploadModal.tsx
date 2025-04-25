@@ -1,19 +1,8 @@
-import {
-  Badge,
-  Button,
-  FileInput,
-  Stack,
-  TextInput,
-  Title,
-  Group,
-} from '@mantine/core';
+import { Badge, Button, FileInput, Stack, TextInput } from '@mantine/core';
 import { ContextModalProps } from '@mantine/modals';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 
 import { supabaseClient } from '../../supabase/supabaseClient';
-
-const MotionIcon = motion.svg;
 
 export const Upload = ({
   innerProps,
