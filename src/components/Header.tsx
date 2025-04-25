@@ -5,31 +5,27 @@ import {
   Burger,
   Button,
   Container,
-  Drawer,
   Group,
   Menu,
-  Stack,
   Text,
   UnstyledButton,
   useMantineColorScheme,
 } from '@mantine/core';
+import { useStore } from '@nanostores/react';
 import {
   IconChevronDown,
   IconLogout,
+  IconMoon,
   IconSettings,
   IconSun,
-  IconMoon,
-  IconMenu,
 } from '@tabler/icons-react';
 import cx from 'clsx';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useStore } from '@nanostores/react';
 import { $currUser, $registeredUser } from '../global-state/user';
+import { openTypedModal } from '../mantine/modals/modals-utils';
 import { supabaseClient } from '../supabase/supabaseClient';
 import classes from './HeaderTabs.module.css';
-import { openTypedModal } from '../mantine/modals/modals-utils';
-import { useDisclosure } from '@mantine/hooks';
 
 const mainLinks = [
   { link: '/', label: 'Home' },
@@ -38,13 +34,16 @@ const mainLinks = [
   { link: '/forum', label: 'Forum' },
   { link: '/contact', label: 'Contact' },
 ];
-
-export function Header() {
+type HeaderProps = {
+  onBurgerClick: () => void;
+  burgerOpened: boolean;
+};
+export function Header({ onBurgerClick, burgerOpened }: HeaderProps) {
   const [userMenuOpened, setUserMenuOpened] = useState(false);
   const [active, setActive] = useState(0);
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
-  const [opened, { toggle }] = useDisclosure();
+
   const user = useStore($registeredUser);
   const navigate = useNavigate();
 
@@ -81,10 +80,10 @@ export function Header() {
           <Burger
             lineSize={2}
             size="md"
-            opened={opened}
-            onClick={toggle}
+            opened={burgerOpened}
+            onClick={onBurgerClick}
             aria-label="Toggle navigation"
-            display={{ base: 'flex', md: 'none' }} // Only show on mobile
+            display={{ base: 'flex', md: 'none' }}
           />
 
           {/* Regular Links for larger screens */}
@@ -167,19 +166,6 @@ export function Header() {
           </Group>
         </Group>
       </Container>
-
-      {/* Drawer (Mobile View - Slide In from Left) */}
-      <Drawer
-        opened={opened}
-        onClose={toggle}
-        position="left"
-        size="auto"
-        withCloseButton={false}
-        padding="md"
-        className={classes.drawer}
-      >
-        <Stack gap={15}>{mainItems}</Stack>
-      </Drawer>
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { supabaseClient } from '../supabase/supabaseClient';
 
 import handleDownload from '../Utils/DownloadHandler';
 import { useStore } from '@nanostores/react';
-import { $currUser, $registeredUser } from '../global-state/user';
+import { $registeredUser } from '../global-state/user';
 import { motion } from 'framer-motion';
 
 const Materials = () => {
