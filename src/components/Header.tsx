@@ -84,6 +84,7 @@ export function Header({ onBurgerClick, burgerOpened }: HeaderProps) {
             onClick={onBurgerClick}
             aria-label="Toggle navigation"
             display={{ base: 'flex', md: 'none' }}
+            style={{ position: 'relative', top: 20 }} // THIS  "FIX" is for losers like me but it workss
           />
 
           {/* Regular Links for larger screens */}
