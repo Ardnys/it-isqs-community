@@ -2,10 +2,13 @@ import {
   ActionIcon,
   Anchor,
   Avatar,
+  Burger,
   Button,
   Container,
+  Drawer,
   Group,
   Menu,
+  Stack,
   Text,
   UnstyledButton,
   useMantineColorScheme,
@@ -16,6 +19,7 @@ import {
   IconSettings,
   IconSun,
   IconMoon,
+  IconMenu,
 } from '@tabler/icons-react';
 import cx from 'clsx';
 import { useState } from 'react';
@@ -25,6 +29,7 @@ import { $currUser, $registeredUser } from '../global-state/user';
 import { supabaseClient } from '../supabase/supabaseClient';
 import classes from './HeaderTabs.module.css';
 import { openTypedModal } from '../mantine/modals/modals-utils';
+import { useDisclosure } from '@mantine/hooks';
 
 const mainLinks = [
   { link: '/', label: 'Home' },
@@ -37,11 +42,11 @@ const mainLinks = [
 export function Header() {
   const [userMenuOpened, setUserMenuOpened] = useState(false);
   const [active, setActive] = useState(0);
-  const user = useStore($registeredUser);
-  const navigate = useNavigate();
-
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
+  const [opened, { toggle }] = useDisclosure();
+  const user = useStore($registeredUser);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     supabaseClient.auth.signOut();
@@ -72,7 +77,23 @@ export function Header() {
     <div className={classes.header}>
       <Container className={classes.mainSection} size="lg">
         <Group justify="space-between">
-          <Group gap={30} justify="flex-end" className={classes.mainLinks}>
+          {/* Burger Menu Button (Mobile view) */}
+          <Burger
+            lineSize={2}
+            size="md"
+            opened={opened}
+            onClick={toggle}
+            aria-label="Toggle navigation"
+            display={{ base: 'flex', md: 'none' }} // Only show on mobile
+          />
+
+          {/* Regular Links for larger screens */}
+          <Group
+            gap={30}
+            justify="flex-end"
+            className={classes.mainLinks}
+            display={{ base: 'none', md: 'flex' }}
+          >
             {mainItems}
           </Group>
 
@@ -146,6 +167,19 @@ export function Header() {
           </Group>
         </Group>
       </Container>
+
+      {/* Drawer (Mobile View - Slide In from Left) */}
+      <Drawer
+        opened={opened}
+        onClose={toggle}
+        position="left"
+        size="auto"
+        withCloseButton={false}
+        padding="md"
+        className={classes.drawer}
+      >
+        <Stack gap={15}>{mainItems}</Stack>
+      </Drawer>
     </div>
   );
 }
