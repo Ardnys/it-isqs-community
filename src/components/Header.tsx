@@ -2,6 +2,7 @@ import {
   ActionIcon,
   Anchor,
   Avatar,
+  Burger,
   Button,
   Container,
   Group,
@@ -10,21 +11,21 @@ import {
   UnstyledButton,
   useMantineColorScheme,
 } from '@mantine/core';
+import { useStore } from '@nanostores/react';
 import {
   IconChevronDown,
   IconLogout,
+  IconMoon,
   IconSettings,
   IconSun,
-  IconMoon,
 } from '@tabler/icons-react';
 import cx from 'clsx';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useStore } from '@nanostores/react';
 import { $currUser, $registeredUser } from '../global-state/user';
+import { openTypedModal } from '../mantine/modals/modals-utils';
 import { supabaseClient } from '../supabase/supabaseClient';
 import classes from './HeaderTabs.module.css';
-import { openTypedModal } from '../mantine/modals/modals-utils';
 
 const mainLinks = [
   { link: '/', label: 'Home' },
@@ -33,15 +34,18 @@ const mainLinks = [
   { link: '/forum', label: 'Forum' },
   { link: '/contact', label: 'Contact' },
 ];
-
-export function Header() {
+type HeaderProps = {
+  onBurgerClick: () => void;
+  burgerOpened: boolean;
+};
+export function Header({ onBurgerClick, burgerOpened }: HeaderProps) {
   const [userMenuOpened, setUserMenuOpened] = useState(false);
   const [active, setActive] = useState(0);
-  const user = useStore($registeredUser);
-  const navigate = useNavigate();
-
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
+
+  const user = useStore($registeredUser);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     supabaseClient.auth.signOut();
@@ -72,7 +76,24 @@ export function Header() {
     <div className={classes.header}>
       <Container className={classes.mainSection} size="lg">
         <Group justify="space-between">
-          <Group gap={30} justify="flex-end" className={classes.mainLinks}>
+          {/* Burger Menu Button (Mobile view) */}
+          <Burger
+            lineSize={2}
+            size="md"
+            opened={burgerOpened}
+            onClick={onBurgerClick}
+            aria-label="Toggle navigation"
+            display={{ base: 'flex', md: 'none' }}
+            style={{ position: 'relative', top: 20 }} // THIS  "FIX" is for losers like me but it workss
+          />
+
+          {/* Regular Links for larger screens */}
+          <Group
+            gap={30}
+            justify="flex-end"
+            className={classes.mainLinks}
+            display={{ base: 'none', md: 'flex' }}
+          >
             {mainItems}
           </Group>
 
