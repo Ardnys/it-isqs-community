@@ -2,6 +2,7 @@ import '@mantine/tiptap/styles.css';
 
 import {
   Button,
+  Container,
   FileInput,
   Group,
   Image,
@@ -10,17 +11,15 @@ import {
   TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { Link, RichTextEditor } from '@mantine/tiptap';
 import { useStore } from '@nanostores/react';
 import { IconX } from '@tabler/icons-react';
-import { useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { $registeredUser } from '../global-state/user';
 import { supabaseClient } from '../supabase/supabaseClient';
 import { v4 as uuidv4 } from 'uuid';
 import { notifications } from '@mantine/notifications';
+import TextEditor from '../components/TextEditor';
 
 const BlogEdit = () => {
   const navigate = useNavigate();
@@ -31,6 +30,7 @@ const BlogEdit = () => {
       label: string;
     }>
   >([]);
+  const [body, setBody] = useState('');
   const currentUser = useStore($registeredUser);
 
   const [coAuthors, setCoAuthors] = useState<string[]>([]);
@@ -69,11 +69,6 @@ const BlogEdit = () => {
 
     fetchProfessionals();
   }, []);
-
-  const editor = useEditor({
-    extensions: [StarterKit, Link],
-    content: '<p style="text-align: center;">Write your blog post here</p>',
-  });
 
   const form = useForm({
     initialValues: {
@@ -194,7 +189,7 @@ const BlogEdit = () => {
   };
 
   const handleSave = (values: { title: string; thumbnail: File | null }) => {
-    const blogContent = editor?.getHTML() || '';
+    const blogContent = body;
 
     saveBlogPost({
       title: values.title,
@@ -205,7 +200,7 @@ const BlogEdit = () => {
   };
 
   return (
-    <div style={{ width: '100vw', paddingLeft: '20vw', paddingRight: '20vw' }}>
+    <Container size="lg" py="lg">
       <form onSubmit={form.onSubmit(handleSave)}>
         <Stack>
           <TextInput
@@ -242,54 +237,7 @@ const BlogEdit = () => {
           )}
 
           {/* TODO make this a component like TextEditor */}
-          <RichTextEditor editor={editor} title="Blog Body">
-            <RichTextEditor.Toolbar sticky stickyOffset={60}>
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Bold />
-                <RichTextEditor.Italic />
-                <RichTextEditor.Underline />
-                <RichTextEditor.Strikethrough />
-                <RichTextEditor.ClearFormatting />
-                <RichTextEditor.Highlight />
-                <RichTextEditor.Code />
-              </RichTextEditor.ControlsGroup>
-
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.H1 />
-                <RichTextEditor.H2 />
-                <RichTextEditor.H3 />
-                <RichTextEditor.H4 />
-              </RichTextEditor.ControlsGroup>
-
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Blockquote />
-                <RichTextEditor.Hr />
-                <RichTextEditor.BulletList />
-                <RichTextEditor.OrderedList />
-                <RichTextEditor.Subscript />
-                <RichTextEditor.Superscript />
-              </RichTextEditor.ControlsGroup>
-
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Link />
-                <RichTextEditor.Unlink />
-              </RichTextEditor.ControlsGroup>
-
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.AlignLeft />
-                <RichTextEditor.AlignCenter />
-                <RichTextEditor.AlignJustify />
-                <RichTextEditor.AlignRight />
-              </RichTextEditor.ControlsGroup>
-
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Undo />
-                <RichTextEditor.Redo />
-              </RichTextEditor.ControlsGroup>
-            </RichTextEditor.Toolbar>
-
-            <RichTextEditor.Content />
-          </RichTextEditor>
+          <TextEditor setBody={setBody} minHeight={300} />
         </Stack>
 
         <Group mt="md">
@@ -299,7 +247,7 @@ const BlogEdit = () => {
           <Button type="submit">Save</Button>
         </Group>
       </form>
-    </div>
+    </Container>
   );
 };
 

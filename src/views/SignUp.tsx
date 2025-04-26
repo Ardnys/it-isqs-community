@@ -45,7 +45,7 @@ export function SignUp() {
         password,
         options: {
           data: { name, surname }, // Stores additional user info
-          emailRedirectTo: 'it-isqs-community.vercel.app/home',
+          emailRedirectTo: `${window.location.origin}/home`,
         },
       });
 

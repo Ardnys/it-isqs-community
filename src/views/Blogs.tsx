@@ -21,7 +21,10 @@ const Blogs = () => {
   const fetchBlogPosts = async () => {
     setLoading(true);
 
-    const { data, error } = await supabaseClient.from('Blog').select(`
+    const { data, error } = await supabaseClient
+      .from('Blog')
+      .select(
+        `
       *,
       CoAuthors (
         RegisteredUser (
@@ -29,7 +32,9 @@ const Blogs = () => {
           pfp_url
         )
       )
-    `);
+    `,
+      )
+      .order('date', { ascending: false });
 
     if (error) {
       console.error('Error while fetching blog posts', error);

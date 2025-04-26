@@ -82,7 +82,7 @@ export default function HomePage() {
 
       <Divider my="xl" />
 
-      {/* About Section */}
+      {/* About Section*/}
       <MotionStack
         gap="xl"
         component={motion.div}
