@@ -224,7 +224,7 @@ export default function ForumPage() {
         })}
       </Stack>
 
-      {/* 🔥 Pagination control */}
+      {/* Pagination control */}
       {posts && posts.length > POSTS_PER_PAGE && (
         <Group justify="center" mt="xl">
           <Pagination

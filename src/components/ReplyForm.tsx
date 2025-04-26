@@ -63,7 +63,7 @@ const ReplyForm = ({
 
   return (
     <Stack gap="xs">
-      <TextEditor setBody={setValue} />
+      <TextEditor setBody={setValue} minHeight={150} />
       <Button
         onClick={handleSubmit}
         loading={loading}
