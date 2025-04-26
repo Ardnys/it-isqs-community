@@ -72,7 +72,7 @@ export default function ForuCreate() {
             required
           />
 
-          <TextEditor setBody={setBody} />
+          <TextEditor setBody={setBody} minHeight={200} />
 
           {errorMessage && (
             <Notification color="red" title="Error">

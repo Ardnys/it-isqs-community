@@ -1,4 +1,4 @@
-import { Badge, Button, FileInput, Stack } from '@mantine/core';
+import { Badge, Button, FileInput, Stack, TextInput } from '@mantine/core';
 import { ContextModalProps } from '@mantine/modals';
 import { useState } from 'react';
 
@@ -8,6 +8,7 @@ export const Upload = ({
   innerProps,
 }: ContextModalProps<{ modalBody: string }>) => {
   const [file, setFile] = useState<File | null>(null);
+  const [customFileName, setCustomFileName] = useState('');
 
   const handleFileChange = (newFile: File | null) => {
     setFile(newFile);
@@ -16,9 +17,14 @@ export const Upload = ({
   const handleUpload = async () => {
     if (file) {
       try {
+        const fileExtension = file.name.split('.').pop();
+        const fileName = customFileName
+          ? `${customFileName}.${fileExtension}`
+          : file.name;
+
         const { data, error } = await supabaseClient.storage
           .from('storage')
-          .upload(`materials/${file.name}`, file);
+          .upload(`materials/${fileName}`, file);
 
         if (error) {
           throw error;
@@ -41,10 +47,19 @@ export const Upload = ({
         onChange={handleFileChange}
       />
 
-      {file && <Badge>{file.name}</Badge>}
+      {file && (
+        <>
+          <Badge>{file.name}</Badge>
+          <TextInput
+            label="Custom file name"
+            placeholder="Enter a custom file name (without extension)"
+            value={customFileName}
+            onChange={(event) => setCustomFileName(event.currentTarget.value)}
+          />
+        </>
+      )}
 
       <Button onClick={handleUpload}>Upload File</Button>
     </Stack>
   );
 };
-//comment
