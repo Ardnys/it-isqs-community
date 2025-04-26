@@ -52,45 +52,37 @@ const BlogPost = ({
           {/* Footer: Read more + authors */}
           <Flex
             justify="space-between"
-            align={{ base: 'center', sm: 'flex-end' }}
-            direction={{ base: 'column', sm: 'column' }}
-            gap={{ base: 'sm', sm: 'lg' }}
             mt="md"
+            align="center"
+            direction="row"
+            wrap="wrap"
           >
-            {/* Read More Button - Left aligned on all screens */}
-            <Flex w="100%" justify={{ base: 'center', sm: 'flex-start' }}>
-              <Button
-                variant="subtle"
-                color="teal"
-                onClick={() => navigate(`/blogs/${id}`)}
-              >
-                Read more
-              </Button>
-            </Flex>
-
-            {/* Authors */}
+            <Button
+              variant="subtle"
+              color="teal"
+              onClick={() => navigate(`/blogs/${id}`)}
+            >
+              Read more
+            </Button>
             {coAuthors?.length > 0 && (
-              <Flex
-                wrap="wrap"
-                gap="xs"
-                align="center"
-                justify={{ base: 'flex-start', sm: 'flex-start' }}
-                style={{ flex: 1 }}
-              >
-                <Text size="sm" c="dimmed">
+              <Group align="center" wrap="wrap">
+                <Text fz="sm" c="dimmed">
                   by
                 </Text>
                 {coAuthors.map((author, index) => (
-                  <Flex key={index} align="flex-start" gap={4}>
+                  <Group key={index} align="center" wrap="wrap">
                     {author.avatar && (
                       <Avatar src={author.avatar} alt={author.name} size={24} />
                     )}
-                    <Text size="sm" c="dimmed">
+                    <Text fz="sm" c="dimmed">
                       {author.name}
                     </Text>
-                  </Flex>
+                    {index < coAuthors.length - 1 && (
+                      <Divider orientation="vertical" mx={8} />
+                    )}
+                  </Group>
                 ))}
-              </Flex>
+              </Group>
             )}
           </Flex>
         </Stack>
