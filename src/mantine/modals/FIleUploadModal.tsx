@@ -7,6 +7,8 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 
 export const Upload = ({
+  context,
+  id,
   innerProps,
 }: ContextModalProps<{ modalBody: string }>) => {
   const [file, setFile] = useState<File | null>(null);
@@ -31,9 +33,9 @@ export const Upload = ({
           color: 'teal',
           icon: <IconCheck size={16} />,
           autoClose: 4000,
-          position: 'top-center',
         });
 
+        context.closeModal(id);
         console.log('File uploaded successfully!', data);
       } catch (error: any) {
         notifications.show({
@@ -42,7 +44,6 @@ export const Upload = ({
           color: 'red',
           icon: <IconX size={16} />,
           autoClose: 4000,
-          position: 'top-center',
         });
       }
     }
