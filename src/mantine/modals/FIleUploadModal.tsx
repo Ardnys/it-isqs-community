@@ -3,6 +3,8 @@ import { ContextModalProps } from '@mantine/modals';
 import { useState } from 'react';
 
 import { supabaseClient } from '../../supabase/supabaseClient';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
 
 export const Upload = ({
   innerProps,
@@ -23,10 +25,25 @@ export const Upload = ({
         if (error) {
           throw error;
         }
+        notifications.show({
+          title: 'Success',
+          message: 'Material uploaded successfully',
+          color: 'teal',
+          icon: <IconCheck size={16} />,
+          autoClose: 4000,
+          position: 'top-center',
+        });
 
         console.log('File uploaded successfully!', data);
-      } catch (error) {
-        console.error('Error uploading file:', error);
+      } catch (error: any) {
+        notifications.show({
+          title: 'Error while uploading material',
+          message: error.message,
+          color: 'red',
+          icon: <IconX size={16} />,
+          autoClose: 4000,
+          position: 'top-center',
+        });
       }
     }
   };
