@@ -74,121 +74,70 @@ const Materials = () => {
     <Container size="lg" py="lg" px="md">
       {/* Upload Button for Professionals */}
       {user?.role === 'professional' ? (
-        <motion.div
-          initial={{ opacity: 0, scaleX: 0.5 }}
-          animate={{ opacity: 1, scaleX: 1 }}
-          transition={{
-            type: 'spring',
-            stiffness: 150,
-            damping: 25,
-            duration: 0.5,
-          }}
+        <div
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            display: 'inline-block',
             width: '100%',
-            overflow: 'hidden', // This ensures that content outside the mask is hidden
-            transformOrigin: 'left center', // Anchor scaling to the left
+            position: 'relative',
+            overflow: 'hidden', // Mask content to grow from the center
           }}
         >
+          <Button
+            onClick={() =>
+              openTypedModal({
+                modal: 'upload',
+                title: 'Upload Material',
+                body: { modalBody: 'Upload your material here' },
+              })
+            }
+            fullWidth
+            color="teal"
+            style={{ marginBottom: '20px' }}
+          >
+            Upload
+          </Button>
+        </div>
+      ) : (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div
             style={{
-              display: 'inline-block',
-              width: '100%',
-              position: 'relative',
-              overflow: 'hidden', // Mask content to grow from the center
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
             <motion.div
-              initial={{ width: '0%' }}
-              animate={{ width: '100%' }}
+              initial={{ y: 40 }}
+              animate={{ y: 0 }}
               transition={{
                 type: 'spring',
-                stiffness: 150,
-                damping: 25,
-                duration: 0.5,
+                stiffness: 100,
+                damping: 10,
+                restDelta: 0.1,
               }}
               style={{
-                display: 'block',
-                height: '100%',
-                maskImage:
-                  'linear-gradient(to right, black 50%, transparent 100%)', // Mask from center
-                WebkitMaskImage:
-                  'linear-gradient(to right, black 50%, transparent 100%)', // For Safari
-              }}
-            >
-              <Button
-                onClick={() =>
-                  openTypedModal({
-                    modal: 'upload',
-                    title: 'Upload Material',
-                    body: { modalBody: 'Upload your material here' },
-                  })
-                }
-                fullWidth
-                color="teal"
-                size="lg"
-                style={{ marginBottom: '20px' }}
-              >
-                Upload
-              </Button>
-            </motion.div>
-          </div>
-        </motion.div>
-      ) : (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          style={{
-            marginBottom: '24px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div
-              style={{
+                fontSize: '36px',
                 display: 'flex',
+                justifyContent: 'center',
                 alignItems: 'center',
               }}
             >
-              <motion.div
-                initial={{ y: 40 }}
-                animate={{ y: 0 }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 100,
-                  damping: 10,
-                  restDelta: 0.1,
-                }}
-                style={{
-                  fontSize: '36px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                📁
-              </motion.div>
-            </div>
-
-            <motion.h1
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              style={{
-                fontSize: '32px',
-                fontWeight: 600,
-                margin: 0,
-              }}
-            >
-              Materials
-            </motion.h1>
+              📁
+            </motion.div>
           </div>
-        </motion.div>
+
+          <motion.h1
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            style={{
+              fontSize: '32px',
+              fontWeight: 600,
+              margin: 0,
+            }}
+          >
+            Materials
+          </motion.h1>
+        </div>
       )}
 
       {/* Materials List */}
