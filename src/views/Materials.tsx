@@ -109,14 +109,6 @@ const Materials = () => {
                 damping: 25,
                 duration: 0.5,
               }}
-              style={{
-                display: 'block',
-                height: '100%',
-                maskImage:
-                  'linear-gradient(to right, black 50%, transparent 100%)', // Mask from center
-                WebkitMaskImage:
-                  'linear-gradient(to right, black 50%, transparent 100%)', // For Safari
-              }}
             >
               <Button
                 onClick={() =>
