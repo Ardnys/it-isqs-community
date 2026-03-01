@@ -1,14 +1,7 @@
 # IT-ISQS Website
 
-## Usage
-
-You need to put soup anon key and soup url in `env/.env`. Obtain them at `https://soup.com/dashboard/project/{PROJECT_ID}/settings/api`
-Don't forget to install dependencies.
-Navigate to /auth and login using `deez@mail.com` email and `helloworld` password.
-
-> Beware. It's awfully slow.
-
-Below came from template.
+## Soup is no longer active
+Our soup project has long expired but some parts of UI are still visible. It should just serve as an example from now on. 
 
 ---
 
